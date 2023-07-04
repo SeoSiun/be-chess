@@ -13,13 +13,13 @@
 
 
 ## 미션 2 - 체스판 생성
- - [ ] Board 클래스 구현
-   - [ ] ArrayList로 여러 개의 Pawn 관리
-   - [ ] Pawn 추가 기능
- - [ ] PawnTest에 색이 없는 Pawn 생성 테스트 추다
- - [ ] 색을 상수로
- - [ ] BoardTest 추가
-   - [ ] Pawn를 체스 판에 추가
- - [ ] 패키지 분리
- - [ ] Pawn 외의 객체 추가시 에러 발생시키기
- - [ ] 중복제거
+ - [x] Board 클래스 구현
+   - [x] ArrayList로 여러 개의 Pawn 관리
+   - [x] Pawn 추가 기능
+ - [x] PawnTest에 색이 없는 Pawn 생성 테스트 추다
+ - [x] 색을 상수로
+ - [x] BoardTest 추가
+   - [x] Pawn를 체스 판에 추가
+ - [x] 패키지 분리
+ - [x] Pawn 외의 객체 추가시 에러 발생시키기
+ - [x] 중복제거
