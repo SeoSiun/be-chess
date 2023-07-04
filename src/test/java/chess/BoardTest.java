@@ -31,4 +31,29 @@ public class BoardTest {
         assertEquals(index + 1, board.size());
         assertEquals(pawn, board.findPawn(index));
     }
+
+    @Test
+    @DisplayName("Board initialize시 흰색 폰 8개, 검은색 폰 8개가 놓여야 한다.")
+    public void initialize(){
+        Board board = new Board();
+        board.initialize();
+        assertEquals("pppppppp", board.getWhitePawnsResult());
+        assertEquals("PPPPPPPP", board.getBlackPawnsResult());
+    }
+
+
+    @Test
+    @DisplayName("Board initialize시 흰색 폰이 1번째 줄, 검은색폰이 7번째 줄에 놓여야 한다.")
+    public void run_chess() {
+        Board board = new Board();
+        board.initialize();
+        assertEquals("........\n" +
+                "PPPPPPPP\n" +
+                "........\n" +
+                "........\n" +
+                "........\n" +
+                "........\n" +
+                "pppppppp\n" +
+                "........", board.print());
+    }
 }
