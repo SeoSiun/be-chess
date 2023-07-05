@@ -3,21 +3,28 @@ package chess;
 import java.util.Scanner;
 
 public class Chess {
-    public static void main(String[] args) {
+    private static final String START = "start";
+    private static final String END = "end";
+    private final Board board;
+
+    public Chess() {
+        board = new Board();
+    }
+
+    public void run() {
         Scanner sc = new Scanner(System.in);
-        Board board = new Board();
         String command;
 
-        while(sc.hasNext()) {
-            command = sc.nextLine();
-            if(command.equals("start")) {
-                System.out.println("START");
-                board.initialize();
-                System.out.println(board.print());
-            }
+        System.out.println("명령어를 입력해주세요 ('start' / 'end')");
 
-            else if(command.equals("end")) {
-                System.out.println("END");
+        while (sc.hasNext()) {
+            command = sc.nextLine();
+            if (command.equals(START)) {
+                System.out.println("체스 게임을 시작합니다");
+                board.initialize();
+                System.out.println(board.showBoard());
+            } else if (command.equals(END)) {
+                System.out.println("체스 게임을 종료합니다.");
                 break;
             }
         }

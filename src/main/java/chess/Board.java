@@ -1,80 +1,84 @@
 package chess;
 
-import chess.pieces.Pawn;
+import chess.pieces.Color;
+import chess.pieces.Piece;
+import chess.pieces.Type;
+
+import static utils.StringUtils.appendNewLine;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Board {
-    private final ArrayList<Pawn> pawns;
-    private final ArrayList<ArrayList<Pawn>> board;
+    private final List<List<Piece>> board;
 
-    private final int row;
-    private final int col;
-
-    private final ArrayList<Pawn> whitePawns;
-    private final ArrayList<Pawn> blackPawns;
+    private static final int ROW_SIZE = 8;
+    private static final int COL_SIZE = 8;
 
 
     public Board() {
-        this.pawns = new ArrayList<>();
         this.board = new ArrayList<>();
-        this.row = 8;
-        this.col = 8;
-        this.whitePawns = new ArrayList<>();
-        this.blackPawns = new ArrayList<>();
-        for(int i = 0; i < col; i++) {
-            whitePawns.add(new Pawn(Pawn.WHITE_COLOR));
-            blackPawns.add(new Pawn(Pawn.BLACK_COLOR));
-        }
-    }
-
-    public void add(Pawn pawn) {
-        pawns.add(pawn);
-    }
-
-    public Pawn findPawn(int index) {
-        return pawns.get(index);
-    }
-
-    public int size() {
-        return pawns.size();
     }
 
     public void initialize() {
-        for(int i = 0; i < row; i++) {
-            if(i == 1) board.add(blackPawns);
-            else if(i == row - 2) board.add(whitePawns);
-            else board.add(new ArrayList<>());
+        board.add(createFirstLine(Color.BLACK));
+        board.add(createLineWithOneType(Color.BLACK, Type.PAWN));
+        for (int i = 0; i < 4; i++) {
+            board.add(createLineWithOneType(Color.NONE, Type.NONE));
         }
+        board.add(createLineWithOneType(Color.WHITE, Type.PAWN));
+        board.add(createFirstLine(Color.WHITE));
     }
 
-    public String print() {
+    private List<Piece> createFirstLine(Color color) {
+        return new ArrayList<>() {{
+            add(Piece.createPiece(color, Type.ROOK));
+            add(Piece.createPiece(color, Type.KNIGHT));
+            add(Piece.createPiece(color, Type.BISHOP));
+            add(Piece.createPiece(color, Type.QUEEN));
+            add(Piece.createPiece(color, Type.KING));
+            add(Piece.createPiece(color, Type.BISHOP));
+            add(Piece.createPiece(color, Type.KNIGHT));
+            add(Piece.createPiece(color, Type.ROOK));
+        }};
+    }
+
+    private List<Piece> createLineWithOneType(Color color, Type type) {
+        return new ArrayList<>() {{
+            for (int i = 0; i < COL_SIZE; i++) {
+                add(Piece.createPiece(color, type));
+            }
+        }};
+    }
+
+    public int pieceCount() {
+        int count = 0;
+
+        for (List<Piece> line : board) {
+            for (Piece piece : line) {
+                if (!piece.isNone()) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    public String showBoard() {
         StringBuilder sb = new StringBuilder();
 
-        for(int i = 0; i < row; i++) {
-            sb.append(getPawnsResult(board.get(i)));
-            if(i != row -1) sb.append("\n");
+        for (List<Piece> line : board) {
+            sb.append(appendNewLine(getLineRepresentation(line)));
         }
         return sb.toString();
     }
 
-    public String getWhitePawnsResult() {
-        return getPawnsResult(whitePawns);
-    }
-
-    public String getBlackPawnsResult() {
-        return getPawnsResult(blackPawns);
-    }
-
-    private String getPawnsResult(ArrayList<Pawn> p) {
-        if(p.isEmpty()) return Character.toString(Pawn.EMPTY_REPRESENTATION).repeat(col);
-
+    private String getLineRepresentation(List<Piece> line) {
         StringBuilder sb = new StringBuilder();
 
-        for(int i = 0; i < col; i++) {
-            sb.append(p.get(i).getRepresentation());
+        for (Piece piece : line) {
+            sb.append(piece.getRepresentation());
         }
-
         return sb.toString();
     }
 }

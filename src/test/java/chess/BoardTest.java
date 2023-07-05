@@ -1,59 +1,33 @@
 package chess;
 
-import chess.pieces.Pawn;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static utils.StringUtils.appendNewLine;
+
 
 public class BoardTest {
-    Board board;
-    Pawn white;
-    Pawn black;
+    private Board board;
 
-    @BeforeEach
-    public void init() {
+    @Before
+    public void setup() {
         board = new Board();
-        white = new Pawn(Pawn.WHITE_COLOR);
-        black = new Pawn(Pawn.BLACK_COLOR);
     }
 
     @Test
-    @DisplayName("Pawn 추가 테스트")
+    @DisplayName("체스판 초기화 시 기물 배치를 검사합니다.")
     public void create() {
-        verifyAddPawnToBoard(white, 0);
-        verifyAddPawnToBoard(black, 1);
-    }
-
-    private void verifyAddPawnToBoard(Pawn pawn, final int index) {
-        board.add(pawn);
-        assertEquals(index + 1, board.size());
-        assertEquals(pawn, board.findPawn(index));
-    }
-
-    @Test
-    @DisplayName("Board initialize시 흰색 폰 8개, 검은색 폰 8개가 놓여야 한다.")
-    public void initialize(){
-        Board board = new Board();
         board.initialize();
-        assertEquals("pppppppp", board.getWhitePawnsResult());
-        assertEquals("PPPPPPPP", board.getBlackPawnsResult());
-    }
-
-
-    @Test
-    @DisplayName("Board initialize시 흰색 폰이 1번째 줄, 검은색폰이 7번째 줄에 놓여야 한다.")
-    public void run_chess() {
-        Board board = new Board();
-        board.initialize();
-        assertEquals("........\n" +
-                "PPPPPPPP\n" +
-                "........\n" +
-                "........\n" +
-                "........\n" +
-                "........\n" +
-                "pppppppp\n" +
-                "........", board.print());
+        assertEquals(32, board.pieceCount());
+        String blankRank = appendNewLine("........");
+        assertEquals(
+                appendNewLine("RNBQKBNR") +
+                        appendNewLine("PPPPPPPP") +
+                        blankRank + blankRank + blankRank + blankRank +
+                        appendNewLine("pppppppp") +
+                        appendNewLine("rnbqkbnr"),
+                board.showBoard());
     }
 }
