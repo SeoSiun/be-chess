@@ -10,18 +10,21 @@ public class Piece {
     }
 
     public enum Type {
-        PAWN('p'),
-        KNIGHT('n'),
-        ROOK('r'),
-        BISHOP('b'),
-        QUEEN('q'),
-        KING('k'),
-        NO_PIECE('.');
+        PAWN('p', 1.0),
+        ROOK('r', 5.0),
+        KNIGHT('n', 2.5),
+        BISHOP('b', 3.0),
+        QUEEN('q', 9.0),
+        KING('k', 0.0),
+        NO_PIECE('.', 0.0);
 
+        public static final double DUPLICATE_PAWN_POINT = 0.5;
         private final char representation;
+        private final double defaultPoint;
 
-        Type(char representation) {
+        Type(char representation, double defaultPoint) {
             this.representation = representation;
+            this.defaultPoint = defaultPoint;
         }
 
         public char getWhiteRepresentation() {
@@ -30,6 +33,10 @@ public class Piece {
 
         public char getBlackRepresentation() {
             return Character.toUpperCase(representation);
+        }
+
+        public double getDefaultPoint() {
+            return defaultPoint;
         }
     }
 
@@ -64,6 +71,10 @@ public class Piece {
             return type.getWhiteRepresentation();
         }
         return type.getBlackRepresentation();
+    }
+
+    public double getPoint() {
+        return type.getDefaultPoint();
     }
 
     public static Piece createWhitePawn() {
@@ -161,6 +172,10 @@ public class Piece {
 
     public boolean checkTypeAndColor(Color color, Type type) {
         return this.color == color && this.type == type;
+    }
+
+    public boolean checkColor(Color color) {
+        return this.color == color;
     }
 
     @Override

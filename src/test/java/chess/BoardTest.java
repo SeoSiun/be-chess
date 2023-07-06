@@ -92,4 +92,41 @@ class BoardTest {
                 appendNewLine("abcdefgh"),board.showBoard());
 
     }
+
+    @Test
+    @DisplayName("calculatePoint는 각 기물별 점수 합계를 리턴한다.")
+    void calculatePoint() throws Exception {
+        double blackExpected = 20.5;
+        double whiteExpected = 19.5;
+
+        board.initializeEmpty();
+
+        addPiece("b6", Piece.createBlackPawn());
+        addPiece("c6", Piece.createBlackPawn());
+        addPiece("c5", Piece.createBlackPawn());
+        addPiece("e6", Piece.createBlackQueen());
+        addPiece("b8", Piece.createBlackKing());
+        addPiece("c8", Piece.createBlackRook());
+        addPiece("a7", Piece.createBlackPawn());
+        addPiece("c7", Piece.createBlackPawn());
+        addPiece("d7", Piece.createBlackBishop());
+
+        addPiece("f2", Piece.createWhitePawn());
+        addPiece("g2", Piece.createWhitePawn());
+        addPiece("e1", Piece.createWhiteRook());
+        addPiece("f1", Piece.createWhiteKing());
+        addPiece("f4", Piece.createWhiteKnight());
+        addPiece("g4", Piece.createWhiteQueen());
+        addPiece("f3", Piece.createWhitePawn());
+        addPiece("h3", Piece.createWhitePawn());
+
+        assertEquals(blackExpected, board.calculatePoint(Piece.Color.BLACK), 0.01);
+        assertEquals(whiteExpected, board.calculatePoint(Piece.Color.WHITE), 0.01);
+
+        System.out.println(board.showBoard());
+    }
+
+    private void addPiece(String position, Piece piece) {
+        board.move(position, piece);
+    }
 }

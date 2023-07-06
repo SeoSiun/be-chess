@@ -6,6 +6,7 @@ import static utils.StringUtils.appendNewLine;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class Board {
     private final List<Rank> ranks;
@@ -73,6 +74,33 @@ public class Board {
     public Piece findPiece(String coordinate) {
         Position position = new Position(coordinate);
 
-        return ranks.get(position.getYPos()).getPiece(position.getXPos());
+        return findPieceByIndex(position.getYPos(), position.getXPos());
+    }
+
+    public Piece findPieceByIndex(int rank, int file) {
+        return ranks.get(rank).getPiece(file);
+    }
+
+    public double calculatePoint(Piece.Color color) {
+        double pointExceptPawn = ranks.stream()
+                .mapToDouble(rank -> rank.calculatePointExceptPawn(color)).sum();
+
+        return pointExceptPawn + calculatePawnPoint(color);
+    }
+
+    private double calculatePawnPoint(Piece.Color color) {
+        return IntStream.range(0, MAX_FILE)
+                .map(file -> (int) IntStream.range(0, MAX_RANK)
+                        .filter(rank -> findPieceByIndex(rank, file).checkTypeAndColor(color, Piece.Type.PAWN))
+                        .count())
+                .mapToDouble(Board::getPawnPointByCount)
+                .sum();
+    }
+
+    private static double getPawnPointByCount(int count) {
+        if (count > 1) {
+            return Piece.Type.DUPLICATE_PAWN_POINT * count;
+        }
+        return Piece.Type.PAWN.getDefaultPoint() * count;
     }
 }

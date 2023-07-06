@@ -12,7 +12,7 @@ public class Rank {
         pieces = new ArrayList<>();
     }
 
-    public void addPiece(Piece piece) {
+    private void addPiece(Piece piece) {
         pieces.add(piece);
     }
 
@@ -91,7 +91,6 @@ public class Rank {
         return (int) pieces.stream()
                 .filter(piece -> piece.checkTypeAndColor(color, type))
                 .count();
-
     }
 
     public String getRankRepresentation() {
@@ -101,5 +100,11 @@ public class Rank {
             sb.append(piece.getRepresentation());
         }
         return sb.toString();
+    }
+
+    public double calculatePointExceptPawn(Piece.Color color) {
+        return pieces.stream()
+                .filter(piece -> piece.checkColor(color) && piece.getType() != Piece.Type.PAWN)
+                .mapToDouble(piece -> piece.getPoint()).sum();
     }
 }
