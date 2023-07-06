@@ -65,4 +65,31 @@ class BoardTest {
         assertEquals(Piece.createWhiteRook(), board.findPiece("a1"));
         assertEquals(Piece.createWhiteRook(), board.findPiece("h1"));
     }
+
+    @Test
+    @DisplayName("move 결과 해당 위치에 해당 기물이 놓여야한다.")
+    void move() throws Exception {
+        board.initializeEmpty();
+
+        String blankRank = "........";
+        String position = "b5";
+
+        Piece piece = Piece.createBlackRook();
+        board.move(position, piece);
+
+
+        assertEquals(piece, board.findPiece(position));
+        assertEquals(
+                appendNewLine(blankRank + "  8") +
+                appendNewLine(blankRank + "  7") +
+                appendNewLine(blankRank + "  6")+
+                appendNewLine(".R......  5") +
+                appendNewLine(blankRank + "  4") +
+                appendNewLine(blankRank + "  3") +
+                appendNewLine(blankRank + "  2") +
+                appendNewLine(blankRank + "  1") +
+                appendNewLine("") +
+                appendNewLine("abcdefgh"),board.showBoard());
+
+    }
 }

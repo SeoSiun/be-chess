@@ -20,6 +20,10 @@ public class Rank {
         return pieces.get(index);
     }
 
+    public void setPiece(int index, Piece piece) {
+        pieces.set(index, piece);
+    }
+
     public static Rank createFirstWhiteRank() {
         Rank rank = new Rank();
 

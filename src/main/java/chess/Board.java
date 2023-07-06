@@ -27,6 +27,18 @@ public class Board {
         ranks.add(Rank.createFirstBlackRank());
     }
 
+    public void initializeEmpty() {
+        for (int file = 0; file < MAX_FILE; file++) {
+            ranks.add(Rank.createBlankRank());
+        }
+    }
+
+    public void move(String coordinate, Piece piece) {
+        Position position = new Position(coordinate);
+
+        ranks.get(position.getYPos()).setPiece(position.getXPos(), piece);
+    }
+
     public int pieceCount() {
         int count = 0;
 
