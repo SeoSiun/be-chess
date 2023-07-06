@@ -64,9 +64,9 @@
   - 기물이 존재하지 않는 Piece도 생성할 수 있도록 Piece.createBlank() 메소드 구현
   - Piece.getType() 함수 구현
 - [x] 팩토리 메소드 리팩토링
-  - createWhite(type), createBlack(type) 구현을 통해 중복 제거
+  - createWhite(initialType), createBlack(initialType) 구현을 통해 중복 제거
   
-- [ ] 체스판의 모든 칸을 Piece로 초기화 -> ArrayList<ArrayList<Piece>>
+- [x] 체스판의 모든 칸을 Piece로 초기화 -> ArrayList<ArrayList<Piece>>
   - ArrayList<Rank> 구조로 변경하기 (cf) 체스판에서 row를 Rank라고 부름)
 - [ ] 기물 종류, 색에 해당하는 기물 개수를 반환하는 로직 구현 (호출 시에 개수를 계산하게)
 - [ ] 주어진 위치의 기물을 가져오는 메소드 구현 (체스판 좌표 구성)

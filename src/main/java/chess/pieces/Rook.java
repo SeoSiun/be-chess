@@ -1,11 +1,11 @@
 package chess.pieces;
 
 public class Rook extends Piece {
-    public Rook() {
+    protected Rook() {
         super(Type.ROOK);
     }
 
-    public Rook(Color color) {
+    protected Rook(Color color) {
         super(color, Type.ROOK);
     }
 }

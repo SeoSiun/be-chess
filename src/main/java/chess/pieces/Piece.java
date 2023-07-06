@@ -156,5 +156,4 @@ public class Piece {
     public Boolean isNoPiece() {
         return this.type == Type.NO_PIECE;
     }
-
 }

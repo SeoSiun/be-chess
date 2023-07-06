@@ -1,11 +1,11 @@
 package chess.pieces;
 
 public class Queen extends Piece {
-    public Queen() {
+    protected Queen() {
         super(Type.QUEEN);
     }
 
-    public Queen(Color color) {
+    protected Queen(Color color) {
         super(color, Type.QUEEN);
     }
 }
