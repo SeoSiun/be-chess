@@ -1,22 +1,52 @@
 package chess.pieces;
 
 public class Piece {
+    public enum Color {
+        BLACK,
+        WHITE,
+        NO_COLOR
+    }
+
+    public enum Type {
+        PAWN('p'),
+        KNIGHT('n'),
+        ROOK('r'),
+        BISHOP('b'),
+        QUEEN('q'),
+        KING('k'),
+        NO_PIECE('.');
+
+        private final char representation;
+
+        Type(char representation) {
+            this.representation = representation;
+        }
+
+        public char getWhiteRepresentation() {
+            return representation;
+        }
+
+        public char getBlackRepresentation() {
+            return Character.toUpperCase(representation);
+        }
+    }
+
     private final Color color;
-    private final Type name;
+    private final Type type;
 
     protected Piece() {
-        this.color = Color.NONE;
-        this.name = Type.NONE;
+        this.color = Color.NO_COLOR;
+        this.type = Type.NO_PIECE;
     }
 
-    protected Piece(Type name) {
+    protected Piece(Type type) {
         this.color = Color.WHITE;
-        this.name = name;
+        this.type = type;
     }
 
-    protected Piece(Color color, Type name) {
+    protected Piece(Color color, Type type) {
         this.color = color;
-        this.name = name;
+        this.type = type;
     }
 
     public Color getColor() {
@@ -24,9 +54,10 @@ public class Piece {
     }
 
     public char getRepresentation() {
-        char r = name.getRepresentation();
-
-        return isWhite() ? r : Character.toUpperCase(r);
+        if (color == Color.WHITE || color == Color.NO_COLOR) {
+            return type.getWhiteRepresentation();
+        }
+        return type.getBlackRepresentation();
     }
 
     public static Pawn createWhitePawn() {
@@ -91,7 +122,7 @@ public class Piece {
                 return new Queen(color);
             case KING:
                 return new King(color);
-            case NONE:
+            case NO_PIECE:
                 return new Piece();
             default:
                 throw new IllegalArgumentException("this type is not allowed");
@@ -106,7 +137,8 @@ public class Piece {
         return this.color == Color.WHITE;
     }
 
-    public Boolean isNone() {
-        return this.color == Color.NONE;
+    public Boolean isNoPiece() {
+        return this.type == Type.NO_PIECE;
     }
+
 }

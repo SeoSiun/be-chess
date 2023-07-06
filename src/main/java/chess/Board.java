@@ -1,8 +1,6 @@
 package chess;
 
-import chess.pieces.Color;
 import chess.pieces.Piece;
-import chess.pieces.Type;
 
 import static utils.StringUtils.appendNewLine;
 
@@ -21,29 +19,29 @@ public class Board {
     }
 
     public void initialize() {
-        board.add(createFirstLine(Color.BLACK));
-        board.add(createLineWithOneType(Color.BLACK, Type.PAWN));
+        board.add(createFirstLine(Piece.Color.BLACK));
+        board.add(createLineWithOneType(Piece.Color.BLACK, Piece.Type.PAWN));
         for (int i = 0; i < 4; i++) {
-            board.add(createLineWithOneType(Color.NONE, Type.NONE));
+            board.add(createLineWithOneType(Piece.Color.NO_COLOR, Piece.Type.NO_PIECE));
         }
-        board.add(createLineWithOneType(Color.WHITE, Type.PAWN));
-        board.add(createFirstLine(Color.WHITE));
+        board.add(createLineWithOneType(Piece.Color.WHITE, Piece.Type.PAWN));
+        board.add(createFirstLine(Piece.Color.WHITE));
     }
 
-    private List<Piece> createFirstLine(Color color) {
+    private List<Piece> createFirstLine(Piece.Color color) {
         return new ArrayList<>() {{
-            add(Piece.createPiece(color, Type.ROOK));
-            add(Piece.createPiece(color, Type.KNIGHT));
-            add(Piece.createPiece(color, Type.BISHOP));
-            add(Piece.createPiece(color, Type.QUEEN));
-            add(Piece.createPiece(color, Type.KING));
-            add(Piece.createPiece(color, Type.BISHOP));
-            add(Piece.createPiece(color, Type.KNIGHT));
-            add(Piece.createPiece(color, Type.ROOK));
+            add(Piece.createPiece(color, Piece.Type.ROOK));
+            add(Piece.createPiece(color, Piece.Type.KNIGHT));
+            add(Piece.createPiece(color, Piece.Type.BISHOP));
+            add(Piece.createPiece(color, Piece.Type.QUEEN));
+            add(Piece.createPiece(color, Piece.Type.KING));
+            add(Piece.createPiece(color, Piece.Type.BISHOP));
+            add(Piece.createPiece(color, Piece.Type.KNIGHT));
+            add(Piece.createPiece(color, Piece.Type.ROOK));
         }};
     }
 
-    private List<Piece> createLineWithOneType(Color color, Type type) {
+    private List<Piece> createLineWithOneType(Piece.Color color, Piece.Type type) {
         return new ArrayList<>() {{
             for (int i = 0; i < COL_SIZE; i++) {
                 add(Piece.createPiece(color, type));
@@ -56,7 +54,7 @@ public class Board {
 
         for (List<Piece> line : board) {
             for (Piece piece : line) {
-                if (!piece.isNone()) {
+                if (!piece.isNoPiece()) {
                     count++;
                 }
             }

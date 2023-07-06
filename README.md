@@ -55,8 +55,8 @@
 
 
 ## 미션 5 - 기물 위치 부여 및 점수계산
-- [ ] 기물의 색(Color), 기물의 종류(Type)에 따른 enum 구현
-  - Color.None -> Color.NOCOLOR로 수정
+- [x] 기물의 색(Color), 기물의 종류(Type)에 따른 enum 구현
+  - Color.None -> Color.NO_COLOR로 수정
   - Type.None -> Type.NO_PIECE로 수정
   - Color, Type을 Piece 클래스 내부로 옮기기
   - getRepresentation 대신 getWhiteRepresentation, getBlackRepresentation
