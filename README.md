@@ -60,10 +60,10 @@
   - Type.None -> Type.NO_PIECE로 수정
   - Color, Type을 Piece 클래스 내부로 옮기기
   - getRepresentation 대신 getWhiteRepresentation, getBlackRepresentation
-- [ ] 팩토리 메소드에서 enum 사용
+- [x] 팩토리 메소드에서 enum 사용
   - 기물이 존재하지 않는 Piece도 생성할 수 있도록 Piece.createBlank() 메소드 구현
   - Piece.getType() 함수 구현
-- [ ] 팩토리 메소드 리팩토링
+- [x] 팩토리 메소드 리팩토링
   - createWhite(type), createBlack(type) 구현을 통해 중복 제거
   
 - [ ] 체스판의 모든 칸을 Piece로 초기화 -> ArrayList<ArrayList<Piece>>
