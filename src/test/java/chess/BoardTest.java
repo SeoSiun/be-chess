@@ -22,13 +22,18 @@ class BoardTest {
     void create() {
         board.initialize();
         assertEquals(32, board.pieceCount());
-        String blankRank = appendNewLine("........");
+        String blankRank = "........";
         assertEquals(
-                appendNewLine("RNBQKBNR") +
-                        appendNewLine("PPPPPPPP") +
-                        blankRank + blankRank + blankRank + blankRank +
-                        appendNewLine("pppppppp") +
-                        appendNewLine("rnbqkbnr"),
+                appendNewLine("RNBQKBNR  8") +
+                        appendNewLine("PPPPPPPP  7") +
+                        appendNewLine(blankRank + "  6")+
+                        appendNewLine(blankRank + "  5") +
+                        appendNewLine(blankRank + "  4") +
+                        appendNewLine(blankRank + "  3") +
+                        appendNewLine("pppppppp  2") +
+                        appendNewLine("rnbqkbnr  1") +
+                        appendNewLine("") +
+                        appendNewLine("abcdefgh"),
                 board.showBoard());
     }
 
@@ -48,5 +53,16 @@ class BoardTest {
         assertEquals(1, board.pieceCount(Piece.Color.BLACK, Piece.Type.QUEEN));
         assertEquals(2, board.pieceCount(Piece.Color.WHITE, Piece.Type.BISHOP));
         assertEquals(2, board.pieceCount(Piece.Color.BLACK, Piece.Type.BISHOP));
+    }
+
+    @Test
+    @DisplayName("findPiece는 주어진 좌표에 놓인 기물을 반환해야한다.")
+    void findPiece() throws Exception {
+        board.initialize();
+
+        assertEquals(Piece.createBlackRook(), board.findPiece("a8"));
+        assertEquals(Piece.createBlackRook(), board.findPiece("h8"));
+        assertEquals(Piece.createWhiteRook(), board.findPiece("a1"));
+        assertEquals(Piece.createWhiteRook(), board.findPiece("h1"));
     }
 }

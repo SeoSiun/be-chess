@@ -18,13 +18,13 @@ public class Board {
     }
 
     public void initialize() {
-        ranks.add(Rank.createFirstBlackRank());
-        ranks.add(Rank.createRankWithOnlyBlackPawn());
+        ranks.add(Rank.createFirstWhiteRank());
+        ranks.add(Rank.createRankWithOnlyWhitePawn());
         for (int file = 2; file < MAX_FILE - 2; file++) {
             ranks.add(Rank.createBlankRank());
         }
-        ranks.add(Rank.createRankWithOnlyWhitePawn());
-        ranks.add(Rank.createFirstWhiteRank());
+        ranks.add(Rank.createRankWithOnlyBlackPawn());
+        ranks.add(Rank.createFirstBlackRank());
     }
 
     public int pieceCount() {
@@ -48,9 +48,19 @@ public class Board {
     public String showBoard() {
         StringBuilder sb = new StringBuilder();
 
-        for (Rank rank : ranks) {
-            sb.append(appendNewLine(rank.getRankRepresentation()));
+        for (int rank = MAX_RANK; rank > 0; rank--) {
+            sb.append(ranks.get(rank - 1).getRankRepresentation());
+            sb.append(appendNewLine("  " + rank));
         }
+        sb.append(appendNewLine(""));
+        sb.append(appendNewLine("abcdefgh"));
+
         return sb.toString();
+    }
+
+    public Piece findPiece(String coordinate) {
+        Position position = new Position(coordinate);
+
+        return ranks.get(position.getYPos()).getPiece(position.getXPos());
     }
 }

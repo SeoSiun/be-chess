@@ -16,6 +16,10 @@ public class Rank {
         pieces.add(piece);
     }
 
+    public Piece getPiece(int index) {
+        return pieces.get(index);
+    }
+
     public static Rank createFirstWhiteRank() {
         Rank rank = new Rank();
 
