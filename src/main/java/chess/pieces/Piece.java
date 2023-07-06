@@ -53,6 +53,10 @@ public class Piece {
         return this.color;
     }
 
+    public Type getType() {
+        return this.type;
+    }
+
     public char getRepresentation() {
         if (color == Color.WHITE || color == Color.NO_COLOR) {
             return type.getWhiteRepresentation();
@@ -108,8 +112,12 @@ public class Piece {
         return new King(Color.BLACK);
     }
 
-    public static Piece createPiece(Color color, Type name) {
-        switch (name) {
+    public static Piece createBlank() {
+        return createPiece(Color.NO_COLOR, Type.NO_PIECE);
+    }
+
+    public static Piece createPiece(Color color, Type type) {
+        switch (type) {
             case PAWN:
                 return new Pawn(color);
             case KNIGHT:
@@ -123,7 +131,7 @@ public class Piece {
             case KING:
                 return new King(color);
             case NO_PIECE:
-                return new Piece();
+                return new Blank();
             default:
                 throw new IllegalArgumentException("this type is not allowed");
         }
