@@ -4,6 +4,7 @@ import chess.pieces.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Rank {
     private List<Piece> pieces;
@@ -105,6 +106,12 @@ public class Rank {
     public double calculatePointExceptPawn(Piece.Color color) {
         return pieces.stream()
                 .filter(piece -> piece.checkColor(color) && piece.getType() != Piece.Type.PAWN)
-                .mapToDouble(piece -> piece.getPoint()).sum();
+                .mapToDouble(Piece::getPoint).sum();
+    }
+
+    public List<Piece> getPiecesByColor(Piece.Color color) {
+        return pieces.stream()
+                .filter(piece -> piece.checkColor(color))
+                .collect(Collectors.toList());
     }
 }

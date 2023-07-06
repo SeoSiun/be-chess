@@ -26,7 +26,7 @@ class BoardTest {
         assertEquals(
                 appendNewLine("RNBQKBNR  8") +
                         appendNewLine("PPPPPPPP  7") +
-                        appendNewLine(blankRank + "  6")+
+                        appendNewLine(blankRank + "  6") +
                         appendNewLine(blankRank + "  5") +
                         appendNewLine(blankRank + "  4") +
                         appendNewLine(blankRank + "  3") +
@@ -81,15 +81,15 @@ class BoardTest {
         assertEquals(piece, board.findPiece(position));
         assertEquals(
                 appendNewLine(blankRank + "  8") +
-                appendNewLine(blankRank + "  7") +
-                appendNewLine(blankRank + "  6")+
-                appendNewLine(".R......  5") +
-                appendNewLine(blankRank + "  4") +
-                appendNewLine(blankRank + "  3") +
-                appendNewLine(blankRank + "  2") +
-                appendNewLine(blankRank + "  1") +
-                appendNewLine("") +
-                appendNewLine("abcdefgh"),board.showBoard());
+                        appendNewLine(blankRank + "  7") +
+                        appendNewLine(blankRank + "  6") +
+                        appendNewLine(".R......  5") +
+                        appendNewLine(blankRank + "  4") +
+                        appendNewLine(blankRank + "  3") +
+                        appendNewLine(blankRank + "  2") +
+                        appendNewLine(blankRank + "  1") +
+                        appendNewLine("") +
+                        appendNewLine("abcdefgh"), board.showBoard());
 
     }
 
@@ -128,5 +128,24 @@ class BoardTest {
 
     private void addPiece(String position, Piece piece) {
         board.move(position, piece);
+    }
+
+    @Test
+    @DisplayName("getSortedPiecesByPoint는 해당 색상의 기물들을 점수 순서로 정렬해서 반환해야한다.")
+    public void getSortedPiecesByPoint() {
+        board.initializeEmpty();
+
+        addPiece("b6", Piece.createBlackPawn());
+        addPiece("e6", Piece.createBlackQueen());
+        addPiece("b8", Piece.createBlackKing());
+        addPiece("c8", Piece.createBlackRook());
+
+        addPiece("f2", Piece.createWhitePawn());
+        addPiece("g2", Piece.createWhitePawn());
+        addPiece("e1", Piece.createWhiteRook());
+        addPiece("f1", Piece.createWhiteKing());
+
+        assertEquals("rppk", RankTest.getRepresentations(board.getSortedPiecesByPoint(Piece.Color.WHITE)));
+        assertEquals("QRPK", RankTest.getRepresentations(board.getSortedPiecesByPoint(Piece.Color.BLACK)));
     }
 }

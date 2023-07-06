@@ -5,7 +5,9 @@ import chess.pieces.Piece;
 import static utils.StringUtils.appendNewLine;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Board {
@@ -102,5 +104,16 @@ public class Board {
             return Piece.Type.DUPLICATE_PAWN_POINT * count;
         }
         return Piece.Type.PAWN.getDefaultPoint() * count;
+    }
+
+    public List<Piece> getSortedPiecesByPoint(Piece.Color color) {
+        return ranks.stream()
+                .flatMap(rank -> rank.getPiecesByColor(color).stream())
+                .sorted(sortPieceByPointComparator())
+                .collect(Collectors.toList());
+    }
+
+    private static Comparator<Piece> sortPieceByPointComparator() {
+        return (piece1, piece2) -> (int) (piece2.getPoint() - piece1.getPoint());
     }
 }
