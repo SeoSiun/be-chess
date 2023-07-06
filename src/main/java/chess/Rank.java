@@ -79,6 +79,13 @@ public class Rank {
                 .count();
     }
 
+    public int pieceCount(Piece.Color color, Piece.Type type) {
+        return (int) pieces.stream()
+                .filter(piece -> piece.checkTypeAndColor(color, type))
+                .count();
+
+    }
+
     public String getRankRepresentation() {
         StringBuilder sb = new StringBuilder();
 

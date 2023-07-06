@@ -1,5 +1,7 @@
 package chess;
 
+import chess.pieces.Piece;
+
 import static utils.StringUtils.appendNewLine;
 
 import java.util.ArrayList;
@@ -30,6 +32,15 @@ public class Board {
 
         for (Rank rank : ranks) {
             count += rank.pieceCount();
+        }
+        return count;
+    }
+
+    public int pieceCount(Piece.Color color, Piece.Type type) {
+        int count = 0;
+
+        for (Rank rank : ranks) {
+            count += rank.pieceCount(color, type);
         }
         return count;
     }

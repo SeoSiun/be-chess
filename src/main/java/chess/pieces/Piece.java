@@ -156,4 +156,8 @@ public class Piece {
     public Boolean isNoPiece() {
         return this.type == Type.NO_PIECE;
     }
+
+    public boolean checkTypeAndColor(Color color, Type type) {
+        return this.color == color && this.type == type;
+    }
 }
