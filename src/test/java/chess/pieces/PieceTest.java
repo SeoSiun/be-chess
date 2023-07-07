@@ -1,35 +1,43 @@
 package chess.pieces;
 
+import chess.pieces.Piece.Type;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PieceTest {
     @Test
-    @DisplayName("모든 종류의 기물 생성 및 representation 체크")
-    public void create_pieces() {
-        verifyPiece(Piece.createWhitePawn(), Color.WHITE, Type.PAWN.getRepresentation());
-        verifyPiece(Piece.createBlackPawn(), Color.BLACK, Character.toUpperCase(Type.PAWN.getRepresentation()));
+    @DisplayName("각 기물 종류/색별 팩토리 메소드가 올바르게 동작하는지 확인")
+    void createPieces() {
+        verifyPiece(Piece.createWhitePawn(), Piece.createBlackPawn(), Type.PAWN);
+        verifyPiece(Piece.createWhiteKnight(), Piece.createBlackKnight(), Type.KNIGHT);
+        verifyPiece(Piece.createWhiteRook(), Piece.createBlackRook(), Type.ROOK);
+        verifyPiece(Piece.createWhiteBishop(), Piece.createBlackBishop(), Type.BISHOP);
+        verifyPiece(Piece.createWhiteQueen(), Piece.createBlackQueen(), Type.QUEEN);
+        verifyPiece(Piece.createWhiteKing(), Piece.createBlackKing(), Type.KING);
 
-        verifyPiece(Piece.createWhiteKnight(), Color.WHITE, Type.KNIGHT.getRepresentation());
-        verifyPiece(Piece.createBlackKnight(), Color.BLACK, Character.toUpperCase(Type.KNIGHT.getRepresentation()));
-
-        verifyPiece(Piece.createWhiteRook(), Color.WHITE, Type.ROOK.getRepresentation());
-        verifyPiece(Piece.createBlackRook(), Color.BLACK, Character.toUpperCase(Type.ROOK.getRepresentation()));
-
-        verifyPiece(Piece.createWhiteBishop(), Color.WHITE, Type.BISHOP.getRepresentation());
-        verifyPiece(Piece.createBlackBishop(), Color.BLACK, Character.toUpperCase(Type.BISHOP.getRepresentation()));
-
-        verifyPiece(Piece.createWhiteQueen(), Color.WHITE, Type.QUEEN.getRepresentation());
-        verifyPiece(Piece.createBlackQueen(), Color.BLACK, Character.toUpperCase(Type.QUEEN.getRepresentation()));
-
-        verifyPiece(Piece.createWhiteKing(), Color.WHITE, Type.KING.getRepresentation());
-        verifyPiece(Piece.createBlackKing(), Color.BLACK, Character.toUpperCase(Type.KING.getRepresentation()));
+        Piece blank = Piece.createBlank();
+        assertFalse(blank.isWhite());
+        assertFalse(blank.isBlack());
+        assertEquals(Type.NO_PIECE, blank.getType());
     }
 
-    private void verifyPiece(final Piece piece, final Color color, final char representation) {
-        assertEquals(color, piece.getColor());
-        assertEquals(representation, piece.getRepresentation());
+    private void verifyPiece(final Piece whitePiece, final Piece blackPiece, final Type type) {
+        assertTrue(whitePiece.isWhite());
+        assertEquals(type, whitePiece.getType());
+
+        assertTrue(blackPiece.isBlack());
+        assertEquals(type, blackPiece.getType());
+    }
+
+    @Test
+    @DisplayName("흰색 폰은 소문자, 검은색 폰은 대문자 p로 나타나야한다.")
+    void getRepresentationPerPiece() throws Exception {
+        assertEquals('p', Piece.Type.PAWN.getWhiteRepresentation());
+        assertEquals('P', Piece.Type.PAWN.getBlackRepresentation());
     }
 }

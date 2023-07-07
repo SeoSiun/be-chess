@@ -1,11 +1,11 @@
 package chess.pieces;
 
 public class Pawn extends Piece {
-    public Pawn() {
+    protected Pawn() {
         super(Type.PAWN);
     }
 
-    public Pawn(Color color) {
+    protected Pawn(Color color) {
         super(color, Type.PAWN);
     }
 }

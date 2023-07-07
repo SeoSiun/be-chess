@@ -1,11 +1,11 @@
 package chess.pieces;
 
 public class Knight extends Piece {
-    public Knight() {
+    protected Knight() {
         super(Type.KNIGHT);
     }
 
-    public Knight(Color color) {
+    protected Knight(Color color) {
         super(color, Type.KNIGHT);
     }
 }

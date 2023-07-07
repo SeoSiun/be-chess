@@ -42,13 +42,46 @@
 
 
 ## 미션 4 - 기물 배치
-- [ ] "\n" 반복코드 제거 => System.getProperty("line.separator") 사용
+- [x] "\n" 반복코드 제거 => System.getProperty("line.separator") 사용
   - new line 문자는 운영체제마다 달라질 수 있음!!
   - utils.StringUtils 클래스를 추가해 해당 기능을 유틸리티 메소드로 분리한다.
-- [ ] Pawn 클래스 명을 좀 더 일반적인 이름인 Piece로 rename
+- [x] Pawn 클래스 명을 좀 더 일반적인 이름인 Piece로 rename
   - 색상, 이름(기물 종류: pawn, knight,...)을 가짐
   - private 생성자를 가져야 하며 인스턴스 생성 후에는 상태를 변경할 수 없어야함(값 객체)
-  - [ ] 색과 이름을 받아 Piece 객체를 생성하는 팩토리 메소드를 구현
-- [ ] 전체 기물 상태를 볼 수 있는 체스판 구현 및 테스트
-- [ ] 검은색 말과 흰색 말을 구분할 수 있는 메소드 추가
+  - [x] 색과 이름을 받아 Piece 객체를 생성하는 팩토리 메소드를 구현
+- [x] 전체 기물 상태를 볼 수 있는 체스판 구현 및 테스트
+- [x] 검은색 말과 흰색 말을 구분할 수 있는 메소드 추가
+- [x] 리팩토링
+
+
+## 미션 5 - 기물 위치 부여 및 점수계산
+- [x] 기물의 색(Color), 기물의 종류(Type)에 따른 enum 구현
+  - Color.None -> Color.NO_COLOR로 수정
+  - Type.None -> Type.NO_PIECE로 수정
+  - Color, Type을 Piece 클래스 내부로 옮기기
+  - getRepresentation 대신 getWhiteRepresentation, getBlackRepresentation
+- [x] 팩토리 메소드에서 enum 사용
+  - 기물이 존재하지 않는 Piece도 생성할 수 있도록 Piece.createBlank() 메소드 구현
+  - Piece.getType() 함수 구현
+- [x] 팩토리 메소드 리팩토링
+  - createWhite(initialType), createBlack(initialType) 구현을 통해 중복 제거
+  
+- [x] 체스판의 모든 칸을 Piece로 초기화 -> ArrayList<ArrayList<Piece>>
+  - ArrayList<Rank> 구조로 변경하기 (cf) 체스판에서 row를 Rank라고 부름)
+- [x] 기물 종류, 색에 해당하는 기물 개수를 반환하는 로직 구현 (호출 시에 개수를 계산하게)
+- [x] 주어진 위치의 기물을 가져오는 메소드 구현 (체스판 좌표 구성)
+  - 위치를 xy 좌표로 변환하는 작업의 중복을 제거하기 위해 Position class 구현
+- [x] 임의의 기물을 체스판에 추가하는 기능
+  - 빈 체스판을 초기화하는 함수 추가
+  
+- [x] 체스 프로그램 점수 계산 기능 추가
+  - 한 번에 한 쪽의 점수만을 계산해야함
+  - 현재까지 남아있는 기물에 따라 점수 계산
+  - 같은 file에 폰이 여러 개 있는 경우 0.5점으로 계산
+- [x] 기물의 점수가 높은 순으로 정렬하는 기능 추가
+  - 검은색과 흰색 각각을 높은순서/낮은 순서로 정렬해보기
+  - java collection의 정렬 기능을 활용해 점수가 높은 순서에서 낮은 순으로 정렬한다.
+
 - [ ] 리팩토링
+  - 인터페이스 추출
+  - 요구사항을 만족하는 "최소한의 클래스, 메소드, 중복을 없애는 것"이 중요

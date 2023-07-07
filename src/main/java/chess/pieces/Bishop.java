@@ -1,11 +1,11 @@
 package chess.pieces;
 
 public class Bishop extends Piece {
-    public Bishop() {
+    protected Bishop() {
         super(Type.BISHOP);
     }
 
-    public Bishop(Color color) {
+    protected Bishop(Color color) {
         super(color, Type.BISHOP);
     }
 }
