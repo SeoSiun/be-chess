@@ -38,6 +38,68 @@ class BoardTest {
     }
 
     @Test
+    @DisplayName("여러 번 initialize해도 같은 결과가 나와야 한다.")
+    void multipleInitialize() {
+        // given
+
+        // when
+        board.initialize();
+        board.initialize();
+
+        // then
+        assertEquals(32, board.pieceCount());
+        assertEquals(
+                appendNewLine("RNBQKBNR  8") +
+                        appendNewLine("PPPPPPPP  7") +
+                        appendNewLine(BLANK_RANK + "  6") +
+                        appendNewLine(BLANK_RANK + "  5") +
+                        appendNewLine(BLANK_RANK + "  4") +
+                        appendNewLine(BLANK_RANK + "  3") +
+                        appendNewLine("pppppppp  2") +
+                        appendNewLine("rnbqkbnr  1") +
+                        appendNewLine("") +
+                        appendNewLine("abcdefgh"),
+                board.showBoard());
+    }
+
+    @Test
+    @DisplayName("기물이 없는 체스판이 초기화되어야 한다.")
+    void initializeEmpty() {
+        // given
+
+        // when
+        board.initializeEmpty();
+
+        // then
+        assertEquals(0, board.pieceCount());
+        assertEquals(
+                appendNewLine(BLANK_RANK + "  8") +
+                        appendNewLine(BLANK_RANK + "  7") +
+                        appendNewLine(BLANK_RANK + "  6") +
+                        appendNewLine(BLANK_RANK + "  5") +
+                        appendNewLine(BLANK_RANK + "  4") +
+                        appendNewLine(BLANK_RANK + "  3") +
+                        appendNewLine(BLANK_RANK + "  2") +
+                        appendNewLine(BLANK_RANK + "  1") +
+                        appendNewLine("") +
+                        appendNewLine("abcdefgh"),
+                board.showBoard());
+    }
+
+    @Test
+    @DisplayName("모든 기물의 개수를 반환해야 한다.")
+    void pieceCount() {
+        // given
+        board.initialize();
+
+        // when
+        int pieceCount = board.pieceCount();
+
+        // then
+        assertEquals(32, pieceCount);
+    }
+
+    @Test
     @DisplayName("pieceCount는 기물 색, 종류에 해당하는 기물의 개수를 반환합니다.")
     void pieceCount() {
         board.initialize();

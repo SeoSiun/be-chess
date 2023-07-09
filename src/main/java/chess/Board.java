@@ -21,6 +21,7 @@ public class Board {
     }
 
     public void initialize() {
+        ranks.clear();
         ranks.add(Rank.createFirstWhiteRank());
         ranks.add(Rank.createRankWithOnlyWhitePawn());
         for (int file = 2; file < MAX_FILE - 2; file++) {
@@ -31,13 +32,14 @@ public class Board {
     }
 
     public void initializeEmpty() {
+        ranks.clear();
         for (int file = 0; file < MAX_FILE; file++) {
             ranks.add(Rank.createBlankRank());
         }
     }
 
     public void move(String coordinate, Piece piece) {
-        Position position = new Position(coordinate);
+        Position position = Position.from(coordinate);
 
         ranks.get(position.getYPos()).setPiece(position.getXPos(), piece);
     }
@@ -74,12 +76,12 @@ public class Board {
     }
 
     public Piece findPiece(String coordinate) {
-        Position position = new Position(coordinate);
+        Position position = Position.from(coordinate);
 
         return findPieceByIndex(position.getYPos(), position.getXPos());
     }
 
-    public Piece findPieceByIndex(int rank, int file) {
+    private Piece findPieceByIndex(int rank, int file) {
         return ranks.get(rank).getPiece(file);
     }
 
@@ -93,7 +95,7 @@ public class Board {
     private double calculatePawnPoint(Piece.Color color) {
         return IntStream.range(0, MAX_FILE)
                 .map(file -> (int) IntStream.range(0, MAX_RANK)
-                        .filter(rank -> findPieceByIndex(rank, file).checkTypeAndColor(color, Piece.Type.PAWN))
+                        .filter(rank -> findPieceByIndex(rank, file).checkColorAndType(color, Piece.Type.PAWN))
                         .count())
                 .mapToDouble(Board::getPawnPointByCount)
                 .sum();
@@ -109,11 +111,7 @@ public class Board {
     public List<Piece> getSortedPiecesByPoint(Piece.Color color) {
         return ranks.stream()
                 .flatMap(rank -> rank.getPiecesByColor(color).stream())
-                .sorted(sortPieceByPointComparator())
+                .sorted(Comparator.comparingDouble(Piece::getPoint).reversed())
                 .collect(Collectors.toList());
-    }
-
-    private static Comparator<Piece> sortPieceByPointComparator() {
-        return (piece1, piece2) -> (int) (piece2.getPoint() - piece1.getPoint());
     }
 }
