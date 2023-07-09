@@ -67,10 +67,10 @@ public class Piece {
     }
 
     public char getRepresentation() {
-        if (color == Color.WHITE || color == Color.NO_COLOR) {
-            return type.getWhiteRepresentation();
+        if (color == Color.BLACK) {
+            return type.getBlackRepresentation();
         }
-        return type.getBlackRepresentation();
+        return type.getWhiteRepresentation();
     }
 
     public double getPoint() {
@@ -166,11 +166,15 @@ public class Piece {
         return this.color == Color.WHITE;
     }
 
-    public Boolean isNoPiece() {
+    public Boolean isBlank() {
         return this.type == Type.NO_PIECE;
     }
 
-    public boolean checkTypeAndColor(Color color, Type type) {
+    public Boolean isPawn() {
+        return this.type == Type.PAWN;
+    }
+
+    public boolean checkColorAndType(Color color, Type type) {
         return this.color == color && this.type == type;
     }
 

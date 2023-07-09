@@ -84,17 +84,17 @@ public class Rank {
 
     public int pieceCount() {
         return (int) pieces.stream()
-                .filter(piece -> !piece.isNoPiece())
+                .filter(piece -> !piece.isBlank())
                 .count();
     }
 
     public int pieceCount(Piece.Color color, Piece.Type type) {
         return (int) pieces.stream()
-                .filter(piece -> piece.checkTypeAndColor(color, type))
+                .filter(piece -> piece.checkColorAndType(color, type))
                 .count();
     }
 
-    public String getRankRepresentation() {
+    public String getRepresentation() {
         StringBuilder sb = new StringBuilder();
 
         for (Piece piece : pieces) {
@@ -105,7 +105,7 @@ public class Rank {
 
     public double calculatePointExceptPawn(Piece.Color color) {
         return pieces.stream()
-                .filter(piece -> piece.checkColor(color) && piece.getType() != Piece.Type.PAWN)
+                .filter(piece -> piece.checkColor(color) && !piece.isPawn())
                 .mapToDouble(Piece::getPoint).sum();
     }
 

@@ -66,7 +66,7 @@ public class Board {
         StringBuilder sb = new StringBuilder();
 
         for (int rank = MAX_RANK; rank > 0; rank--) {
-            sb.append(ranks.get(rank - 1).getRankRepresentation());
+            sb.append(ranks.get(rank - 1).getRepresentation());
             sb.append(appendNewLine("  " + rank));
         }
         sb.append(appendNewLine(""));
