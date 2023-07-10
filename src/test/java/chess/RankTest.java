@@ -2,6 +2,7 @@ package chess;
 
 
 import chess.pieces.Piece;
+import chess.pieces.PieceFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -11,17 +12,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RankTest {
+    Rank firstBlackRank = RankFactory.createFirstRank(Piece.Color.BLACK);
+    Rank firstWhiteRank = RankFactory.createFirstRank(Piece.Color.WHITE);
+
     @Test
     @DisplayName("각 팩토리메소드마다 올바른 Piece를 포함하는 Rank가 생성되어야 한다.")
     void create() {
         // given
 
         // when
-        Rank firstBlackRank = Rank.createFirstBlackRank();
-        Rank firstWhiteRank = Rank.createFirstWhiteRank();
-        Rank rankWithOnlyBlackPawn = Rank.createRankWithOnlyBlackPawn();
-        Rank rankWithOnlyWhitePawn = Rank.createRankWithOnlyWhitePawn();
-        Rank blankRank = Rank.createBlankRank();
+        Rank firstBlackRank = RankFactory.createFirstRank(Piece.Color.BLACK);
+        Rank firstWhiteRank = RankFactory.createFirstRank(Piece.Color.WHITE);
+        Rank rankWithOnlyBlackPawn = RankFactory.createRankWithOneColorAndType(Piece.Color.BLACK, Piece.Type.PAWN);
+        Rank rankWithOnlyWhitePawn = RankFactory.createRankWithOneColorAndType(Piece.Color.WHITE, Piece.Type.PAWN);
+        Rank blankRank = RankFactory.createBlankRank();
 
         // then
         verifyRank(firstBlackRank, 1);
@@ -62,7 +66,7 @@ class RankTest {
     @DisplayName("index에 해당하는 piece를 반환해야 한다.")
     void getPiece() {
         // given
-        Rank rank = Rank.createFirstBlackRank();
+        Rank rank = RankFactory.createFirstRank(Piece.Color.BLACK);
         int index = 1;
 
         // when
@@ -77,8 +81,8 @@ class RankTest {
     @DisplayName("모든 기물의 개수를 반환해야 한다.")
     void pieceCount() {
         // given
-        Rank rankWith8Pieces = Rank.createFirstBlackRank();
-        Rank blankRank = Rank.createBlankRank();
+        Rank rankWith8Pieces = RankFactory.createFirstRank(Piece.Color.BLACK);
+        Rank blankRank = RankFactory.createBlankRank();
 
         // when
         int rankWith8PiecesCount = rankWith8Pieces.pieceCount();
@@ -93,9 +97,9 @@ class RankTest {
     @DisplayName("index에 해당하는 위치에 해당 Piece가 놓여야 한다.")
     void setPiece() {
         // given
-        Rank rank = Rank.createBlankRank();
+        Rank rank = RankFactory.createBlankRank();
         int index = 1;
-        Piece whitePawn = Piece.createWhitePawn();
+        Piece whitePawn = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.PAWN);
 
         // when
         rank.setPiece(index, whitePawn);
@@ -109,9 +113,9 @@ class RankTest {
     @DisplayName("color, type에 해당하는 모든 기물의 개수를 반환해야 한다.")
     void pieceCountWithColorAndType() {
         // given
-        Rank rank = Rank.createFirstBlackRank();
-        rank.setPiece(1, Piece.createWhiteKnight());
-        rank.setPiece(4, Piece.createWhiteKnight());
+        Rank rank = RankFactory.createFirstRank(Piece.Color.BLACK);
+        rank.setPiece(1, PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.KNIGHT));
+        rank.setPiece(4, PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.KNIGHT));
 
         // when
         int pieceCountWithWhiteKnight = rank.pieceCount(Piece.Color.WHITE, Piece.Type.KNIGHT);
@@ -128,8 +132,6 @@ class RankTest {
     @DisplayName("해당 rank의 representation이 반환되어야 한다.")
     void getRepresentation() {
         // given
-        Rank firstBlackRank = Rank.createFirstBlackRank();
-        Rank firstWhiteRank = Rank.createFirstWhiteRank();
 
         // when
         String firstBlackRankRepresentation = firstBlackRank.getRepresentation();
@@ -144,9 +146,9 @@ class RankTest {
     @DisplayName("rank에서 해당하는 색의 기물 목록이 리턴되어야 한다.")
     void getPiecesByColor() {
         // given
-        Rank rank = Rank.createFirstBlackRank();
-        rank.setPiece(1, Piece.createWhiteQueen());
-        rank.setPiece(5, Piece.createWhiteKnight());
+        Rank rank = RankFactory.createFirstRank(Piece.Color.BLACK);
+        rank.setPiece(1, PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.QUEEN));
+        rank.setPiece(5, PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.KNIGHT));
 
         // when
         List<Piece> whitePieces = rank.getPiecesByColor(Piece.Color.WHITE);

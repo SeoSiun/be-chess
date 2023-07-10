@@ -1,6 +1,9 @@
 package chess;
 
 import chess.pieces.Piece;
+import chess.pieces.Piece.Color;
+import chess.pieces.Piece.Type;
+import chess.pieces.PieceFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -118,18 +121,18 @@ class BoardTest {
         board.initialize();
 
         // when
-        int whitePawnCount = board.pieceCount(Piece.Color.WHITE, Piece.Type.PAWN);
-        int blackPawnCount = board.pieceCount(Piece.Color.BLACK, Piece.Type.PAWN);
-        int whiteKnightCount = board.pieceCount(Piece.Color.WHITE, Piece.Type.KNIGHT);
-        int blackKnightCount = board.pieceCount(Piece.Color.BLACK, Piece.Type.KNIGHT);
-        int whiteRookCount = board.pieceCount(Piece.Color.WHITE, Piece.Type.ROOK);
-        int blackRookCount = board.pieceCount(Piece.Color.BLACK, Piece.Type.ROOK);
-        int whiteKingCount = board.pieceCount(Piece.Color.WHITE, Piece.Type.KING);
-        int blackKingCount = board.pieceCount(Piece.Color.BLACK, Piece.Type.KING);
-        int whiteQueenCount = board.pieceCount(Piece.Color.WHITE, Piece.Type.QUEEN);
-        int blackQueenCount = board.pieceCount(Piece.Color.BLACK, Piece.Type.QUEEN);
-        int whiteBishopCount = board.pieceCount(Piece.Color.WHITE, Piece.Type.BISHOP);
-        int blackBishopCount = board.pieceCount(Piece.Color.BLACK, Piece.Type.BISHOP);
+        int whitePawnCount = board.pieceCount(Color.WHITE, Type.PAWN);
+        int blackPawnCount = board.pieceCount(Color.BLACK, Type.PAWN);
+        int whiteKnightCount = board.pieceCount(Color.WHITE, Type.KNIGHT);
+        int blackKnightCount = board.pieceCount(Color.BLACK, Type.KNIGHT);
+        int whiteRookCount = board.pieceCount(Color.WHITE, Type.ROOK);
+        int blackRookCount = board.pieceCount(Color.BLACK, Type.ROOK);
+        int whiteKingCount = board.pieceCount(Color.WHITE, Type.KING);
+        int blackKingCount = board.pieceCount(Color.BLACK, Type.KING);
+        int whiteQueenCount = board.pieceCount(Color.WHITE, Type.QUEEN);
+        int blackQueenCount = board.pieceCount(Color.BLACK, Type.QUEEN);
+        int whiteBishopCount = board.pieceCount(Color.WHITE, Type.BISHOP);
+        int blackBishopCount = board.pieceCount(Color.BLACK, Type.BISHOP);
 
         // then
         assertEquals(8, whitePawnCount);
@@ -159,10 +162,10 @@ class BoardTest {
         Piece pieceInh1 = board.findPiece("h1");
 
         // then
-        assertEquals(Piece.createBlackRook(), pieceIna8);
-        assertEquals(Piece.createBlackRook(), pieceInh8);
-        assertEquals(Piece.createWhiteRook(), pieceIna1);
-        assertEquals(Piece.createWhiteRook(), pieceInh1);
+        assertEquals(PieceFactory.createPiece(Color.BLACK, Type.ROOK), pieceIna8);
+        assertEquals(PieceFactory.createPiece(Color.BLACK, Type.ROOK), pieceInh8);
+        assertEquals(PieceFactory.createPiece(Color.WHITE, Type.ROOK), pieceIna1);
+        assertEquals(PieceFactory.createPiece(Color.WHITE, Type.ROOK), pieceInh1);
     }
 
     @Test
@@ -171,15 +174,15 @@ class BoardTest {
         // given
         board.initializeEmpty();
 
-        addPiece("b6", Piece.createBlackPawn());
-        addPiece("e6", Piece.createBlackQueen());
-        addPiece("b8", Piece.createBlackKing());
-        addPiece("c8", Piece.createBlackRook());
+        addPiece("b6", PieceFactory.createPiece(Color.BLACK, Type.PAWN));
+        addPiece("e6", PieceFactory.createPiece(Color.BLACK, Type.QUEEN));
+        addPiece("b8", PieceFactory.createPiece(Color.BLACK, Type.KING));
+        addPiece("c8", PieceFactory.createPiece(Color.BLACK, Type.ROOK));
 
-        addPiece("f2", Piece.createWhitePawn());
-        addPiece("g2", Piece.createWhitePawn());
-        addPiece("e1", Piece.createWhiteRook());
-        addPiece("f1", Piece.createWhiteKing());
+        addPiece("f2", PieceFactory.createPiece(Color.WHITE, Type.PAWN));
+        addPiece("g2", PieceFactory.createPiece(Color.WHITE, Type.PAWN));
+        addPiece("e1", PieceFactory.createPiece(Color.WHITE, Type.ROOK));
+        addPiece("f1", PieceFactory.createPiece(Color.WHITE, Type.KING));
 
         // when
         // then
@@ -192,24 +195,24 @@ class BoardTest {
         // given
         board.initializeEmpty();
 
-        addPiece("b6", Piece.createBlackPawn());
-        addPiece("c6", Piece.createBlackPawn());
-        addPiece("c5", Piece.createBlackPawn());
-        addPiece("e6", Piece.createBlackQueen());
-        addPiece("b8", Piece.createBlackKing());
-        addPiece("c8", Piece.createBlackRook());
-        addPiece("a7", Piece.createBlackPawn());
-        addPiece("c7", Piece.createBlackPawn());
-        addPiece("d7", Piece.createBlackBishop());
+        addPiece("b6", PieceFactory.createPiece(Color.BLACK, Type.PAWN));
+        addPiece("c6", PieceFactory.createPiece(Color.BLACK, Type.PAWN));
+        addPiece("c5", PieceFactory.createPiece(Color.BLACK, Type.PAWN));
+        addPiece("e6", PieceFactory.createPiece(Color.BLACK, Type.QUEEN));
+        addPiece("b8", PieceFactory.createPiece(Color.BLACK, Type.KING));
+        addPiece("c8", PieceFactory.createPiece(Color.BLACK, Type.ROOK));
+        addPiece("a7", PieceFactory.createPiece(Color.BLACK, Type.PAWN));
+        addPiece("c7", PieceFactory.createPiece(Color.BLACK, Type.PAWN));
+        addPiece("d7", PieceFactory.createPiece(Color.BLACK, Type.BISHOP));
 
-        addPiece("f2", Piece.createWhitePawn());
-        addPiece("g2", Piece.createWhitePawn());
-        addPiece("e1", Piece.createWhiteRook());
-        addPiece("f1", Piece.createWhiteKing());
-        addPiece("f4", Piece.createWhiteKnight());
-        addPiece("g4", Piece.createWhiteQueen());
-        addPiece("f3", Piece.createWhitePawn());
-        addPiece("h3", Piece.createWhitePawn());
+        addPiece("f2", PieceFactory.createPiece(Color.WHITE, Type.PAWN));
+        addPiece("g2", PieceFactory.createPiece(Color.WHITE, Type.PAWN));
+        addPiece("e1", PieceFactory.createPiece(Color.WHITE, Type.ROOK));
+        addPiece("f1", PieceFactory.createPiece(Color.WHITE, Type.KING));
+        addPiece("f4", PieceFactory.createPiece(Color.WHITE, Type.KNIGHT));
+        addPiece("g4", PieceFactory.createPiece(Color.WHITE, Type.QUEEN));
+        addPiece("f3", PieceFactory.createPiece(Color.WHITE, Type.PAWN));
+        addPiece("h3", PieceFactory.createPiece(Color.WHITE, Type.PAWN));
 
         // when
         // then
@@ -218,8 +221,8 @@ class BoardTest {
 
     private void verifyCalculatedPoint(double blackExpected, double whiteExpected) {
         // when
-        double blackPoint = board.calculatePoint(Piece.Color.BLACK);
-        double whitePoint = board.calculatePoint(Piece.Color.WHITE);
+        double blackPoint = board.calculatePoint(Color.BLACK);
+        double whitePoint = board.calculatePoint(Color.WHITE);
 
         // then
         assertEquals(blackExpected, blackPoint, 0.01);
@@ -236,21 +239,21 @@ class BoardTest {
         // given
         board.initializeEmpty();
 
-        addPiece("b6", Piece.createBlackPawn());
-        addPiece("e6", Piece.createBlackQueen());
-        addPiece("e5", Piece.createBlackBishop());
-        addPiece("e3", Piece.createBlackKnight());
-        addPiece("b8", Piece.createBlackKing());
-        addPiece("c8", Piece.createBlackRook());
+        addPiece("b6", PieceFactory.createPiece(Color.BLACK, Type.PAWN));
+        addPiece("e6", PieceFactory.createPiece(Color.BLACK, Type.QUEEN));
+        addPiece("e5", PieceFactory.createPiece(Color.BLACK, Type.BISHOP));
+        addPiece("e3", PieceFactory.createPiece(Color.BLACK, Type.KNIGHT));
+        addPiece("b8", PieceFactory.createPiece(Color.BLACK, Type.KING));
+        addPiece("c8", PieceFactory.createPiece(Color.BLACK, Type.ROOK));
 
-        addPiece("f2", Piece.createWhitePawn());
-        addPiece("g2", Piece.createWhitePawn());
-        addPiece("e1", Piece.createWhiteRook());
-        addPiece("f1", Piece.createWhiteKing());
+        addPiece("f2", PieceFactory.createPiece(Color.WHITE, Type.PAWN));
+        addPiece("g2", PieceFactory.createPiece(Color.WHITE, Type.PAWN));
+        addPiece("e1", PieceFactory.createPiece(Color.WHITE, Type.ROOK));
+        addPiece("f1", PieceFactory.createPiece(Color.WHITE, Type.KING));
 
         // when
-        List<Piece> sortedWhitePieces = board.getSortedPiecesByPoint(Piece.Color.WHITE);
-        List<Piece> sortedBlackPieces = board.getSortedPiecesByPoint(Piece.Color.BLACK);
+        List<Piece> sortedWhitePieces = board.getSortedPiecesByPoint(Color.WHITE);
+        List<Piece> sortedBlackPieces = board.getSortedPiecesByPoint(Color.BLACK);
 
         // then
         assertEquals("rppk", RankTest.getRepresentations(sortedWhitePieces));

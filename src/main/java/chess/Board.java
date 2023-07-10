@@ -1,6 +1,8 @@
 package chess;
 
 import chess.pieces.Piece;
+import chess.pieces.Piece.Color;
+import chess.pieces.Piece.Type;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -23,19 +25,19 @@ public class Board {
 
     public void initialize() {
         ranks.clear();
-        ranks.add(Rank.createFirstWhiteRank());
-        ranks.add(Rank.createRankWithOnlyWhitePawn());
+        ranks.add(RankFactory.createFirstRank(Color.WHITE));
+        ranks.add(RankFactory.createRankWithOneColorAndType(Color.WHITE, Type.PAWN));
         for (int file = 2; file < MAX_FILE - 2; file++) {
-            ranks.add(Rank.createBlankRank());
+            ranks.add(RankFactory.createBlankRank());
         }
-        ranks.add(Rank.createRankWithOnlyBlackPawn());
-        ranks.add(Rank.createFirstBlackRank());
+        ranks.add(RankFactory.createRankWithOneColorAndType(Color.BLACK, Type.PAWN));
+        ranks.add(RankFactory.createFirstRank(Color.BLACK));
     }
 
     public void initializeEmpty() {
         ranks.clear();
         for (int file = 0; file < MAX_FILE; file++) {
-            ranks.add(Rank.createBlankRank());
+            ranks.add(RankFactory.createBlankRank());
         }
     }
 
@@ -62,7 +64,7 @@ public class Board {
      * @param type : 찾을 기물 타입
      * @return : 해당 color, type의 기물 개수 반환
      */
-    public int pieceCount(Piece.Color color, Piece.Type type) {
+    public int pieceCount(Color color, Type type) {
         int count = 0;
 
         for (Rank rank : ranks) {
@@ -103,7 +105,7 @@ public class Board {
         return ranks.get(position.getYPos()).getPiece(position.getXPos());
     }
 
-    public double calculatePoint(Piece.Color color) {
+    public double calculatePoint(Color color) {
         double pointExceptPawn = ranks.stream()
                 .mapToDouble(rank -> rank.calculatePointExceptPawn(color))
                 .sum();
@@ -111,21 +113,21 @@ public class Board {
         return pointExceptPawn + calculatePawnPoint(color);
     }
 
-    private double calculatePawnPoint(Piece.Color color) {
+    private double calculatePawnPoint(Color color) {
         return IntStream.range(0, MAX_FILE)
                 .map(file -> (int) IntStream.range(0, MAX_RANK)
-                        .filter(rank -> findPiece(rank, file).checkColorAndType(color, Piece.Type.PAWN)).count())
+                        .filter(rank -> findPiece(rank, file).checkColorAndType(color, Type.PAWN)).count())
                 .mapToDouble(Board::getPawnPointByCount).sum();
     }
 
     private static double getPawnPointByCount(int count) {
         if (count > 1) {
-            return Piece.Type.DUPLICATE_PAWN_POINT * count;
+            return Type.DUPLICATE_PAWN_POINT * count;
         }
-        return Piece.Type.PAWN.getDefaultPoint() * count;
+        return Type.PAWN.getDefaultPoint() * count;
     }
 
-    public List<Piece> getSortedPiecesByPoint(Piece.Color color) {
+    public List<Piece> getSortedPiecesByPoint(Color color) {
         return ranks.stream()
                 .flatMap(rank -> rank.getPiecesByColor(color).stream())
                 .sorted(Comparator.comparingDouble(Piece::getPoint).reversed())
