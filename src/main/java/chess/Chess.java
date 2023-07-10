@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class Chess {
     private static final String START = "start";
     private static final String END = "end";
+    private static final String MOVE = "move";
     private final Board board;
 
     public Chess() {
@@ -26,6 +27,11 @@ public class Chess {
             } else if (command.equals(END)) {
                 System.out.println("체스 게임을 종료합니다.");
                 break;
+            } else if (command.startsWith(MOVE)) {
+                String[] splited = command.split(" ");
+
+                board.move(splited[1], splited[2]);
+                System.out.println(board.showBoard());
             }
         }
     }
