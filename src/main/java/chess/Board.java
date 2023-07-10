@@ -39,8 +39,17 @@ public class Board {
     }
 
     public void move(String coordinate, Piece piece) {
-        Position position = Position.from(coordinate);
+        move(Position.from(coordinate), piece);
+    }
 
+    public void move(String sourcePosition, String targetPosition) {
+        Piece pieceToMove = findPiece(sourcePosition);
+
+        move(sourcePosition, Piece.createBlank());
+        move(targetPosition, pieceToMove);
+    }
+
+    private void move(Position position, Piece piece) {
         ranks.get(position.getYPos()).setPiece(position.getXPos(), piece);
     }
 
@@ -78,16 +87,19 @@ public class Board {
     public Piece findPiece(String coordinate) {
         Position position = Position.from(coordinate);
 
-        return findPieceByIndex(position.getYPos(), position.getXPos());
+        return findPiece(position);
     }
 
-    private Piece findPieceByIndex(int rank, int file) {
+    private Piece findPiece(int rank, int file) {
         return ranks.get(rank).getPiece(file);
     }
 
+    private Piece findPiece(Position position) {
+        return ranks.get(position.getYPos()).getPiece(position.getXPos());
+    }
+
     public double calculatePoint(Piece.Color color) {
-        double pointExceptPawn = ranks.stream()
-                .mapToDouble(rank -> rank.calculatePointExceptPawn(color)).sum();
+        double pointExceptPawn = ranks.stream().mapToDouble(rank -> rank.calculatePointExceptPawn(color)).sum();
 
         return pointExceptPawn + calculatePawnPoint(color);
     }
@@ -95,10 +107,8 @@ public class Board {
     private double calculatePawnPoint(Piece.Color color) {
         return IntStream.range(0, MAX_FILE)
                 .map(file -> (int) IntStream.range(0, MAX_RANK)
-                        .filter(rank -> findPieceByIndex(rank, file).checkColorAndType(color, Piece.Type.PAWN))
-                        .count())
-                .mapToDouble(Board::getPawnPointByCount)
-                .sum();
+                        .filter(rank -> findPiece(rank, file).checkColorAndType(color, Piece.Type.PAWN)).count())
+                .mapToDouble(Board::getPawnPointByCount).sum();
     }
 
     private static double getPawnPointByCount(int count) {

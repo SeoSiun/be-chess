@@ -163,7 +163,7 @@ class BoardTest {
 
     @Test
     @DisplayName("지정한 위치에 기물이 놓여야한다.")
-    void move() throws Exception {
+    void move() {
         // given
         board.initializeEmpty();
         String position = "b5";
@@ -278,5 +278,22 @@ class BoardTest {
         // then
         assertEquals("rppk", RankTest.getRepresentations(sortedWhitePieces));
         assertEquals("QRBNPK", RankTest.getRepresentations(sortedBlackPieces));
+    }
+
+    @Test
+    @DisplayName("source 위치에 있는 Piece가 target 위치로 옮겨져야 한다.")
+    void moveFromSourceToTarget() throws Exception {
+        // given
+        board.initialize();
+
+        String sourcePosition = "b2";
+        String targetPosition = "b3";
+
+        // when
+        board.move(sourcePosition, targetPosition);
+
+        // then
+        assertEquals(Piece.createBlank(), board.findPiece(sourcePosition));
+        assertEquals(Piece.createWhitePawn(), board.findPiece(targetPosition));
     }
 }
