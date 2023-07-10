@@ -16,26 +16,36 @@ public class Position {
         return new Position(fileToIndex(coordinate.charAt(0)),rankToIndex(coordinate.charAt(1)));
     }
 
+    public static Position of(int xPos, int yPos) {
+        validate(xPos, yPos);
+
+        return new Position(xPos, yPos);
+    }
+
     private static void validate(String coordinate) {
         if (coordinate.length() != 2) {
             throw new IllegalArgumentException(ILLEGAL_COORDINATE_ERROR);
         }
-        if (!isValidFileRange(coordinate.charAt(0))) {
+        if (isInvalidRange(fileToIndex(coordinate.charAt(0)))) {
             throw new IllegalArgumentException(ILLEGAL_COORDINATE_ERROR);
         }
-        if (!isValidRankRange(coordinate.charAt(1))) {
+        if (isInvalidRange(rankToIndex(coordinate.charAt(1)))) {
             throw new IllegalArgumentException(ILLEGAL_COORDINATE_ERROR);
         }
     }
 
-    private static boolean isValidFileRange(char file) {
-        return file >= 'a' && file <= 'h';
+    private static void validate(int xPos, int yPos) {
+        if (isInvalidRange(xPos)) {
+            throw new IllegalArgumentException(ILLEGAL_COORDINATE_ERROR);
+        }
+        if (isInvalidRange(yPos)) {
+            throw new IllegalArgumentException(ILLEGAL_COORDINATE_ERROR);
+        }
     }
 
-    private static boolean isValidRankRange(char rank) {
-        return rank >= '1' && rank <= '8';
+    private static boolean isInvalidRange(int pos) {
+        return pos < 0 || pos > 7;
     }
-
 
     private static int fileToIndex(char file) {
         return file - 'a';

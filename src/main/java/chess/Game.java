@@ -2,14 +2,18 @@ package chess;
 
 import java.util.Scanner;
 
-public class Chess {
+public class Game {
     private static final String START = "start";
     private static final String END = "end";
     private static final String MOVE = "move";
     private final Board board;
+    private final ChessGame chessGame;
+    private final ChessView chessView;
 
-    public Chess() {
+    public Game() {
         board = new Board();
+        chessGame = new ChessGame(board);
+        chessView = new ChessView(board);
     }
 
     public void run() {
@@ -23,15 +27,15 @@ public class Chess {
             if (command.equals(START)) {
                 System.out.println("체스 게임을 시작합니다");
                 board.initialize();
-                System.out.println(board.showBoard());
+                System.out.println(chessView.showBoard());
             } else if (command.equals(END)) {
                 System.out.println("체스 게임을 종료합니다.");
                 break;
             } else if (command.startsWith(MOVE)) {
-                String[] splited = command.split(" ");
+                String[] splitCommand = command.split(" ");
 
-                board.move(splited[1], splited[2]);
-                System.out.println(board.showBoard());
+                chessGame.move(splitCommand[1], splitCommand[2]);
+                System.out.println(chessView.showBoard());
             }
         }
     }

@@ -1,11 +1,11 @@
 package softeer2nd;
 
-import chess.Chess;
+import chess.Game;
 
 public class Main {
     public static void main(String[] args) {
-        Chess chess = new Chess();
+        Game game = new Game();
 
-        chess.run();
+        game.run();
     }
 }

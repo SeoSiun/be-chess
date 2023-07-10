@@ -13,12 +13,16 @@ import static utils.StringUtils.appendNewLine;
 
 class BoardTest {
     private Board board;
-    private static final String BLANK_RANK = "........";
+    private ChessView chessView;
+    private ChessGame chessGame;
+    public static final String BLANK_RANK = "........";
 
 
     @BeforeEach
     void setup() {
         board = new Board();
+        chessView = new ChessView(board);
+        chessGame = new ChessGame(board);
     }
 
     @Test
@@ -42,7 +46,7 @@ class BoardTest {
                         appendNewLine("rnbqkbnr  1") +
                         appendNewLine("") +
                         appendNewLine("abcdefgh"),
-                board.showBoard());
+                chessView.showBoard());
     }
 
     @Test
@@ -67,7 +71,7 @@ class BoardTest {
                         appendNewLine("rnbqkbnr  1") +
                         appendNewLine("") +
                         appendNewLine("abcdefgh"),
-                board.showBoard());
+                chessView.showBoard());
     }
 
     @Test
@@ -91,7 +95,7 @@ class BoardTest {
                         appendNewLine(BLANK_RANK + "  1") +
                         appendNewLine("") +
                         appendNewLine("abcdefgh"),
-                board.showBoard());
+                chessView.showBoard());
     }
 
     @Test
@@ -162,33 +166,6 @@ class BoardTest {
     }
 
     @Test
-    @DisplayName("지정한 위치에 기물이 놓여야한다.")
-    void move() {
-        // given
-        board.initializeEmpty();
-        String position = "b5";
-        Piece piece = Piece.createBlackRook();
-
-        // when
-        board.move(position, piece);
-
-        // then
-        assertEquals(piece, board.findPiece(position));
-        assertEquals(
-                appendNewLine(BLANK_RANK + "  8") +
-                        appendNewLine(BLANK_RANK + "  7") +
-                        appendNewLine(BLANK_RANK + "  6") +
-                        appendNewLine(".R......  5") +
-                        appendNewLine(BLANK_RANK + "  4") +
-                        appendNewLine(BLANK_RANK + "  3") +
-                        appendNewLine(BLANK_RANK + "  2") +
-                        appendNewLine(BLANK_RANK + "  1") +
-                        appendNewLine("") +
-                        appendNewLine("abcdefgh"), board.showBoard());
-
-    }
-
-    @Test
     @DisplayName("해당 색상의 모든 기물의 점수 합계를 리턴해야한다.")
     void calculatePoint() throws Exception {
         // given
@@ -250,7 +227,7 @@ class BoardTest {
     }
 
     private void addPiece(String position, Piece piece) {
-        board.move(position, piece);
+        chessGame.move(position, piece);
     }
 
     @Test
@@ -278,22 +255,5 @@ class BoardTest {
         // then
         assertEquals("rppk", RankTest.getRepresentations(sortedWhitePieces));
         assertEquals("QRBNPK", RankTest.getRepresentations(sortedBlackPieces));
-    }
-
-    @Test
-    @DisplayName("source 위치에 있는 Piece가 target 위치로 옮겨져야 한다.")
-    void moveFromSourceToTarget() throws Exception {
-        // given
-        board.initialize();
-
-        String sourcePosition = "b2";
-        String targetPosition = "b3";
-
-        // when
-        board.move(sourcePosition, targetPosition);
-
-        // then
-        assertEquals(Piece.createBlank(), board.findPiece(sourcePosition));
-        assertEquals(Piece.createWhitePawn(), board.findPiece(targetPosition));
     }
 }
