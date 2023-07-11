@@ -24,19 +24,24 @@ public class Game {
 
         while (sc.hasNext()) {
             command = sc.nextLine();
-            if (command.equals(START)) {
-                System.out.println("체스 게임을 시작합니다");
-                board.initialize();
-                System.out.println(chessView.showBoard());
-            } else if (command.equals(END)) {
-                System.out.println("체스 게임을 종료합니다.");
-                break;
-            } else if (command.startsWith(MOVE)) {
-                String[] splitCommand = command.split(" ");
+            try {
+                if (command.equals(START)) {
+                    System.out.println("체스 게임을 시작합니다");
+                    board.initialize();
+                    System.out.println(chessView.showBoard());
+                } else if (command.equals(END)) {
+                    System.out.println("체스 게임을 종료합니다.");
+                    break;
+                } else if (command.startsWith(MOVE)) {
+                    String[] splitCommand = command.split(" ");
 
-                chessGame.move(splitCommand[1], splitCommand[2]);
-                System.out.println(chessView.showBoard());
+                    chessGame.move(splitCommand[1], splitCommand[2]);
+                    System.out.println(chessView.showBoard());
+                }
+            } catch (IllegalArgumentException exception) {
+                System.out.println(exception.getMessage());
             }
+
         }
     }
 }

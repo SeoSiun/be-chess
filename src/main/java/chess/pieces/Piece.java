@@ -73,6 +73,10 @@ public class Piece {
         public Position getDegree() {
             return degree;
         }
+
+        public boolean isNEorNW() {
+            return this == Direction.NORTHEAST  || this == Direction.NORTHWEST;
+        }
     }
 
     private final Color color;
@@ -126,6 +130,10 @@ public class Piece {
 
     public Boolean isPawn() {
         return this.type == Type.PAWN;
+    }
+
+    public boolean isSameColor(Piece piece) {
+        return this.color == piece.color;
     }
 
     public boolean checkColorAndType(Color color, Type type) {

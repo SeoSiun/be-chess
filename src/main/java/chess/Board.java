@@ -1,8 +1,10 @@
 package chess;
 
+import chess.pieces.Pawn;
 import chess.pieces.Piece;
 import chess.pieces.Piece.Color;
 import chess.pieces.Piece.Type;
+import chess.pieces.PieceFactory;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -11,7 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- *  8 * 8 체스판 구성 및 관리
+ * 8 * 8 체스판 구성 및 관리
  */
 public class Board {
     private final List<Rank> ranks;
@@ -45,8 +47,19 @@ public class Board {
         ranks.get(position.getYPos()).setPiece(position.getXPos(), piece);
     }
 
+    public void move(String sourcePosition, String targetPosition) {
+        Piece pieceToMove = findPiece(sourcePosition);
+
+        move(Position.from(sourcePosition), PieceFactory.createBlank());
+        move(Position.from(targetPosition), pieceToMove);
+
+        // pawn은 첫 번째에만 2칸 움직일 수 있고, 이후에는 1칸만 움직일 수 있음
+        if (pieceToMove instanceof Pawn) {
+            ((Pawn) pieceToMove).afterFirstMove();
+        }
+    }
+
     /**
-     *
      * @return : 전체 기물 개수 반환
      */
     public int pieceCount() {
@@ -59,9 +72,8 @@ public class Board {
     }
 
     /**
-     *
      * @param color : 찾을 기물 색상
-     * @param type : 찾을 기물 타입
+     * @param type  : 찾을 기물 타입
      * @return : 해당 color, type의 기물 개수 반환
      */
     public int pieceCount(Color color, Type type) {
@@ -74,7 +86,6 @@ public class Board {
     }
 
     /**
-     *
      * @param coordinate : 찾을 좌표
      * @return : 해당 위치에 있는 기물 반환
      */
@@ -85,7 +96,6 @@ public class Board {
     }
 
     /**
-     *
      * @param rank : rank index
      * @param file : file index
      * @return : 해당 rank, file에 위치한 기물 반환
@@ -97,7 +107,6 @@ public class Board {
     }
 
     /**
-     *
      * @param position : 찾을 위치
      * @return : 해당 위치에 있는 기물 반환
      */
@@ -136,5 +145,25 @@ public class Board {
 
     public String getRankRepresentation(int rank) {
         return ranks.get(rank).getRepresentation();
+    }
+
+    public boolean isBlank(Position position) {
+        return findPiece(position).isBlank();
+    }
+
+    public boolean isSameColor(String sourcePosition, String targetPosition) {
+        return findPiece(sourcePosition).isSameColor(findPiece(targetPosition));
+    }
+
+    public List<Piece.Direction> getDirections(Position sourcePosition) {
+        return findPiece(sourcePosition).getDirections();
+    }
+
+    public int getMaxMoveCount(Position position) {
+        return findPiece(position).getMaxMoveCount();
+    }
+
+    public boolean isPawn(Position sourcePosition) {
+        return findPiece(sourcePosition).isPawn();
     }
 }

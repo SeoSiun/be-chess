@@ -126,7 +126,7 @@ class ChessGameTest {
      * check King's movement
      */
     @Test
-    @DisplayName("target까지 가는 길에 장애물(다른 기물)이 있다면 TargetUnreachableException을 throw한다.")
+    @DisplayName("target까지 가는 길에 장애물(다른 기물)이 있다면 UnreachableWithObstacleException을 throw한다.")
     void moveUnreachableTarget() {
         // given
         board.initialize();
@@ -134,7 +134,7 @@ class ChessGameTest {
         String targetPosition = "a3";
 
         // when & then
-        assertThrows(TargetUnreachableException.class, () -> chessGame.move(sourcePosition, targetPosition));
+        assertThrows(UnreachableWithObstacleException.class, () -> chessGame.move(sourcePosition, targetPosition));
     }
 
     @Test
@@ -220,7 +220,7 @@ class ChessGameTest {
     }
 
     @Test
-    @DisplayName("Queen이 이동하는 경로에 다른 기물이 있으면 TargetUnreachableException이 발생해야 한다.")
+    @DisplayName("Queen이 이동하는 경로에 다른 기물이 있으면 UnreachableWithObstacleException이 발생해야 한다.")
     void moveQueenWithObstacle() {
         // given
         Piece whiteKing = PieceFactory.createPiece(Color.WHITE, Type.QUEEN);
@@ -229,7 +229,7 @@ class ChessGameTest {
         board.move(Position.from("d3"), PieceFactory.createPiece(Color.WHITE, Type.PAWN));
 
         // when & then
-        assertThrows(TargetUnreachableException.class, () -> chessGame.move("d1", "d5"));
+        assertThrows(UnreachableWithObstacleException.class, () -> chessGame.move("d1", "d5"));
     }
 
 
