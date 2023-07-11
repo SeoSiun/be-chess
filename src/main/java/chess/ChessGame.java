@@ -32,18 +32,29 @@ public class ChessGame {
      * @param sourcePosition : 옮기기 전 위치
      * @param targetPosition : 옮길 위치
      */
-    public void move(String sourcePosition, String targetPosition) {
-        validate(sourcePosition, targetPosition);
+    public void move(String sourcePosition, String targetPosition, boolean isWhiteTurn) {
+        validate(sourcePosition, targetPosition, isWhiteTurn);
 
         board.move(sourcePosition, targetPosition);
     }
 
-    private void validate(String sourcePosition, String targetPosition) {
+    private void validate(String sourcePosition, String targetPosition, boolean isWhiteTurn) {
         checkNoPieceInSource(sourcePosition);
+        checkValidTurn(isWhiteTurn, sourcePosition);
         checkTargetSameAsSource(sourcePosition, targetPosition);
-        checkIsTargetSameColor(sourcePosition, targetPosition);
         Piece.Direction direction = getDirection(Position.from(sourcePosition), Position.from(targetPosition));
+        checkIsTargetSameColor(sourcePosition, targetPosition);
         checkTargetReachable(Position.from(sourcePosition), Position.from(targetPosition), direction);
+    }
+
+    private void checkValidTurn(boolean isWhiteTurn, String sourcePosition) {
+        if (isWhiteTurn && board.isWhite(sourcePosition)) {
+            return;
+        }
+        if (!isWhiteTurn && board.isBlack(sourcePosition)) {
+            return;
+        }
+        throw new InvalidTurnException();
     }
 
     /**
@@ -90,7 +101,7 @@ public class ChessGame {
                 .collect(Collectors.toList());
 
         if (filteredDirection.isEmpty()) {
-            throw new InvalidDirectionException();
+            throw new InvalidTargetPositionException();
         }
         return filteredDirection.get(0);
     }
@@ -121,7 +132,7 @@ public class ChessGame {
         }
         if (moveCount == 0) {
             // target까지 도달할 수 없을 때 예외처리
-            throw new TargetUnreachableException();
+            throw new InvalidTargetPositionException();
         }
         checkReachability(direction, targetPosition, curPosition.add(direction), moveCount - 1);
     }

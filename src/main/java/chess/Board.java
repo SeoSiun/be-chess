@@ -163,7 +163,15 @@ public class Board {
         return findPiece(position).getMaxMoveCount();
     }
 
-    public boolean isPawn(Position sourcePosition) {
-        return findPiece(sourcePosition).isPawn();
+    public boolean isPawn(Position position) {
+        return findPiece(position).isPawn();
+    }
+
+    public boolean isWhite(String position) {
+        return findPiece(position).isWhite();
+    }
+
+    public boolean isBlack(String position) {
+        return findPiece(position).isBlack();
     }
 }

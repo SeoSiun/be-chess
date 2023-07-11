@@ -67,7 +67,7 @@ class ChessGameTest {
         String targetPosition = "b3";
 
         // when
-        chessGame.move(sourcePosition, targetPosition);
+        chessGame.move(sourcePosition, targetPosition, true);
 
         // then
         assertEquals(PieceFactory.createBlank(), board.findPiece(sourcePosition));
@@ -83,7 +83,7 @@ class ChessGameTest {
         String targetPosition = "a2";
 
         // when & then
-        assertThrows(NoPieceInSourceException.class, () -> chessGame.move(sourcePosition, targetPosition));
+        assertThrows(NoPieceInSourceException.class, () -> chessGame.move(sourcePosition, targetPosition, true));
     }
 
     @Test
@@ -95,11 +95,11 @@ class ChessGameTest {
         String targetPosition = "a2";
 
         // when & then
-        assertThrows(TargetSameColorException.class, () -> chessGame.move(sourcePosition, targetPosition));
+        assertThrows(TargetSameColorException.class, () -> chessGame.move(sourcePosition, targetPosition, true));
     }
 
     @Test
-    @DisplayName("해당 기물이 움직일 수 없는 위치로 움직이는 경우 InvalidDirectionException을 throw한다.")
+    @DisplayName("해당 기물이 움직일 수 없는 위치로 움직이는 경우 InvalidTargetPositionException을 throw한다.")
     void moveInvalidDirection() {
         // given
         board.initialize();
@@ -107,7 +107,7 @@ class ChessGameTest {
         String targetPosition = "b4";
 
         // when & then
-        assertThrows(InvalidDirectionException.class, () -> chessGame.move(sourcePosition, targetPosition));
+        assertThrows(InvalidTargetPositionException.class, () -> chessGame.move(sourcePosition, targetPosition, true));
     }
 
     @Test
@@ -119,7 +119,7 @@ class ChessGameTest {
         String targetPosition = "a2";
 
         // when & then
-        assertThrows(TargetSameAsSourceException.class, () -> chessGame.move(sourcePosition, targetPosition));
+        assertThrows(TargetSameAsSourceException.class, () -> chessGame.move(sourcePosition, targetPosition, true));
     }
 
     /**
@@ -134,7 +134,7 @@ class ChessGameTest {
         String targetPosition = "a3";
 
         // when & then
-        assertThrows(UnreachableWithObstacleException.class, () -> chessGame.move(sourcePosition, targetPosition));
+        assertThrows(UnreachableWithObstacleException.class, () -> chessGame.move(sourcePosition, targetPosition, true));
     }
 
     @Test
@@ -148,7 +148,7 @@ class ChessGameTest {
 
         // when & then
         IntStream.range(0, positions.length - 1)
-                .forEach(index -> verifyMovement(whiteKing, positions[index], positions[index + 1]));
+                .forEach(index -> verifyMovement(whiteKing, positions[index], positions[index + 1], true));
     }
 
     @Test
@@ -160,11 +160,11 @@ class ChessGameTest {
         board.move(Position.from("e8"), whiteKing);
 
         // when & then
-        assertThrows(PositionOutOfRangeException.class, () -> chessGame.move("e8", "e9"));
+        assertThrows(PositionOutOfRangeException.class, () -> chessGame.move("e8", "e9", true));
     }
 
     @Test
-    @DisplayName("King이 1칸 이상 움직이면 TargetUnreachableException이 발생해야 한다.")
+    @DisplayName("King이 1칸 이상 움직이면 InvalidTargetPositionException이 발생해야 한다.")
     void moveKingMultipleStep() {
         // given
         Piece whiteKing = PieceFactory.createPiece(Color.WHITE, Type.KING);
@@ -172,7 +172,7 @@ class ChessGameTest {
         board.move(Position.from("e5"), whiteKing);
 
         // when & then
-        assertThrows(TargetUnreachableException.class, () -> chessGame.move("e5", "e2"));
+        assertThrows(InvalidTargetPositionException.class, () -> chessGame.move("e5", "e2", true));
     }
 
     @Test
@@ -185,7 +185,7 @@ class ChessGameTest {
         board.move(Position.from("e4"), PieceFactory.createPiece(Color.WHITE, Type.PAWN));
 
         // when & then
-        assertThrows(TargetSameColorException.class, () -> chessGame.move("e5", "e4"));
+        assertThrows(TargetSameColorException.class, () -> chessGame.move("e5", "e4", true));
     }
 
 
@@ -203,7 +203,7 @@ class ChessGameTest {
 
         // when & then
         IntStream.range(0, positions.length - 1)
-                .forEach(index -> verifyMovement(whiteQueen, positions[index], positions[index + 1]));
+                .forEach(index -> verifyMovement(whiteQueen, positions[index], positions[index + 1], true));
 
     }
 
@@ -216,7 +216,7 @@ class ChessGameTest {
         board.move(Position.from("e5"), whiteKing);
 
         // when & then
-        assertThrows(PositionOutOfRangeException.class, () -> chessGame.move("e5", "e9"));
+        assertThrows(PositionOutOfRangeException.class, () -> chessGame.move("e5", "e9", true));
     }
 
     @Test
@@ -229,7 +229,7 @@ class ChessGameTest {
         board.move(Position.from("d3"), PieceFactory.createPiece(Color.WHITE, Type.PAWN));
 
         // when & then
-        assertThrows(UnreachableWithObstacleException.class, () -> chessGame.move("d1", "d5"));
+        assertThrows(UnreachableWithObstacleException.class, () -> chessGame.move("d1", "d5", true));
     }
 
 
@@ -247,18 +247,18 @@ class ChessGameTest {
 
         // when & then
         IntStream.range(0, positions.length - 1)
-                .forEach(index -> verifyMovement(whiteKnight, positions[index], positions[index + 1]));
+                .forEach(index -> verifyMovement(whiteKnight, positions[index], positions[index + 1], true));
     }
 
     @Test
-    @DisplayName("Knight가 NNE, NNW, .. WWS 으로 여러 칸 움직이면 InvalidDirectionException이 발생한다.")
+    @DisplayName("Knight가 NNE, NNW, .. WWS 으로 여러 칸 움직이면 InvalidTargetPositionException이 발생한다.")
     void moveKnightMultipleStep() {
         // given
         Piece whiteKnight = PieceFactory.createPiece(Color.WHITE, Type.KNIGHT);
         board.initializeEmpty();
         board.move(Position.from("d4"), whiteKnight);
 
-        assertThrows(InvalidDirectionException.class, () -> chessGame.move("d4", "f8"));
+        assertThrows(InvalidTargetPositionException.class, () -> chessGame.move("d4", "f8", true));
     }
 
 
@@ -276,20 +276,20 @@ class ChessGameTest {
 
         // when & then
         IntStream.range(0, positions.length - 1)
-                .forEach(index -> verifyMovement(whiteBishop, positions[index], positions[index + 1]));
+                .forEach(index -> verifyMovement(whiteBishop, positions[index], positions[index + 1], true));
     }
 
     @Test
-    @DisplayName("Bishop이 대각선이 아닌 방향으로 움직이면 InvalidDirectionException이 발생한다.")
+    @DisplayName("Bishop이 대각선이 아닌 방향으로 움직이면 InvalidTargetPositionException이 발생한다.")
     void moveBishopNonDiagonal() {
         // given
         Piece whiteBishop = PieceFactory.createPiece(Color.WHITE, Type.BISHOP);
         board.initializeEmpty();
         board.move(Position.from("d4"), whiteBishop);
 
-        assertThrows(InvalidDirectionException.class, () -> chessGame.move("d4", "d8"));
-        assertThrows(InvalidDirectionException.class, () -> chessGame.move("d4", "a4"));
-        assertThrows(InvalidDirectionException.class, () -> chessGame.move("d4", "g6"));
+        assertThrows(InvalidTargetPositionException.class, () -> chessGame.move("d4", "d8", true));
+        assertThrows(InvalidTargetPositionException.class, () -> chessGame.move("d4", "a4", true));
+        assertThrows(InvalidTargetPositionException.class, () -> chessGame.move("d4", "g6", true));
     }
 
     /**
@@ -306,20 +306,20 @@ class ChessGameTest {
 
         // when & then
         IntStream.range(0, positions.length - 1)
-                .forEach(index -> verifyMovement(whiteRook, positions[index], positions[index + 1]));
+                .forEach(index -> verifyMovement(whiteRook, positions[index], positions[index + 1], true));
     }
 
     @Test
-    @DisplayName("Rook이 수직/수평이 아닌 방향으로 움직이면 InvalidDirectionException이 발생한다.")
+    @DisplayName("Rook이 수직/수평이 아닌 방향으로 움직이면 InvalidTargetPositionException이 발생한다.")
     void moveRookInvalidDirection() {
         // given
         Piece whiteRook = PieceFactory.createPiece(Color.WHITE, Type.ROOK);
         board.initializeEmpty();
         board.move(Position.from("d4"), whiteRook);
 
-        assertThrows(InvalidDirectionException.class, () -> chessGame.move("d4", "a7"));
-        assertThrows(InvalidDirectionException.class, () -> chessGame.move("d4", "g1"));
-        assertThrows(InvalidDirectionException.class, () -> chessGame.move("d4", "g6"));
+        assertThrows(InvalidTargetPositionException.class, () -> chessGame.move("d4", "a7", true));
+        assertThrows(InvalidTargetPositionException.class, () -> chessGame.move("d4", "g1", true));
+        assertThrows(InvalidTargetPositionException.class, () -> chessGame.move("d4", "g6", true));
     }
 
     /**
@@ -336,8 +336,8 @@ class ChessGameTest {
         board.move(Position.from("c2"), whitePawnForTwoStep);
 
         // when & then
-        verifyMovement(whitePawnForOneStep, "b2", "b3");
-        verifyMovement(whitePawnForTwoStep, "c2", "c4");
+        verifyMovement(whitePawnForOneStep, "b2", "b3", true);
+        verifyMovement(whitePawnForTwoStep, "c2", "c4", true);
     }
 
     @Test
@@ -347,11 +347,11 @@ class ChessGameTest {
         Piece whitePawn = PieceFactory.createPiece(Color.WHITE, Type.PAWN);
         board.initializeEmpty();
         board.move(Position.from("b2"), whitePawn);
-        chessGame.move("b2", "b4");
+        chessGame.move("b2", "b4", true);
 
         // when & then
-        verifyMovement(whitePawn, "b4", "b5");
-        assertThrows(TargetUnreachableException.class, () -> chessGame.move("b5", "b7"));
+        verifyMovement(whitePawn, "b4", "b5", true);
+        assertThrows(InvalidTargetPositionException.class, () -> chessGame.move("b5", "b7", true));
     }
 
     @Test
@@ -366,13 +366,26 @@ class ChessGameTest {
         board.move(Position.from("c3"), blackPawn);
 
         // when & then
-        verifyMovement(whitePawn, "b2", "c3");
-        assertThrows(PawnMoveDiagonalWithNoEnemyException.class, () -> chessGame.move("c3", "d4"));
+        verifyMovement(whitePawn, "b2", "c3", true);
+        assertThrows(PawnMoveDiagonalWithNoEnemyException.class, () -> chessGame.move("c3", "d4", true));
     }
 
-    private void verifyMovement(Piece pieceToMove, String sourcePosition, String targetPosition) {
+    @Test
+    @DisplayName("흰색 턴일 때 검은색 기물을 움직이면 InvalidTurnException이 throw된다.")
+    void invalidTurn() {
+        // given
+        Piece blackPawn = PieceFactory.createPiece(Color.BLACK, Type.PAWN);
+
+        board.initializeEmpty();
+        board.move(Position.from("b7"), blackPawn);
+
+        // when & then
+        assertThrows(InvalidTurnException.class, () -> chessGame.move("b7", "b6", true));
+    }
+
+    private void verifyMovement(Piece pieceToMove, String sourcePosition, String targetPosition, boolean isWhiteTurn) {
         // when
-        chessGame.move(sourcePosition, targetPosition);
+        chessGame.move(sourcePosition, targetPosition, isWhiteTurn);
 
         // then
         assertEquals(pieceToMove, board.findPiece(targetPosition));
