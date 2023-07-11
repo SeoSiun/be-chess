@@ -1,7 +1,6 @@
 package chess;
 
 import chess.pieces.Piece;
-import exceptions.InvalidPositionLengthException;
 import exceptions.PositionOutOfRangeException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,24 +28,16 @@ class PositionTest {
         // given
         String coordinateWithRankOutOfRange = "a0";
         String coordinateWithFileOutOfRange = "k8";
+        String coordinateWithLongLength = "a13";
         String coordinateWithCharRank = "aa";
         String coordinateWithIntFile = "11";
 
         // when & then
         assertThrows(PositionOutOfRangeException.class, () -> Position.from(coordinateWithRankOutOfRange));
         assertThrows(PositionOutOfRangeException.class, () -> Position.from(coordinateWithFileOutOfRange));
+        assertThrows(PositionOutOfRangeException.class, () -> Position.from(coordinateWithLongLength));
         assertThrows(PositionOutOfRangeException.class, () -> Position.from(coordinateWithCharRank));
         assertThrows(PositionOutOfRangeException.class, () -> Position.from(coordinateWithIntFile));
-    }
-
-    @Test
-    @DisplayName("좌표 길이가 2보다 크면 InvalidPositionLengthException을 throw한다")
-    void createPositionWithLongLengthCoordinate() {
-        // given
-        String coordinateWithLongLength = "a13";
-
-        // when & then
-        assertThrows(InvalidPositionLengthException.class, () -> Position.from(coordinateWithLongLength));
     }
 
     @Test

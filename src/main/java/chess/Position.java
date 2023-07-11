@@ -1,6 +1,5 @@
 package chess;
 
-import exceptions.InvalidPositionLengthException;
 import exceptions.NoIntegerException;
 import exceptions.PositionOutOfRangeException;
 
@@ -33,7 +32,7 @@ public class Position {
 
     private static void validate(String coordinate) {
         if (coordinate.length() != 2) {
-            throw new InvalidPositionLengthException();
+            throw new PositionOutOfRangeException();
         }
         if (isInvalidRange(fileToIndex(coordinate.charAt(0)))) {
             throw new PositionOutOfRangeException();
