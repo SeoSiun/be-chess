@@ -1,10 +1,12 @@
 package chess;
 
+import chess.pieces.Piece;
+import exceptions.InvalidPositionLengthException;
+import exceptions.PositionOutOfRangeException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class PositionTest {
     @Test
@@ -22,20 +24,57 @@ class PositionTest {
     }
 
     @Test
-    @DisplayName("좌표 범위를 벗어나면 IllegalArgumentException 에러를 throw한다.")
+    @DisplayName("좌표 범위를 벗어나면 PositionOutOfRangeException을 throw한다")
     void createPositionOutOfRange() {
         // given
         String coordinateWithRankOutOfRange = "a0";
         String coordinateWithFileOutOfRange = "k8";
-        String coordinateWithLongLength = "a8k";
         String coordinateWithCharRank = "aa";
         String coordinateWithIntFile = "11";
 
         // when & then
-        assertThrows(IllegalArgumentException.class, () -> Position.from(coordinateWithRankOutOfRange));
-        assertThrows(IllegalArgumentException.class, () -> Position.from(coordinateWithFileOutOfRange));
-        assertThrows(IllegalArgumentException.class, () -> Position.from(coordinateWithLongLength));
-        assertThrows(IllegalArgumentException.class, () -> Position.from(coordinateWithCharRank));
-        assertThrows(IllegalArgumentException.class, () -> Position.from(coordinateWithIntFile));
+        assertThrows(PositionOutOfRangeException.class, () -> Position.from(coordinateWithRankOutOfRange));
+        assertThrows(PositionOutOfRangeException.class, () -> Position.from(coordinateWithFileOutOfRange));
+        assertThrows(PositionOutOfRangeException.class, () -> Position.from(coordinateWithCharRank));
+        assertThrows(PositionOutOfRangeException.class, () -> Position.from(coordinateWithIntFile));
+    }
+
+    @Test
+    @DisplayName("좌표 길이가 2보다 크면 InvalidPositionLengthException을 throw한다")
+    void createPositionWithLongLengthCoordinate() {
+        // given
+        String coordinateWithLongLength = "a13";
+
+        // when & then
+        assertThrows(InvalidPositionLengthException.class, () -> Position.from(coordinateWithLongLength));
+    }
+
+    @Test
+    @DisplayName("같은 방향인지 여부를 반환해야 한다.")
+    void isSameDirection() {
+        // given
+        Position sourcePosition = Position.of(0, 0);
+        Position targetNEPosition1 = Position.of(1, 1);
+        Position targetNEPosition2 = Position.of(2, 2);
+        Position targetRandomPosition = Position.of(3,5);
+        Position targetNPosition = Position.of(0, 1);
+        Position targetSSEPosition = Position.getInstanceWithNoValidate(1, -2);
+
+        // when
+        boolean NETrue1 = targetNEPosition1.isSameDirection(Piece.Direction.NORTHEAST.getDegree(), sourcePosition);
+        boolean NETrue2 = targetNEPosition2.isSameDirection(Piece.Direction.NORTHEAST.getDegree(), sourcePosition);
+        boolean randomFalse = targetRandomPosition.isSameDirection(Piece.Direction.NORTHEAST.getDegree(), sourcePosition);
+        boolean NFalse = targetNPosition.isSameDirection(Piece.Direction.NORTHEAST.getDegree(), sourcePosition);
+        boolean NTrue = targetNPosition.isSameDirection(Piece.Direction.NORTH.getDegree(), sourcePosition);
+        boolean SSEFalse = targetSSEPosition.isSameDirection(Piece.Direction.NORTHEAST.getDegree(), sourcePosition);
+        boolean SSETrue = targetSSEPosition.isSameDirection(Piece.Direction.SSE.getDegree(), sourcePosition);
+
+        assertTrue(NETrue1);
+        assertTrue(NETrue2);
+        assertFalse(randomFalse);
+        assertFalse(NFalse);
+        assertTrue(NTrue);
+        assertFalse(SSEFalse);
+        assertTrue(SSETrue);
     }
 }

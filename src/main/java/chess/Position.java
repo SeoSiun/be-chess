@@ -1,7 +1,12 @@
 package chess;
 
+import exceptions.InvalidPositionLengthException;
+import exceptions.NoIntegerException;
+import exceptions.PositionOutOfRangeException;
+
+import java.util.Objects;
+
 public class Position {
-    private static final String ILLEGAL_COORDINATE_ERROR = "잘못된 좌표 입니다.";
     private final int xPos;
     private final int yPos;
 
@@ -22,24 +27,25 @@ public class Position {
         return new Position(xPos, yPos);
     }
 
+    public static Position getInstanceWithNoValidate(int xPos, int yPos) {
+        return new Position(xPos, yPos);
+    }
+
     private static void validate(String coordinate) {
         if (coordinate.length() != 2) {
-            throw new IllegalArgumentException(ILLEGAL_COORDINATE_ERROR);
+            throw new InvalidPositionLengthException();
         }
         if (isInvalidRange(fileToIndex(coordinate.charAt(0)))) {
-            throw new IllegalArgumentException(ILLEGAL_COORDINATE_ERROR);
+            throw new PositionOutOfRangeException();
         }
         if (isInvalidRange(rankToIndex(coordinate.charAt(1)))) {
-            throw new IllegalArgumentException(ILLEGAL_COORDINATE_ERROR);
+            throw new PositionOutOfRangeException();
         }
     }
 
     private static void validate(int xPos, int yPos) {
-        if (isInvalidRange(xPos)) {
-            throw new IllegalArgumentException(ILLEGAL_COORDINATE_ERROR);
-        }
-        if (isInvalidRange(yPos)) {
-            throw new IllegalArgumentException(ILLEGAL_COORDINATE_ERROR);
+        if (isInvalidRange(xPos) || isInvalidRange(yPos)) {
+            throw new PositionOutOfRangeException();
         }
     }
 
@@ -60,5 +66,53 @@ public class Position {
 
     public int getYPos() {
         return yPos;
+    }
+
+    public Position add(Position position) {
+        return Position.of(xPos + position.xPos, yPos + position.yPos);
+    }
+
+    public Position sub(Position position) {
+        return Position.getInstanceWithNoValidate(xPos - position.xPos, yPos - position.yPos);
+    }
+
+    public boolean isSameDirection(Position direction, Position sourcePosition) {
+        Position vector = this.sub(sourcePosition);
+
+        try {
+            return vector.equals(direction) || direction.equals(vector.getUnitVector());
+        } catch (NoIntegerException exception) {
+            return false;
+        }
+    }
+
+    private Position getUnitVector() {
+        int newXPos = xPos;
+        int newYPos = yPos;
+
+        // 대각선, 수직, 수평 다 아닌 경우
+        if (xPos != 0 && yPos != 0 && Math.abs(xPos) != Math.abs(yPos)) {
+            return null;
+        }
+        if (xPos != 0) {
+            newXPos = xPos / Math.abs(xPos);
+        }
+        if (yPos != 0) {
+            newYPos = yPos / Math.abs(yPos);
+        }
+        return Position.getInstanceWithNoValidate(newXPos, newYPos);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Position position = (Position) o;
+        return xPos == position.xPos && yPos == position.yPos;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(xPos, yPos);
     }
 }
