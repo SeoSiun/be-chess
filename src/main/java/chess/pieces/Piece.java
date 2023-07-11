@@ -1,6 +1,11 @@
 package chess.pieces;
 
+import chess.Position;
+
+import java.util.List;
 import java.util.Objects;
+
+import static chess.Board.MAX_RANK;
 
 public class Piece {
     public enum Color {
@@ -40,22 +45,48 @@ public class Piece {
         }
     }
 
+    public enum Direction {
+        NORTH(0, 1),
+        NORTHEAST(1, 1),
+        EAST(1, 0),
+        SOUTHEAST(1, -1),
+        SOUTH(0, -1),
+        SOUTHWEST(-1, -1),
+        WEST(-1, 0),
+        NORTHWEST(-1, 1),
+
+        NNE(1, 2),
+        NNW(-1, 2),
+        SSE(1, -2),
+        SSW(-1, -2),
+        EEN(2, 1),
+        EES(2, -1),
+        WWN(-2, 1),
+        WWS(-2, -1);
+
+        private final Position degree;
+
+        private Direction(int xDegree, int yDegree) {
+            this.degree = Position.getInstanceWithNoValidate(xDegree, yDegree);
+        }
+
+        public Position getDegree() {
+            return degree;
+        }
+
+        public boolean isNEorNW() {
+            return this == Direction.NORTHEAST  || this == Direction.NORTHWEST;
+        }
+    }
+
     private final Color color;
     private final Type type;
+    private final List<Direction> directions;
 
-    protected Piece() {
-        this.color = Color.NO_COLOR;
-        this.type = Type.NO_PIECE;
-    }
-
-    protected Piece(Type type) {
-        this.color = Color.WHITE;
-        this.type = type;
-    }
-
-    protected Piece(Color color, Type type) {
+    protected Piece(Color color, Type type, List<Direction> directions) {
         this.color = color;
         this.type = type;
+        this.directions = directions;
     }
 
     public Color getColor() {
@@ -66,96 +97,23 @@ public class Piece {
         return this.type;
     }
 
+    public List<Direction> getDirections() {
+        return directions;
+    }
+
+    public int getMaxMoveCount() {
+        return MAX_RANK;
+    }
+
     public char getRepresentation() {
-        if (color == Color.WHITE || color == Color.NO_COLOR) {
-            return type.getWhiteRepresentation();
+        if (color == Color.BLACK) {
+            return type.getBlackRepresentation();
         }
-        return type.getBlackRepresentation();
+        return type.getWhiteRepresentation();
     }
 
     public double getPoint() {
         return type.getDefaultPoint();
-    }
-
-    public static Piece createWhitePawn() {
-        return createWhite(Type.PAWN);
-    }
-
-    public static Piece createBlackPawn() {
-        return createBlack(Type.PAWN);
-    }
-
-    public static Piece createWhiteKnight() {
-        return createWhite(Type.KNIGHT);
-    }
-
-    public static Piece createBlackKnight() {
-        return createBlack(Type.KNIGHT);
-    }
-
-    public static Piece createWhiteRook() {
-        return createWhite(Type.ROOK);
-    }
-
-    public static Piece createBlackRook() {
-        return createBlack(Type.ROOK);
-    }
-
-    public static Piece createWhiteBishop() {
-        return createWhite(Type.BISHOP);
-    }
-
-    public static Piece createBlackBishop() {
-        return createBlack(Type.BISHOP);
-    }
-
-    public static Piece createWhiteQueen() {
-        return createWhite(Type.QUEEN);
-    }
-
-    public static Piece createBlackQueen() {
-        return createBlack(Type.QUEEN);
-    }
-
-    public static Piece createWhiteKing() {
-        return createWhite(Type.KING);
-    }
-
-    public static Piece createBlackKing() {
-        return createBlack(Type.KING);
-    }
-
-    public static Piece createBlank() {
-        return createPiece(Color.NO_COLOR, Type.NO_PIECE);
-    }
-
-    private static Piece createWhite(Type type) {
-        return createPiece(Color.WHITE, type);
-    }
-
-    private static Piece createBlack(Type type) {
-        return createPiece(Color.BLACK, type);
-    }
-
-    private static Piece createPiece(Color color, Type type) {
-        switch (type) {
-            case PAWN:
-                return new Pawn(color);
-            case KNIGHT:
-                return new Knight(color);
-            case ROOK:
-                return new Rook(color);
-            case BISHOP:
-                return new Bishop(color);
-            case QUEEN:
-                return new Queen(color);
-            case KING:
-                return new King(color);
-            case NO_PIECE:
-                return new Blank();
-            default:
-                throw new IllegalArgumentException("this type is not allowed");
-        }
     }
 
     public Boolean isBlack() {
@@ -166,11 +124,19 @@ public class Piece {
         return this.color == Color.WHITE;
     }
 
-    public Boolean isNoPiece() {
+    public Boolean isBlank() {
         return this.type == Type.NO_PIECE;
     }
 
-    public boolean checkTypeAndColor(Color color, Type type) {
+    public Boolean isPawn() {
+        return this.type == Type.PAWN;
+    }
+
+    public boolean isSameColor(Piece piece) {
+        return this.color == piece.color;
+    }
+
+    public boolean checkColorAndType(Color color, Type type) {
         return this.color == color && this.type == type;
     }
 

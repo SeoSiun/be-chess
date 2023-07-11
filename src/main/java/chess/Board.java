@@ -1,8 +1,10 @@
 package chess;
 
+import chess.pieces.Pawn;
 import chess.pieces.Piece;
-
-import static utils.StringUtils.appendNewLine;
+import chess.pieces.Piece.Color;
+import chess.pieces.Piece.Type;
+import chess.pieces.PieceFactory;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -10,6 +12,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * 8 * 8 체스판 구성 및 관리
+ */
 public class Board {
     private final List<Rank> ranks;
 
@@ -21,27 +26,42 @@ public class Board {
     }
 
     public void initialize() {
-        ranks.add(Rank.createFirstWhiteRank());
-        ranks.add(Rank.createRankWithOnlyWhitePawn());
+        ranks.clear();
+        ranks.add(RankFactory.createFirstRank(Color.WHITE));
+        ranks.add(RankFactory.createRankWithOneColorAndType(Color.WHITE, Type.PAWN));
         for (int file = 2; file < MAX_FILE - 2; file++) {
-            ranks.add(Rank.createBlankRank());
+            ranks.add(RankFactory.createBlankRank());
         }
-        ranks.add(Rank.createRankWithOnlyBlackPawn());
-        ranks.add(Rank.createFirstBlackRank());
+        ranks.add(RankFactory.createRankWithOneColorAndType(Color.BLACK, Type.PAWN));
+        ranks.add(RankFactory.createFirstRank(Color.BLACK));
     }
 
     public void initializeEmpty() {
+        ranks.clear();
         for (int file = 0; file < MAX_FILE; file++) {
-            ranks.add(Rank.createBlankRank());
+            ranks.add(RankFactory.createBlankRank());
         }
     }
 
-    public void move(String coordinate, Piece piece) {
-        Position position = new Position(coordinate);
-
+    public void move(Position position, Piece piece) {
         ranks.get(position.getYPos()).setPiece(position.getXPos(), piece);
     }
 
+    public void move(String sourcePosition, String targetPosition) {
+        Piece pieceToMove = findPiece(sourcePosition);
+
+        move(Position.from(sourcePosition), PieceFactory.createBlank());
+        move(Position.from(targetPosition), pieceToMove);
+
+        // pawn은 첫 번째에만 2칸 움직일 수 있고, 이후에는 1칸만 움직일 수 있음
+        if (pieceToMove instanceof Pawn) {
+            ((Pawn) pieceToMove).afterFirstMove();
+        }
+    }
+
+    /**
+     * @return : 전체 기물 개수 반환
+     */
     public int pieceCount() {
         int count = 0;
 
@@ -51,7 +71,12 @@ public class Board {
         return count;
     }
 
-    public int pieceCount(Piece.Color color, Piece.Type type) {
+    /**
+     * @param color : 찾을 기물 색상
+     * @param type  : 찾을 기물 타입
+     * @return : 해당 color, type의 기물 개수 반환
+     */
+    public int pieceCount(Color color, Type type) {
         int count = 0;
 
         for (Rank rank : ranks) {
@@ -60,60 +85,85 @@ public class Board {
         return count;
     }
 
-    public String showBoard() {
-        StringBuilder sb = new StringBuilder();
-
-        for (int rank = MAX_RANK; rank > 0; rank--) {
-            sb.append(ranks.get(rank - 1).getRankRepresentation());
-            sb.append(appendNewLine("  " + rank));
-        }
-        sb.append(appendNewLine(""));
-        sb.append(appendNewLine("abcdefgh"));
-
-        return sb.toString();
-    }
-
+    /**
+     * @param coordinate : 찾을 좌표
+     * @return : 해당 위치에 있는 기물 반환
+     */
     public Piece findPiece(String coordinate) {
-        Position position = new Position(coordinate);
+        Position position = Position.from(coordinate);
 
-        return findPieceByIndex(position.getYPos(), position.getXPos());
+        return findPiece(position);
     }
 
-    public Piece findPieceByIndex(int rank, int file) {
-        return ranks.get(rank).getPiece(file);
+    /**
+     * @param rank : rank index
+     * @param file : file index
+     * @return : 해당 rank, file에 위치한 기물 반환
+     */
+    private Piece findPiece(int rank, int file) {
+        Position position = Position.of(file, rank);
+
+        return findPiece(position);
     }
 
-    public double calculatePoint(Piece.Color color) {
+    /**
+     * @param position : 찾을 위치
+     * @return : 해당 위치에 있는 기물 반환
+     */
+    private Piece findPiece(Position position) {
+        return ranks.get(position.getYPos()).getPiece(position.getXPos());
+    }
+
+    public double calculatePoint(Color color) {
         double pointExceptPawn = ranks.stream()
-                .mapToDouble(rank -> rank.calculatePointExceptPawn(color)).sum();
+                .mapToDouble(rank -> rank.calculatePointExceptPawn(color))
+                .sum();
 
         return pointExceptPawn + calculatePawnPoint(color);
     }
 
-    private double calculatePawnPoint(Piece.Color color) {
+    private double calculatePawnPoint(Color color) {
         return IntStream.range(0, MAX_FILE)
                 .map(file -> (int) IntStream.range(0, MAX_RANK)
-                        .filter(rank -> findPieceByIndex(rank, file).checkTypeAndColor(color, Piece.Type.PAWN))
-                        .count())
-                .mapToDouble(Board::getPawnPointByCount)
-                .sum();
+                        .filter(rank -> findPiece(rank, file).checkColorAndType(color, Type.PAWN)).count())
+                .mapToDouble(Board::getPawnPointByCount).sum();
     }
 
     private static double getPawnPointByCount(int count) {
         if (count > 1) {
-            return Piece.Type.DUPLICATE_PAWN_POINT * count;
+            return Type.DUPLICATE_PAWN_POINT * count;
         }
-        return Piece.Type.PAWN.getDefaultPoint() * count;
+        return Type.PAWN.getDefaultPoint() * count;
     }
 
-    public List<Piece> getSortedPiecesByPoint(Piece.Color color) {
+    public List<Piece> getSortedPiecesByPoint(Color color) {
         return ranks.stream()
                 .flatMap(rank -> rank.getPiecesByColor(color).stream())
-                .sorted(sortPieceByPointComparator())
+                .sorted(Comparator.comparingDouble(Piece::getPoint).reversed())
                 .collect(Collectors.toList());
     }
 
-    private static Comparator<Piece> sortPieceByPointComparator() {
-        return (piece1, piece2) -> (int) (piece2.getPoint() - piece1.getPoint());
+    public String getRankRepresentation(int rank) {
+        return ranks.get(rank).getRepresentation();
+    }
+
+    public boolean isBlank(Position position) {
+        return findPiece(position).isBlank();
+    }
+
+    public boolean isSameColor(String sourcePosition, String targetPosition) {
+        return findPiece(sourcePosition).isSameColor(findPiece(targetPosition));
+    }
+
+    public List<Piece.Direction> getDirections(Position sourcePosition) {
+        return findPiece(sourcePosition).getDirections();
+    }
+
+    public int getMaxMoveCount(Position position) {
+        return findPiece(position).getMaxMoveCount();
+    }
+
+    public boolean isPawn(Position sourcePosition) {
+        return findPiece(sourcePosition).isPawn();
     }
 }

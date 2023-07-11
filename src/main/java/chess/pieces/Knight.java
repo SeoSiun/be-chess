@@ -1,11 +1,16 @@
 package chess.pieces;
 
+import java.util.Arrays;
+
+import static chess.pieces.Piece.Direction.*;
+
 public class Knight extends Piece {
-    protected Knight() {
-        super(Type.KNIGHT);
+    protected Knight(Color color) {
+        super(color, Type.KNIGHT, Arrays.asList(NNE, NNW, SSE, SSW, EEN, EES, WWN, WWS));
     }
 
-    protected Knight(Color color) {
-        super(color, Type.KNIGHT);
+    @Override
+    public int getMaxMoveCount() {
+        return 1;
     }
 }
