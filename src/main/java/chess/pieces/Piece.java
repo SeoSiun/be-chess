@@ -1,6 +1,11 @@
 package chess.pieces;
 
+import chess.Position;
+
+import java.util.List;
 import java.util.Objects;
+
+import static chess.Board.MAX_RANK;
 
 public class Piece {
     public enum Color {
@@ -40,22 +45,44 @@ public class Piece {
         }
     }
 
+    public enum Direction {
+        NORTH(0, 1),
+        NORTHEAST(1, 1),
+        EAST(1, 0),
+        SOUTHEAST(1, -1),
+        SOUTH(0, -1),
+        SOUTHWEST(-1, -1),
+        WEST(-1, 0),
+        NORTHWEST(-1, 1),
+
+        NNE(1, 2),
+        NNW(-1, 2),
+        SSE(1, -2),
+        SSW(-1, -2),
+        EEN(2, 1),
+        EES(2, -1),
+        WWN(-2, 1),
+        WWS(-2, -1);
+
+        private final Position degree;
+
+        private Direction(int xDegree, int yDegree) {
+            this.degree = Position.getInstanceWithNoValidate(xDegree, yDegree);
+        }
+
+        public Position getDegree() {
+            return degree;
+        }
+    }
+
     private final Color color;
     private final Type type;
+    private final List<Direction> directions;
 
-    protected Piece() {
-        this.color = Color.NO_COLOR;
-        this.type = Type.NO_PIECE;
-    }
-
-    protected Piece(Type type) {
-        this.color = Color.WHITE;
-        this.type = type;
-    }
-
-    protected Piece(Color color, Type type) {
+    protected Piece(Color color, Type type, List<Direction> directions) {
         this.color = color;
         this.type = type;
+        this.directions = directions;
     }
 
     public Color getColor() {
@@ -64,6 +91,14 @@ public class Piece {
 
     public Type getType() {
         return this.type;
+    }
+
+    public List<Direction> getDirections() {
+        return directions;
+    }
+
+    public int getMaxMoveCount() {
+        return MAX_RANK;
     }
 
     public char getRepresentation() {
