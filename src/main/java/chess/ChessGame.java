@@ -29,25 +29,28 @@ public class ChessGame {
     /**
      * source에 있는 기물을 target으로 옮김
      *
-     * @param sourcePosition : 옮기기 전 위치
-     * @param targetPosition : 옮길 위치
+     * @param sourceCoordinate : 옮기기 전 좌표
+     * @param targetCoordinate : 옮길 좌표
      */
-    public void move(String sourcePosition, String targetPosition, boolean isWhiteTurn) {
+    public void move(String sourceCoordinate, String targetCoordinate, boolean isWhiteTurn) {
+        Position sourcePosition = Position.from(sourceCoordinate);
+        Position targetPosition = Position.from(targetCoordinate);
+
         validate(sourcePosition, targetPosition, isWhiteTurn);
 
         board.move(sourcePosition, targetPosition);
     }
 
-    private void validate(String sourcePosition, String targetPosition, boolean isWhiteTurn) {
+    private void validate(Position sourcePosition, Position targetPosition, boolean isWhiteTurn) {
         checkNoPieceInSource(sourcePosition);
         checkValidTurn(isWhiteTurn, sourcePosition);
         checkTargetSameAsSource(sourcePosition, targetPosition);
-        Piece.Direction direction = getDirection(Position.from(sourcePosition), Position.from(targetPosition));
+        Piece.Direction direction = getDirection(sourcePosition, targetPosition);
         checkIsTargetSameColor(sourcePosition, targetPosition);
-        checkTargetReachable(Position.from(sourcePosition), Position.from(targetPosition), direction);
+        checkTargetReachable(sourcePosition, targetPosition, direction);
     }
 
-    private void checkValidTurn(boolean isWhiteTurn, String sourcePosition) {
+    private void checkValidTurn(boolean isWhiteTurn, Position sourcePosition) {
         if (isWhiteTurn && board.isWhite(sourcePosition)) {
             return;
         }
@@ -61,8 +64,8 @@ public class ChessGame {
      * source에 기물이 없는 경우 예외처리
      * @param sourcePosition : 옮길 기물의 위치
      */
-    private void checkNoPieceInSource(String sourcePosition) {
-        if (board.isBlank(Position.from(sourcePosition))) {
+    private void checkNoPieceInSource(Position sourcePosition) {
+        if (board.isBlank(sourcePosition)) {
             throw new NoPieceInSourceException();
         }
     }
@@ -72,7 +75,7 @@ public class ChessGame {
      * @param sourcePosition
      * @param targetPosition
      */
-    private void checkTargetSameAsSource(String sourcePosition, String targetPosition) {
+    private void checkTargetSameAsSource(Position sourcePosition, Position targetPosition) {
         if (sourcePosition.equals(targetPosition)) {
             throw new TargetSameAsSourceException();
         }
@@ -83,7 +86,7 @@ public class ChessGame {
      * @param sourcePosition
      * @param targetPosition
      */
-    private void checkIsTargetSameColor(String sourcePosition, String targetPosition) {
+    private void checkIsTargetSameColor(Position sourcePosition, Position targetPosition) {
         if (board.isSameColor(sourcePosition, targetPosition)) {
             throw new TargetSameColorException();
         }

@@ -47,11 +47,11 @@ public class Board {
         ranks.get(position.getYPos()).setPiece(position.getXPos(), piece);
     }
 
-    public void move(String sourcePosition, String targetPosition) {
+    public void move(Position sourcePosition, Position targetPosition) {
         Piece pieceToMove = findPiece(sourcePosition);
 
-        move(Position.from(sourcePosition), PieceFactory.createBlank());
-        move(Position.from(targetPosition), pieceToMove);
+        move(sourcePosition, PieceFactory.createBlank());
+        move(targetPosition, pieceToMove);
 
         // pawn은 첫 번째에만 2칸 움직일 수 있고, 이후에는 1칸만 움직일 수 있음
         if (pieceToMove instanceof Pawn) {
@@ -152,7 +152,7 @@ public class Board {
         return findPiece(position).isBlank();
     }
 
-    public boolean isSameColor(String sourcePosition, String targetPosition) {
+    public boolean isSameColor(Position sourcePosition, Position targetPosition) {
         return findPiece(sourcePosition).isSameColor(findPiece(targetPosition));
     }
 
@@ -168,11 +168,11 @@ public class Board {
         return findPiece(position).isPawn();
     }
 
-    public boolean isWhite(String position) {
+    public boolean isWhite(Position position) {
         return findPiece(position).isWhite();
     }
 
-    public boolean isBlack(String position) {
+    public boolean isBlack(Position position) {
         return findPiece(position).isBlack();
     }
 }
