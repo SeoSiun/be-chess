@@ -1,13 +1,17 @@
 package chess.pieces;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static chess.pieces.Piece.Direction.*;
 
 public class Pawn extends Piece {
     private boolean isFirst;
+    private static final List<Direction> white_directions = Arrays.asList(NORTH, NORTHEAST, NORTHWEST);
+    private static final List<Direction> black_directions = Arrays.asList(SOUTH, SOUTHEAST, SOUTHWEST);
+
     protected Pawn(Color color) {
-        super(color, Type.PAWN, color == Color.WHITE ? Arrays.asList(NORTH, NORTHEAST, NORTHWEST) : Arrays.asList(SOUTH, SOUTHEAST, SOUTHWEST));
+        super(color, Type.PAWN);
         isFirst = true;
     }
 
@@ -21,5 +25,13 @@ public class Pawn extends Piece {
 
     public void afterFirstMove() {
         isFirst = false;
+    }
+
+    @Override
+    public List<Direction> getDirections() {
+        if (isWhite()) {
+            return white_directions;
+        }
+        return black_directions;
     }
 }

@@ -143,6 +143,7 @@ public class Board {
                 .collect(Collectors.toList());
     }
 
+    // TODO: 체스뷰?
     public String getRankRepresentation(int rank) {
         return ranks.get(rank).getRepresentation();
     }

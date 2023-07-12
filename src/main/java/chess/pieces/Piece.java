@@ -7,7 +7,7 @@ import java.util.Objects;
 
 import static chess.Board.MAX_RANK;
 
-public class Piece {
+public abstract class Piece {
     public enum Color {
         BLACK,
         WHITE,
@@ -80,12 +80,10 @@ public class Piece {
 
     private final Color color;
     private final Type type;
-    private final List<Direction> directions;
 
-    protected Piece(Color color, Type type, List<Direction> directions) {
+    protected Piece(Color color, Type type) {
         this.color = color;
         this.type = type;
-        this.directions = directions;
     }
 
     public Color getColor() {
@@ -96,9 +94,7 @@ public class Piece {
         return this.type;
     }
 
-    public List<Direction> getDirections() {
-        return directions;
-    }
+    public abstract List<Direction> getDirections();
 
     public int getMaxMoveCount() {
         return MAX_RANK;
