@@ -114,12 +114,16 @@ public class ChessGame {
      */
     private void checkTargetReachable(Position sourcePosition, Position targetPosition, Piece.Direction direction) {
         // pawn이 대각선 방향으로 이동할 때 상대편 기물이 존재하지 않는 경우 예외처리
-        if (board.isPawn(sourcePosition) && (direction.isNEorNW())) {
-            if (board.isBlank(targetPosition)) {
+        if (board.isPawn(sourcePosition) && (isDiagonal(direction)) && (board.isBlank(targetPosition))) {
                 throw new PawnMoveDiagonalWithNoEnemyException();
             }
         }
         checkReachability(direction.getDegree(), targetPosition, sourcePosition.add(direction.getDegree()), board.getMaxMoveCount(sourcePosition) - 1);
+    }
+
+    private boolean isDiagonal(Piece.Direction direction) {
+        return direction == Piece.Direction.NORTHEAST  || direction == Piece.Direction.NORTHWEST
+                || direction == Piece.Direction.SOUTHEAST || direction == Piece.Direction.SOUTHWEST;
     }
 
     private void checkReachability(Position direction, Position targetPosition, Position curPosition, int moveCount) {

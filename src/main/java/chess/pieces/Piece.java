@@ -72,10 +72,6 @@ public abstract class Piece {
         public Position getDegree() {
             return degree;
         }
-
-        public boolean isNEorNW() {
-            return this == Direction.NORTHEAST  || this == Direction.NORTHWEST;
-        }
     }
 
     private final Color color;
