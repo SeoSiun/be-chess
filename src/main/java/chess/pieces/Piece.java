@@ -23,7 +23,6 @@ public class Piece {
         KING('k', 0.0),
         NO_PIECE('.', 0.0);
 
-        public static final double DUPLICATE_PAWN_POINT = 0.5;
         private final char representation;
         private final double defaultPoint;
 

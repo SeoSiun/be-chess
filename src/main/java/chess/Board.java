@@ -131,7 +131,7 @@ public class Board {
 
     private static double getPawnPointByCount(int count) {
         if (count > 1) {
-            return Type.DUPLICATE_PAWN_POINT * count;
+            return Type.PAWN.getDefaultPoint() / 2 * count;
         }
         return Type.PAWN.getDefaultPoint() * count;
     }
