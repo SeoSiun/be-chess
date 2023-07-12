@@ -11,10 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.stream.IntStream;
 
-import static chess.BoardTest.BLANK_RANK;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static utils.StringUtils.appendNewLine;
 
 class ChessGameTest {
     private Board board;
@@ -29,32 +27,6 @@ class ChessGameTest {
         board = new Board();
         chessView = new ChessView(board);
         chessGame = new ChessGame(board);
-    }
-
-    @Test
-    @DisplayName("지정한 위치에 기물이 놓여야한다.")
-    void move() {
-        // given
-        board.initializeEmpty();
-        String position = "b5";
-        Piece piece = PieceFactory.createPiece(Color.BLACK, Type.ROOK);
-
-        // when
-        chessGame.move(position, piece);
-
-        // then
-        assertEquals(piece, board.findPiece(position));
-        assertEquals(
-                appendNewLine(BLANK_RANK + "  8") +
-                        appendNewLine(BLANK_RANK + "  7") +
-                        appendNewLine(BLANK_RANK + "  6") +
-                        appendNewLine(".R......  5") +
-                        appendNewLine(BLANK_RANK + "  4") +
-                        appendNewLine(BLANK_RANK + "  3") +
-                        appendNewLine(BLANK_RANK + "  2") +
-                        appendNewLine(BLANK_RANK + "  1") +
-                        appendNewLine("") +
-                        appendNewLine("abcdefgh"), chessView.showBoard());
     }
 
     @Test
