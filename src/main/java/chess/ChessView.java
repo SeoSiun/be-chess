@@ -17,6 +17,9 @@ public class ChessView {
     public static final String LINE = "--------------------------------------------------------------";
     public static final String DEFAULT_MESSAGE = "명령어를 입력하세요! (이동: 'move [src] [dst]', 종료: 'end')";
     public static final String END_MESSAGE = "체스 게임을 종료합니다!";
+    public static final String BLACK_IS_WIN = "검은색이 승리하였습니다!";
+    public static final String WHITE_IS_WIN = "흰색이 승리하였습니다!";
+    public static final String KING_IS_GONE = "King을 잡았으므로 ";
 
 
     public String showBoard(Board board) {
@@ -48,5 +51,22 @@ public class ChessView {
 
     public void printPoint(double whitePoint, double blackPoint) {
         System.out.println("   흰색: " + whitePoint + "점, 검은색 " + blackPoint + "점");
+    }
+
+    public String getWinnerMessage(double whitePoint, double blackPoint) {
+        if (whitePoint < blackPoint) {
+            return BLACK_IS_WIN;
+        }
+        else if (whitePoint > blackPoint) {
+            return WHITE_IS_WIN;
+        }
+        return "무승부입니다!";
+    }
+
+    public static String getWinnerMessage(Piece.Color turn) {
+        if (turn == Piece.Color.WHITE) {
+            return KING_IS_GONE + WHITE_IS_WIN;
+        }
+        return KING_IS_GONE + BLACK_IS_WIN;
     }
 }
