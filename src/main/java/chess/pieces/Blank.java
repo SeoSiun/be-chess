@@ -3,6 +3,7 @@ package chess.pieces;
 import chess.Board;
 import chess.Position;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Blank extends Piece {
@@ -12,7 +13,7 @@ public class Blank extends Piece {
 
     @Override
     public List<Direction> getDirections() {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
