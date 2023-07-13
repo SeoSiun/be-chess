@@ -7,12 +7,7 @@ import static utils.StringUtils.appendNewLine;
  *  체스판 출력 로직
  */
 public class ChessView {
-    private final Board board;
-    public ChessView (Board board) {
-        this.board = board;
-    }
-
-    public String showBoard() {
+    public String showBoard(Board board) {
         StringBuilder sb = new StringBuilder();
 
         for (int rank = MAX_RANK; rank > 0; rank--) {

@@ -10,35 +10,29 @@ import java.util.stream.Collectors;
  * 체스 규칙에 따른 로직
  */
 public class ChessGame {
-    private final Board board;
-
-    public ChessGame(Board board) {
-        this.board = board;
-    }
-
-    public void move(String sourceCoordinate, String targetCoordinate, boolean isWhiteTurn) {
+    public void move(Board board, String sourceCoordinate, String targetCoordinate, Piece.Color turn) {
         Position sourcePosition = Position.from(sourceCoordinate);
         Position targetPosition = Position.from(targetCoordinate);
 
-        validate(sourcePosition, targetPosition, isWhiteTurn);
+        validate(board, sourcePosition, targetPosition, turn);
 
         board.move(sourcePosition, targetPosition);
     }
 
-    private void validate(Position sourcePosition, Position targetPosition, boolean isWhiteTurn) {
-        checkNoPieceInSource(sourcePosition);
-        checkValidTurn(isWhiteTurn, sourcePosition);
+    private void validate(Board board, Position sourcePosition, Position targetPosition, Piece.Color turn) {
+        checkNoPieceInSource(board, sourcePosition);
+        checkValidTurn(board, turn, sourcePosition);
         checkTargetSameAsSource(sourcePosition, targetPosition);
-        Piece.Direction direction = getDirection(sourcePosition, targetPosition);
-        checkIsTargetSameColor(sourcePosition, targetPosition);
-        checkTargetReachable(sourcePosition, targetPosition, direction);
+        Piece.Direction direction = getDirection(board, sourcePosition, targetPosition);
+        checkIsTargetSameColor(board, sourcePosition, targetPosition);
+        checkTargetReachable(board, sourcePosition, targetPosition, direction);
     }
 
-    private void checkValidTurn(boolean isWhiteTurn, Position sourcePosition) {
-        if (isWhiteTurn && board.isWhite(sourcePosition)) {
+    private void checkValidTurn(Board board, Piece.Color turn, Position sourcePosition) {
+        if (turn == Piece.Color.WHITE && board.isWhite(sourcePosition)) {
             return;
         }
-        if (!isWhiteTurn && board.isBlack(sourcePosition)) {
+        if (turn == Piece.Color.BLACK && board.isBlack(sourcePosition)) {
             return;
         }
         throw new InvalidTurnException();
@@ -46,10 +40,8 @@ public class ChessGame {
 
     /**
      * source에 기물이 없는 경우 예외처리
-     *
-     * @param sourcePosition : 옮길 기물의 위치
      */
-    private void checkNoPieceInSource(Position sourcePosition) {
+    private void checkNoPieceInSource(Board board, Position sourcePosition) {
         if (board.isBlank(sourcePosition)) {
             throw new NoPieceInSourceException();
         }
@@ -57,9 +49,6 @@ public class ChessGame {
 
     /**
      * source와 target이 같은 위치인 경우 예외처리
-     *
-     * @param sourcePosition
-     * @param targetPosition
      */
     private void checkTargetSameAsSource(Position sourcePosition, Position targetPosition) {
         if (sourcePosition.equals(targetPosition)) {
@@ -69,24 +58,17 @@ public class ChessGame {
 
     /**
      * source에 있는 기물과 target에 있는 기물의 색이 같은 경우 예외처리
-     *
-     * @param sourcePosition
-     * @param targetPosition
      */
-    private void checkIsTargetSameColor(Position sourcePosition, Position targetPosition) {
+    private void checkIsTargetSameColor(Board board, Position sourcePosition, Position targetPosition) {
         if (board.isSameColor(sourcePosition, targetPosition)) {
             throw new TargetSameColorException();
         }
     }
 
     /**
-     * source-target이 어느 방향인지 확인하고, 올바르지 않은 방향이면 예외처리
-     *
-     * @param sourcePosition
-     * @param targetPosition
-     * @return : source-target이 어느 direction인지 반환
+     * source-target이 어느 방향인지 반환, 올바르지 않은 방향이면 예외처리
      */
-    private Piece.Direction getDirection(Position sourcePosition, Position targetPosition) {
+    private Piece.Direction getDirection(Board board, Position sourcePosition, Position targetPosition) {
         List<Piece.Direction> filteredDirection = board.getDirections(sourcePosition).stream()
                 .filter(direction -> targetPosition.isSameDirection(direction.getDegree(), sourcePosition))
                 .collect(Collectors.toList());
@@ -98,18 +80,14 @@ public class ChessGame {
     }
 
     /**
-     * target에 도달 가능하지 않다면 예외처리
-     *
-     * @param sourcePosition
-     * @param targetPosition
-     * @param direction
+     * target에 도달 가능하지 않다면 예외처리 (경로에 다른 기물이 존재하는 경우)
      */
-    private void checkTargetReachable(Position sourcePosition, Position targetPosition, Piece.Direction direction) {
+    private void checkTargetReachable(Board board, Position sourcePosition, Position targetPosition, Piece.Direction direction) {
         // pawn이 대각선 방향으로 이동할 때 상대편 기물이 존재하지 않는 경우 예외처리
         if (board.isPawn(sourcePosition) && (isDiagonal(direction)) && (board.isBlank(targetPosition))) {
             throw new PawnMoveDiagonalWithNoEnemyException();
         }
-        checkReachability(direction.getDegree(), targetPosition, sourcePosition.add(direction.getDegree()), board.getMaxMoveCount(sourcePosition) - 1);
+        checkReachability(board, direction.getDegree(), targetPosition, sourcePosition.add(direction.getDegree()));
     }
 
     private boolean isDiagonal(Piece.Direction direction) {
@@ -117,7 +95,7 @@ public class ChessGame {
                 || direction == Piece.Direction.SOUTHEAST || direction == Piece.Direction.SOUTHWEST;
     }
 
-    private void checkReachability(Position direction, Position targetPosition, Position curPosition, int moveCount) {
+    private void checkReachability(Board board, Position direction, Position targetPosition, Position curPosition) {
         if (targetPosition.equals(curPosition)) {
             return;
         }
@@ -125,11 +103,7 @@ public class ChessGame {
             // source - target 경로에 다른 기물이 존재하는 경우 예외 처리
             throw new UnreachableWithObstacleException();
         }
-        if (moveCount == 0) {
-            // target까지 도달할 수 없을 때 예외처리
-            throw new InvalidTargetPositionException();
-        }
-        checkReachability(direction, targetPosition, curPosition.add(direction), moveCount - 1);
+        checkReachability(board, direction, targetPosition, curPosition.add(direction));
     }
 
 }
