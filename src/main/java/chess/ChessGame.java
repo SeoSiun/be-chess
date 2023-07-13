@@ -1,129 +1,96 @@
 package chess;
 
 import chess.pieces.Piece;
-import exceptions.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static chess.Board.MAX_FILE;
+import static chess.Board.MAX_RANK;
 
 /**
  * 체스 규칙에 따른 로직
  */
 public class ChessGame {
-    private final Board board;
+    // 같은 file에 여러 개의 pawn이 존재하면 0.5점 적용
+    private static final double DUPLICATED_PAWN_POINT = 0.5;
+    public static final String NO_PIECE_IN_SOURCE = "옮길 기물이 존재하지 않습니다.";
+    public static final String INVALID_TURN = "해당 색상의 차례가 아닙니다.";
+    public static final String TARGET_EQUALS_SOURCE = "같은 위치로 이동할 수 없습니다.";
+    public static final String TARGET_IS_SAME_COLOR = "target에 같은 색의 기물이 위치합니다.";
 
-    public ChessGame(Board board) {
-        this.board = board;
-    }
+    public void move(Board board, String sourceCoordinate, String targetCoordinate, Piece.Color turn) {
+        Position sourcePosition = Position.from(sourceCoordinate);
+        Position targetPosition = Position.from(targetCoordinate);
 
-    /**
-     * 해당 기물을 해당 좌표에 놓음
-     *
-     * @param coordinate : 기물을 놓을 위치
-     * @param piece      : 놓을 기물
-     */
-    public void move(String coordinate, Piece piece) {
-        board.move(Position.from(coordinate), piece);
-    }
-
-    /**
-     * source에 있는 기물을 target으로 옮김
-     *
-     * @param sourcePosition : 옮기기 전 위치
-     * @param targetPosition : 옮길 위치
-     */
-    public void move(String sourcePosition, String targetPosition) {
-        validate(sourcePosition, targetPosition);
-
+        checkMovable(board, sourcePosition, targetPosition, turn);
         board.move(sourcePosition, targetPosition);
     }
 
-    private void validate(String sourcePosition, String targetPosition) {
-        checkNoPieceInSource(sourcePosition);
+    /**
+     * 이동 유효성 검사
+     */
+    private void checkMovable(Board board, Position sourcePosition, Position targetPosition, Piece.Color turn) {
+        checkNoPieceInSource(board, sourcePosition);
+        checkValidTurn(board, sourcePosition, turn);
         checkTargetSameAsSource(sourcePosition, targetPosition);
-        checkIsTargetSameColor(sourcePosition, targetPosition);
-        Piece.Direction direction = getDirection(Position.from(sourcePosition), Position.from(targetPosition));
-        checkTargetReachable(Position.from(sourcePosition), Position.from(targetPosition), direction);
+        checkIsTargetSameColor(board, sourcePosition, targetPosition);
+        board.checkMovable(sourcePosition, targetPosition);
     }
 
-    /**
-     * source에 기물이 없는 경우 예외처리
-     * @param sourcePosition : 옮길 기물의 위치
-     */
-    private void checkNoPieceInSource(String sourcePosition) {
-        if (board.isBlank(Position.from(sourcePosition))) {
-            throw new NoPieceInSourceException();
+    private void checkNoPieceInSource(Board board, Position sourcePosition) {
+        if (board.isBlank(sourcePosition)) {
+            throw new IllegalArgumentException(NO_PIECE_IN_SOURCE);
         }
     }
 
-    /**
-     * source와 target이 같은 위치인 경우 예외처리
-     * @param sourcePosition
-     * @param targetPosition
-     */
-    private void checkTargetSameAsSource(String sourcePosition, String targetPosition) {
-        if (sourcePosition.equals(targetPosition)) {
-            throw new TargetSameAsSourceException();
-        }
-    }
-
-    /**
-     * source에 있는 기물과 target에 있는 기물의 색이 같은 경우 예외처리
-     * @param sourcePosition
-     * @param targetPosition
-     */
-    private void checkIsTargetSameColor(String sourcePosition, String targetPosition) {
-        if (board.isSameColor(sourcePosition, targetPosition)) {
-            throw new TargetSameColorException();
-        }
-    }
-
-    /**
-     * source-target이 어느 방향인지 확인하고, 올바르지 않은 방향이면 예외처리
-     * @param sourcePosition
-     * @param targetPosition
-     * @return : source-target이 어느 direction인지 반환
-     */
-    private Piece.Direction getDirection(Position sourcePosition, Position targetPosition) {
-        List<Piece.Direction> filteredDirection = board.getDirections(sourcePosition).stream()
-                .filter(direction -> targetPosition.isSameDirection(direction.getDegree(), sourcePosition))
-                .collect(Collectors.toList());
-
-        if (filteredDirection.isEmpty()) {
-            throw new InvalidDirectionException();
-        }
-        return filteredDirection.get(0);
-    }
-
-    /**
-     * target에 도달 가능하지 않다면 예외처리
-     * @param sourcePosition
-     * @param targetPosition
-     * @param direction
-     */
-    private void checkTargetReachable(Position sourcePosition, Position targetPosition, Piece.Direction direction) {
-        // pawn이 대각선 방향으로 이동할 때 상대편 기물이 존재하지 않는 경우 예외처리
-        if (board.isPawn(sourcePosition) && (direction.isNEorNW())) {
-            if (board.isBlank(targetPosition)) {
-                throw new PawnMoveDiagonalWithNoEnemyException();
-            }
-        }
-        checkReachability(direction.getDegree(), targetPosition, sourcePosition.add(direction.getDegree()), board.getMaxMoveCount(sourcePosition) - 1);
-    }
-
-    private void checkReachability(Position direction, Position targetPosition, Position curPosition, int moveCount) {
-        if (targetPosition.equals(curPosition)) {
+    private void checkValidTurn(Board board, Position sourcePosition, Piece.Color turn) {
+        if (turn == Piece.Color.WHITE && board.isWhite(sourcePosition)) {
             return;
         }
-        if (!board.isBlank(curPosition)) {
-            // source - target 경로에 다른 기물이 존재하는 경우 예외 처리
-            throw new UnreachableWithObstacleException();
+        if (turn == Piece.Color.BLACK && board.isBlack(sourcePosition)) {
+            return;
         }
-        if (moveCount == 0) {
-            // target까지 도달할 수 없을 때 예외처리
-            throw new TargetUnreachableException();
-        }
-        checkReachability(direction, targetPosition, curPosition.add(direction), moveCount - 1);
+        throw new IllegalArgumentException(ChessView.appendTurnMessage(turn, INVALID_TURN));
     }
 
+    private void checkTargetSameAsSource(Position sourcePosition, Position targetPosition) {
+        if (sourcePosition.equals(targetPosition)) {
+            throw new IllegalArgumentException(TARGET_EQUALS_SOURCE);
+        }
+    }
+
+    private void checkIsTargetSameColor(Board board, Position sourcePosition, Position targetPosition) {
+        if (board.isSameColor(sourcePosition, targetPosition)) {
+            throw new IllegalArgumentException(TARGET_IS_SAME_COLOR);
+        }
+    }
+
+    /**
+     * 점수계산
+     */
+    public double calculatePoint(Board board, Piece.Color color) {
+        double pointExceptPawn = board.getRanks().stream()
+                .mapToDouble(rank -> rank.calculatePointExceptPawn(color))
+                .sum();
+
+        return pointExceptPawn + calculatePawnPoint(board, color);
+    }
+
+    private double calculatePawnPoint(Board board, Piece.Color color) {
+        return IntStream.range(0, MAX_FILE)
+                .map(file -> countPawnInFile(board, file, color))
+                .mapToDouble(ChessGame::getPawnPointByCount).sum();
+    }
+
+    private int countPawnInFile(Board board, int file, Piece.Color color) {
+        return (int) IntStream.range(0, MAX_RANK)
+                .filter(rank -> board.isPawn(file, rank, color)).count();
+    }
+
+    private static double getPawnPointByCount(int count) {
+        if (count > 1) {
+            return DUPLICATED_PAWN_POINT * count;
+        }
+        return Piece.Type.PAWN.getDefaultPoint() * count;
+    }
 }

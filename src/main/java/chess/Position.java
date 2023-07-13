@@ -1,12 +1,9 @@
 package chess;
 
-import exceptions.InvalidPositionLengthException;
-import exceptions.NoIntegerException;
-import exceptions.PositionOutOfRangeException;
-
 import java.util.Objects;
 
 public class Position {
+    public static final String POSITION_OUT_OF_RANGE = "좌표 범위가 올바르지 않습니다.";
     private final int xPos;
     private final int yPos;
 
@@ -18,7 +15,7 @@ public class Position {
     public static Position from(String coordinate) {
         validate(coordinate);
 
-        return new Position(fileToIndex(coordinate.charAt(0)),rankToIndex(coordinate.charAt(1)));
+        return new Position(fileToIndex(coordinate.charAt(0)), rankToIndex(coordinate.charAt(1)));
     }
 
     public static Position of(int xPos, int yPos) {
@@ -33,19 +30,19 @@ public class Position {
 
     private static void validate(String coordinate) {
         if (coordinate.length() != 2) {
-            throw new InvalidPositionLengthException();
+            throw new IllegalArgumentException(POSITION_OUT_OF_RANGE);
         }
         if (isInvalidRange(fileToIndex(coordinate.charAt(0)))) {
-            throw new PositionOutOfRangeException();
+            throw new IllegalArgumentException(POSITION_OUT_OF_RANGE);
         }
         if (isInvalidRange(rankToIndex(coordinate.charAt(1)))) {
-            throw new PositionOutOfRangeException();
+            throw new IllegalArgumentException(POSITION_OUT_OF_RANGE);
         }
     }
 
     private static void validate(int xPos, int yPos) {
         if (isInvalidRange(xPos) || isInvalidRange(yPos)) {
-            throw new PositionOutOfRangeException();
+            throw new IllegalArgumentException(POSITION_OUT_OF_RANGE);
         }
     }
 
@@ -60,6 +57,7 @@ public class Position {
     private static int rankToIndex(char num) {
         return Character.getNumericValue(num) - 1;
     }
+
     public int getXPos() {
         return xPos;
     }
@@ -76,17 +74,7 @@ public class Position {
         return Position.getInstanceWithNoValidate(xPos - position.xPos, yPos - position.yPos);
     }
 
-    public boolean isSameDirection(Position direction, Position sourcePosition) {
-        Position vector = this.sub(sourcePosition);
-
-        try {
-            return vector.equals(direction) || direction.equals(vector.getUnitVector());
-        } catch (NoIntegerException exception) {
-            return false;
-        }
-    }
-
-    private Position getUnitVector() {
+    public Position getUnitVector() {
         int newXPos = xPos;
         int newYPos = yPos;
 

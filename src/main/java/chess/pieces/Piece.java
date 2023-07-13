@@ -1,13 +1,12 @@
 package chess.pieces;
 
+import chess.Board;
 import chess.Position;
 
 import java.util.List;
 import java.util.Objects;
 
-import static chess.Board.MAX_RANK;
-
-public class Piece {
+public abstract class Piece {
     public enum Color {
         BLACK,
         WHITE,
@@ -23,7 +22,6 @@ public class Piece {
         KING('k', 0.0),
         NO_PIECE('.', 0.0);
 
-        public static final double DUPLICATE_PAWN_POINT = 0.5;
         private final char representation;
         private final double defaultPoint;
 
@@ -55,6 +53,9 @@ public class Piece {
         WEST(-1, 0),
         NORTHWEST(-1, 1),
 
+        NN(0, 2),
+        SS(0, -2),
+
         NNE(1, 2),
         NNW(-1, 2),
         SSE(1, -2),
@@ -73,20 +74,14 @@ public class Piece {
         public Position getDegree() {
             return degree;
         }
-
-        public boolean isNEorNW() {
-            return this == Direction.NORTHEAST  || this == Direction.NORTHWEST;
-        }
     }
 
     private final Color color;
     private final Type type;
-    private final List<Direction> directions;
 
-    protected Piece(Color color, Type type, List<Direction> directions) {
+    protected Piece(Color color, Type type) {
         this.color = color;
         this.type = type;
-        this.directions = directions;
     }
 
     public Color getColor() {
@@ -97,13 +92,9 @@ public class Piece {
         return this.type;
     }
 
-    public List<Direction> getDirections() {
-        return directions;
-    }
+    public abstract List<Direction> getDirections();
 
-    public int getMaxMoveCount() {
-        return MAX_RANK;
-    }
+    public abstract Direction checkMovable(Board board, Position sourcePosition, Position targetPosition);
 
     public char getRepresentation() {
         if (color == Color.BLACK) {

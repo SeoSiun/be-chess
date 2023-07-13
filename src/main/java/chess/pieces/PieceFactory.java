@@ -20,7 +20,7 @@ public class PieceFactory {
             case NO_PIECE:
                 return new Blank();
             default:
-                throw new IllegalArgumentException("this type is not allowed");
+                throw new IllegalArgumentException("존재하지 않는 기물타입입니다.");
         }
     }
 

@@ -1,5 +1,6 @@
 package chess;
 
+import chess.pieces.Piece;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,7 @@ class ChessViewTest {
     @BeforeEach
     void setup() {
         board = new Board();
-        chessView = new ChessView(board);
+        chessView = new ChessView();
     }
 
     @Test
@@ -25,7 +26,7 @@ class ChessViewTest {
         board.initialize();
 
         // when
-        String showBoard = chessView.showBoard();
+        String showBoard = chessView.showBoard(board);
 
         // then
         assertEquals(32, board.pieceCount());
@@ -41,5 +42,21 @@ class ChessViewTest {
                         appendNewLine("") +
                         appendNewLine("abcdefgh"),
                 showBoard);
+    }
+
+    @Test
+    @DisplayName("어떤 색 기물의 차례인지 정보를 append해준다.")
+    void appendTurnMessage() {
+        // given
+        Piece.Color whiteTurn = Piece.Color.WHITE;
+        Piece.Color blackTurn = Piece.Color.BLACK;
+
+        // when
+        String whiteTurnMessage = ChessView.appendTurnMessage(whiteTurn, "");
+        String blackTurnMessage = ChessView.appendTurnMessage(blackTurn, "");
+
+        // then
+        assertEquals(" (흰색 차례)", whiteTurnMessage);
+        assertEquals(" (검은색 차례)", blackTurnMessage);
     }
 }

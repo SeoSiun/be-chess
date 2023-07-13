@@ -10,14 +10,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * 8 * 8 체스판 구성 및 관리
  */
 public class Board {
     private final List<Rank> ranks;
-
     public static final int MAX_RANK = 8;
     public static final int MAX_FILE = 8;
 
@@ -47,11 +45,11 @@ public class Board {
         ranks.get(position.getYPos()).setPiece(position.getXPos(), piece);
     }
 
-    public void move(String sourcePosition, String targetPosition) {
+    public void move(Position sourcePosition, Position targetPosition) {
         Piece pieceToMove = findPiece(sourcePosition);
 
-        move(Position.from(sourcePosition), PieceFactory.createBlank());
-        move(Position.from(targetPosition), pieceToMove);
+        move(sourcePosition, PieceFactory.createBlank());
+        move(targetPosition, pieceToMove);
 
         // pawn은 첫 번째에만 2칸 움직일 수 있고, 이후에는 1칸만 움직일 수 있음
         if (pieceToMove instanceof Pawn) {
@@ -96,44 +94,11 @@ public class Board {
     }
 
     /**
-     * @param rank : rank index
-     * @param file : file index
-     * @return : 해당 rank, file에 위치한 기물 반환
-     */
-    private Piece findPiece(int rank, int file) {
-        Position position = Position.of(file, rank);
-
-        return findPiece(position);
-    }
-
-    /**
      * @param position : 찾을 위치
      * @return : 해당 위치에 있는 기물 반환
      */
-    private Piece findPiece(Position position) {
+    public Piece findPiece(Position position) {
         return ranks.get(position.getYPos()).getPiece(position.getXPos());
-    }
-
-    public double calculatePoint(Color color) {
-        double pointExceptPawn = ranks.stream()
-                .mapToDouble(rank -> rank.calculatePointExceptPawn(color))
-                .sum();
-
-        return pointExceptPawn + calculatePawnPoint(color);
-    }
-
-    private double calculatePawnPoint(Color color) {
-        return IntStream.range(0, MAX_FILE)
-                .map(file -> (int) IntStream.range(0, MAX_RANK)
-                        .filter(rank -> findPiece(rank, file).checkColorAndType(color, Type.PAWN)).count())
-                .mapToDouble(Board::getPawnPointByCount).sum();
-    }
-
-    private static double getPawnPointByCount(int count) {
-        if (count > 1) {
-            return Type.DUPLICATE_PAWN_POINT * count;
-        }
-        return Type.PAWN.getDefaultPoint() * count;
     }
 
     public List<Piece> getSortedPiecesByPoint(Color color) {
@@ -143,27 +108,34 @@ public class Board {
                 .collect(Collectors.toList());
     }
 
-    public String getRankRepresentation(int rank) {
-        return ranks.get(rank).getRepresentation();
-    }
-
     public boolean isBlank(Position position) {
         return findPiece(position).isBlank();
     }
 
-    public boolean isSameColor(String sourcePosition, String targetPosition) {
+    public boolean isSameColor(Position sourcePosition, Position targetPosition) {
         return findPiece(sourcePosition).isSameColor(findPiece(targetPosition));
     }
 
-    public List<Piece.Direction> getDirections(Position sourcePosition) {
-        return findPiece(sourcePosition).getDirections();
+    public boolean isWhite(Position position) {
+        return findPiece(position).isWhite();
     }
 
-    public int getMaxMoveCount(Position position) {
-        return findPiece(position).getMaxMoveCount();
+    public boolean isBlack(Position position) {
+        return findPiece(position).isBlack();
     }
 
-    public boolean isPawn(Position sourcePosition) {
-        return findPiece(sourcePosition).isPawn();
+    public void checkMovable(Position sourcePosition, Position targetPosition) {
+        findPiece(sourcePosition).checkMovable(this, sourcePosition, targetPosition);
+    }
+    public String getRankRepresentation(int rank) {
+        return ranks.get(rank).getRepresentation();
+    }
+
+    public boolean isPawn(int file, int rank, Color color) {
+        return findPiece(Position.of(file, rank)).checkColorAndType(color, Type.PAWN);
+    }
+
+    public List<Rank> getRanks() {
+        return ranks;
     }
 }
