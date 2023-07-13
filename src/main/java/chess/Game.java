@@ -50,6 +50,7 @@ public class Game {
                 }
             } catch (IllegalArgumentException exception) {
                 System.out.println(appendNewLine(exception.getMessage()));
+                printDefaultMessage();
             }
         }
         end();
