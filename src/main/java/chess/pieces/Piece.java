@@ -135,6 +135,10 @@ public abstract class Piece {
         return this.color == color;
     }
 
+    public boolean isKing() {
+        return this.type == Type.KING;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -18,12 +18,16 @@ public class ChessGame {
     public static final String TARGET_EQUALS_SOURCE = "같은 위치로 이동할 수 없습니다.";
     public static final String TARGET_IS_SAME_COLOR = "target에 같은 색의 기물이 위치합니다.";
 
-    public void move(Board board, String sourceCoordinate, String targetCoordinate, Piece.Color turn) {
+    public boolean move(Board board, String sourceCoordinate, String targetCoordinate, Piece.Color turn) {
         Position sourcePosition = Position.from(sourceCoordinate);
         Position targetPosition = Position.from(targetCoordinate);
 
         checkMovable(board, sourcePosition, targetPosition, turn);
+
+        Piece targetPiece = board.findPiece(targetPosition);
         board.move(sourcePosition, targetPosition);
+
+        return targetPiece.isKing();
     }
 
     /**
