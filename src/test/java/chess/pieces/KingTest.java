@@ -16,7 +16,7 @@ import java.util.stream.IntStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class KingTest {
+class KingTest {
     private Board board;
     private ChessGame chessGame;
     private final Piece blank = PieceFactory.createBlank();
@@ -39,7 +39,7 @@ public class KingTest {
         String targetPosition = "a3";
 
         // when & then
-        assertThrows(UnreachableWithObstacleException.class, () -> chessGame.move(board, sourcePosition, targetPosition));
+        assertThrows(UnreachableWithObstacleException.class, () -> move(sourcePosition, targetPosition));
     }
 
     @Test
@@ -53,7 +53,7 @@ public class KingTest {
 
         // when & then
         IntStream.range(0, positions.length - 1)
-                .forEach(index -> verifyMovement(whiteKing, positions[index], positions[index + 1]));
+                .forEach(index -> verifyMovement(whiteKing, positions[index], positions[index + 1], Piece.Color.WHITE));
     }
 
     @Test
@@ -65,7 +65,7 @@ public class KingTest {
         board.move(Position.from("e8"), whiteKing);
 
         // when & then
-        assertThrows(PositionOutOfRangeException.class, () -> chessGame.move(board, "e8", "e9"));
+        assertThrows(PositionOutOfRangeException.class, () -> move("e8", "e9"));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class KingTest {
         board.move(Position.from("e5"), whiteKing);
 
         // when & then
-        assertThrows(InvalidTargetPositionException.class, () -> chessGame.move(board, "e5", "e2"));
+        assertThrows(InvalidTargetPositionException.class, () -> move("e5", "e2"));
     }
 
     @Test
@@ -90,14 +90,16 @@ public class KingTest {
         board.move(Position.from("e4"), PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.PAWN));
 
         // when & then
-        assertThrows(TargetSameColorException.class, () -> chessGame.move(board, "e5", "e4"));
+        assertThrows(TargetSameColorException.class, () -> move("e5", "e4"));
+    }
+    
+    private void move(String sourcePosition, String targetPosition) {
+        chessGame.move(board, sourcePosition, targetPosition, board.findPiece(sourcePosition).getColor());
     }
 
-
-
-    private void verifyMovement(Piece pieceToMove, String sourcePosition, String targetPosition) {
+    private void verifyMovement(Piece pieceToMove, String sourcePosition, String targetPosition, Piece.Color color) {
         // when
-        chessGame.move(board, sourcePosition, targetPosition);
+        chessGame.move(board, sourcePosition, targetPosition, color);
 
         // then
         assertEquals(pieceToMove, board.findPiece(targetPosition));

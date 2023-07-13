@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class PawnTest {
+class PawnTest {
     private Board board;
     private ChessGame chessGame;
     private final Piece blank = PieceFactory.createBlank();
@@ -22,7 +22,6 @@ public class PawnTest {
         board = new Board();
         chessGame = new ChessGame();
     }
-
 
     /**
      * check pawn's movement
@@ -38,8 +37,8 @@ public class PawnTest {
         board.move(Position.from("c2"), whitePawnForTwoStep);
 
         // when & then
-        verifyMovement(whitePawnForOneStep, "b2", "b3");
-        verifyMovement(whitePawnForTwoStep, "c2", "c4");
+        verifyMovement(whitePawnForOneStep, "b2", "b3", Piece.Color.WHITE);
+        verifyMovement(whitePawnForTwoStep, "c2", "c4", Piece.Color.WHITE);
     }
 
     @Test
@@ -49,11 +48,11 @@ public class PawnTest {
         Piece whitePawn = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.PAWN);
         board.initializeEmpty();
         board.move(Position.from("b2"), whitePawn);
-        chessGame.move(board, "b2", "b4");
+        move("b2", "b4");
 
         // when & then
-        verifyMovement(whitePawn, "b4", "b5");
-        assertThrows(InvalidTargetPositionException.class, () -> chessGame.move(board, "b5", "b7"));
+        verifyMovement(whitePawn, "b4", "b5", Piece.Color.WHITE);
+        assertThrows(InvalidTargetPositionException.class, () -> move("b5", "b7"));
     }
 
     @Test
@@ -68,13 +67,17 @@ public class PawnTest {
         board.move(Position.from("c3"), blackPawn);
 
         // when & then
-        verifyMovement(whitePawn, "b2", "c3");
-        assertThrows(PawnMoveDiagonalWithNoEnemyException.class, () -> chessGame.move(board, "c3", "d4"));
+        verifyMovement(whitePawn, "b2", "c3", Piece.Color.WHITE);
+        assertThrows(PawnMoveDiagonalWithNoEnemyException.class, () -> move("c3", "d4"));
     }
 
-    private void verifyMovement(Piece pieceToMove, String sourcePosition, String targetPosition) {
+    private void move(String sourcePosition, String targetPosition) {
+        chessGame.move(board, sourcePosition, targetPosition, board.findPiece(sourcePosition).getColor());
+    }
+
+    private void verifyMovement(Piece pieceToMove, String sourcePosition, String targetPosition, Piece.Color color) {
         // when
-        chessGame.move(board, sourcePosition, targetPosition);
+        chessGame.move(board, sourcePosition, targetPosition, color);
 
         // then
         assertEquals(pieceToMove, board.findPiece(targetPosition));

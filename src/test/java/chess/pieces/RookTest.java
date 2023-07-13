@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class RookTest {
+class RookTest {
     private Board board;
     private ChessGame chessGame;
     private final Piece blank = PieceFactory.createBlank();
@@ -38,7 +38,7 @@ public class RookTest {
 
         // when & then
         IntStream.range(0, positions.length - 1)
-                .forEach(index -> verifyMovement(whiteRook, positions[index], positions[index + 1]));
+                .forEach(index -> verifyMovement(whiteRook, positions[index], positions[index + 1], Piece.Color.WHITE));
     }
 
     @Test
@@ -49,14 +49,18 @@ public class RookTest {
         board.initializeEmpty();
         board.move(Position.from("d4"), whiteRook);
 
-        assertThrows(InvalidTargetPositionException.class, () -> chessGame.move(board, "d4", "a7"));
-        assertThrows(InvalidTargetPositionException.class, () -> chessGame.move(board, "d4", "g1"));
-        assertThrows(InvalidTargetPositionException.class, () -> chessGame.move(board, "d4", "g6"));
+        assertThrows(InvalidTargetPositionException.class, () -> move("d4", "a7"));
+        assertThrows(InvalidTargetPositionException.class, () -> move("d4", "g1"));
+        assertThrows(InvalidTargetPositionException.class, () -> move("d4", "g6"));
     }
 
-    private void verifyMovement(Piece pieceToMove, String sourcePosition, String targetPosition) {
+    private void move(String sourcePosition, String targetPosition) {
+        chessGame.move(board, sourcePosition, targetPosition, board.findPiece(sourcePosition).getColor());
+    }
+
+    private void verifyMovement(Piece pieceToMove, String sourcePosition, String targetPosition, Piece.Color color) {
         // when
-        chessGame.move(board, sourcePosition, targetPosition);
+        chessGame.move(board, sourcePosition, targetPosition, color);
 
         // then
         assertEquals(pieceToMove, board.findPiece(targetPosition));

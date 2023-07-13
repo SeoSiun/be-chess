@@ -38,7 +38,7 @@ class KnightTest {
 
         // when & then
         IntStream.range(0, positions.length - 1)
-                .forEach(index -> verifyMovement(whiteKnight, positions[index], positions[index + 1]));
+                .forEach(index -> verifyMovement(whiteKnight, positions[index], positions[index + 1], Piece.Color.WHITE));
     }
 
     @Test
@@ -49,12 +49,16 @@ class KnightTest {
         board.initializeEmpty();
         board.move(Position.from("d4"), whiteKnight);
 
-        assertThrows(InvalidTargetPositionException.class, () -> chessGame.move(board, "d4", "f8"));
+        assertThrows(InvalidTargetPositionException.class, () -> move("d4", "f8"));
     }
 
-    private void verifyMovement(Piece pieceToMove, String sourcePosition, String targetPosition) {
+    private void move(String sourcePosition, String targetPosition) {
+        chessGame.move(board, sourcePosition, targetPosition, board.findPiece(sourcePosition).getColor());
+    }
+
+    private void verifyMovement(Piece pieceToMove, String sourcePosition, String targetPosition, Piece.Color color) {
         // when
-        chessGame.move(board, sourcePosition, targetPosition);
+        chessGame.move(board, sourcePosition, targetPosition, color);
 
         // then
         assertEquals(pieceToMove, board.findPiece(targetPosition));

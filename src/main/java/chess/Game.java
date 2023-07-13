@@ -40,7 +40,7 @@ public class Game {
                     System.out.println(END_MESSAGE);
                     break;
                 } else if (command.startsWith(MOVE)) {
-                   move(command);
+                    move(command);
                 } else {
                     throw new IllegalArgumentException("존재하지 않는 명령어입니다.");
                 }
@@ -70,47 +70,18 @@ public class Game {
     private void move(String command) {
         String[] splitCommand = command.split(" ");
 
-        validateMove(splitCommand);
-        chessGame.move(board, splitCommand[1], splitCommand[2]);
-        changeTurn();
-        System.out.println(chessView.showBoard(board));
-    }
-
-    private void validateMove(String[] splitCommand) {
         if (splitCommand.length != 3) {
             throw new IllegalArgumentException("잘못된 인자 개수 입니다.");
         }
-        Position sourcePosition = Position.from(splitCommand[1]);
-
-        checkNoPieceInSource(sourcePosition);
-        checkValidTurn(sourcePosition);
-    }
-
-    /**
-     * source에 기물이 없는 경우 예외처리
-     */
-    private void checkNoPieceInSource(Position sourcePosition) {
-        if (board.isBlank(sourcePosition)) {
-            throw new NoPieceInSourceException();
-        }
-    }
-
-
-    private void checkValidTurn(Position sourcePosition) {
-        if (turn == Piece.Color.WHITE && board.isWhite(sourcePosition)) {
-            return;
-        }
-        if (turn == Piece.Color.BLACK && board.isBlack(sourcePosition)) {
-            return;
-        }
-        throw new InvalidTurnException();
+        chessGame.move(board, splitCommand[1], splitCommand[2], turn);
+        changeTurn();
+        System.out.println(chessView.showBoard(board));
     }
 
     private void changeTurn() {
         if (turn == Piece.Color.WHITE) {
             turn = Piece.Color.BLACK;
-        }
-        else {
+        } else {
             turn = Piece.Color.WHITE;
         }
     }

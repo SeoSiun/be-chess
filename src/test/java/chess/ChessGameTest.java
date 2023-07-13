@@ -32,7 +32,7 @@ class ChessGameTest {
         String targetPosition = "b3";
 
         // when
-        chessGame.move(board, sourcePosition, targetPosition);
+        chessGame.move(board, sourcePosition, targetPosition, Color.WHITE);
 
         // then
         assertEquals(PieceFactory.createBlank(), board.findPiece(sourcePosition));
@@ -48,7 +48,7 @@ class ChessGameTest {
         String targetPosition = "a2";
 
         // when & then
-        assertThrows(TargetSameColorException.class, () -> chessGame.move(board, sourcePosition, targetPosition));
+        assertThrows(TargetSameColorException.class, () -> chessGame.move(board, sourcePosition, targetPosition, Color.WHITE));
     }
 
     @Test
@@ -60,7 +60,7 @@ class ChessGameTest {
         String targetPosition = "b4";
 
         // when & then
-        assertThrows(InvalidTargetPositionException.class, () -> chessGame.move(board, sourcePosition, targetPosition));
+        assertThrows(InvalidTargetPositionException.class, () -> chessGame.move(board, sourcePosition, targetPosition, Color.WHITE));
     }
 
     @Test
@@ -72,7 +72,7 @@ class ChessGameTest {
         String targetPosition = "a2";
 
         // when & then
-        assertThrows(TargetSameAsSourceException.class, () -> chessGame.move(board, sourcePosition, targetPosition));
+        assertThrows(TargetSameAsSourceException.class, () -> chessGame.move(board, sourcePosition, targetPosition, Color.WHITE));
     }
 
 

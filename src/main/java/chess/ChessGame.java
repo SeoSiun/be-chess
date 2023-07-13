@@ -15,38 +15,56 @@ public class ChessGame {
     // 같은 file에 여러 개의 pawn이 존재하면 0.5점 적용
     private static final double DUPLICATED_PAWN_POINT = 0.5;
 
-    public void move(Board board, String sourceCoordinate, String targetCoordinate) {
+    public void move(Board board, String sourceCoordinate, String targetCoordinate, Piece.Color turn) {
         Position sourcePosition = Position.from(sourceCoordinate);
         Position targetPosition = Position.from(targetCoordinate);
 
-        validate(board, sourcePosition, targetPosition);
+        checkMovable(board, sourcePosition, targetPosition, turn);
         board.move(sourcePosition, targetPosition);
     }
 
-    private void validate(Board board, Position sourcePosition, Position targetPosition) {
+    /**
+     * 이동 유효성 검사
+     */
+    private void checkMovable(Board board, Position sourcePosition, Position targetPosition, Piece.Color turn) {
+        checkNoPieceInSource(board, sourcePosition);
+        checkValidTurn(board, sourcePosition, turn);
         checkTargetSameAsSource(sourcePosition, targetPosition);
         checkIsTargetSameColor(board, sourcePosition, targetPosition);
         board.checkMovable(sourcePosition, targetPosition);
     }
 
-    /**
-     * source와 target이 같은 위치인 경우 예외처리
-     */
+    private void checkNoPieceInSource(Board board, Position sourcePosition) {
+        if (board.isBlank(sourcePosition)) {
+            throw new NoPieceInSourceException();
+        }
+    }
+
+    private void checkValidTurn(Board board, Position sourcePosition, Piece.Color turn) {
+        if (turn == Piece.Color.WHITE && board.isWhite(sourcePosition)) {
+            return;
+        }
+        if (turn == Piece.Color.BLACK && board.isBlack(sourcePosition)) {
+            return;
+        }
+        throw new InvalidTurnException();
+    }
+
     private void checkTargetSameAsSource(Position sourcePosition, Position targetPosition) {
         if (sourcePosition.equals(targetPosition)) {
             throw new TargetSameAsSourceException();
         }
     }
 
-    /**
-     * source에 있는 기물과 target에 있는 기물의 색이 같은 경우 예외처리
-     */
     private void checkIsTargetSameColor(Board board, Position sourcePosition, Position targetPosition) {
         if (board.isSameColor(sourcePosition, targetPosition)) {
             throw new TargetSameColorException();
         }
     }
 
+    /**
+     * 점수계산
+     */
     public double calculatePoint(Board board, Piece.Color color) {
         double pointExceptPawn = board.getRanks().stream()
                 .mapToDouble(rank -> rank.calculatePointExceptPawn(color))

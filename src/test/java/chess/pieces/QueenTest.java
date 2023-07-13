@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class QueenTest {
+class QueenTest {
     private Board board;
     private ChessGame chessGame;
     private final Piece blank = PieceFactory.createBlank();
@@ -39,7 +39,7 @@ public class QueenTest {
 
         // when & then
         IntStream.range(0, positions.length - 1)
-                .forEach(index -> verifyMovement(whiteQueen, positions[index], positions[index + 1]));
+                .forEach(index -> verifyMovement(whiteQueen, positions[index], positions[index + 1], Piece.Color.WHITE));
 
     }
 
@@ -52,7 +52,7 @@ public class QueenTest {
         board.move(Position.from("e5"), whiteKing);
 
         // when & then
-        assertThrows(PositionOutOfRangeException.class, () -> chessGame.move(board, "e5", "e9"));
+        assertThrows(PositionOutOfRangeException.class, () -> move( "e5", "e9"));
     }
 
     @Test
@@ -65,12 +65,16 @@ public class QueenTest {
         board.move(Position.from("d3"), PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.PAWN));
 
         // when & then
-        assertThrows(UnreachableWithObstacleException.class, () -> chessGame.move(board, "d1", "d5"));
+        assertThrows(UnreachableWithObstacleException.class, () -> move( "d1", "d5"));
     }
 
-    private void verifyMovement(Piece pieceToMove, String sourcePosition, String targetPosition) {
+    private void move(String sourcePosition, String targetPosition) {
+        chessGame.move(board, sourcePosition, targetPosition, board.findPiece(sourcePosition).getColor());
+    }
+
+    private void verifyMovement(Piece pieceToMove, String sourcePosition, String targetPosition, Piece.Color color) {
         // when
-        chessGame.move(board, sourcePosition, targetPosition);
+        chessGame.move(board, sourcePosition, targetPosition, color);
 
         // then
         assertEquals(pieceToMove, board.findPiece(targetPosition));
