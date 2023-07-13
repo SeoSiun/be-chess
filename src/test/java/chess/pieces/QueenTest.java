@@ -45,21 +45,36 @@ class QueenTest {
     @DisplayName("Queen이 체스판을 벗어나는 위치로 이동하면 PositionOutOfRangeException이 발생해야 한다.")
     void moveQueenOutOfRange() {
         // given
-        Piece whiteKing = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.QUEEN);
+        Piece whiteQueen = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.QUEEN);
         board.initializeEmpty();
-        board.move(Position.from("e5"), whiteKing);
+        board.move(Position.from("e5"), whiteQueen);
 
         // when & then
         verifyException( "e5", "e9", Position.POSITION_OUT_OF_RANGE);
     }
 
     @Test
+    @DisplayName("Queen이 대각선, 수직, 수평 방향이 아닌 방향으로 이동하면 예외가 발생한다.")
+    void moveQueenRandomDirection() {
+        // given
+        Piece whiteQueen = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.QUEEN);
+        board.initializeEmpty();
+        board.move(Position.from("e5"), whiteQueen);
+
+        // when & then
+        verifyException("e5", "f8", RecursivePiece.INVALID_TARGET_POSITION);
+        verifyException("e5", "a4", RecursivePiece.INVALID_TARGET_POSITION);
+        verifyException("e5", "h1", RecursivePiece.INVALID_TARGET_POSITION);
+        verifyException("e5", "b7", RecursivePiece.INVALID_TARGET_POSITION);
+    }
+
+    @Test
     @DisplayName("Queen이 이동하는 경로에 다른 기물이 있으면 UnreachableWithObstacleException이 발생해야 한다.")
     void moveQueenWithObstacle() {
         // given
-        Piece whiteKing = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.QUEEN);
+        Piece whiteQueen = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.QUEEN);
         board.initializeEmpty();
-        board.move(Position.from("d1"), whiteKing);
+        board.move(Position.from("d1"), whiteQueen);
         board.move(Position.from("d3"), PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.PAWN));
 
         // when & then

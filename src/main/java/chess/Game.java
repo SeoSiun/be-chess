@@ -14,7 +14,6 @@ public class Game {
     private final Board board;
     private final ChessGame chessGame;
     private final ChessView chessView;
-
     private Piece.Color turn;
 
     public Game() {

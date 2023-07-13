@@ -69,6 +69,19 @@ class PawnTest {
         verifyException("c3", "d4", Pawn.PAWN_MOVE_DIAGONAL_WITHOUT_ENEMY);
     }
 
+    @Test
+    @DisplayName("Pawn이 뒤로 움직이면 예외가 발생한다.")
+    void movePawnBackward() {
+        // given
+        Piece whitePawn = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.PAWN);
+
+        board.initializeEmpty();
+        board.move(Position.from("e4"), whitePawn);
+
+        // when & then
+        verifyException("e4", "e3", RecursivePiece.INVALID_TARGET_POSITION);
+    }
+
     private void verifyException(String source, String target, String expectedMessage) {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> move(source, target));
         assertEquals(expectedMessage, exception.getMessage());

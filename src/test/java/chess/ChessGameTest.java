@@ -76,6 +76,20 @@ class ChessGameTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> chessGame.move(board, sourcePosition, targetPosition, Color.WHITE));
         assertEquals(ChessGame.TARGET_EQUALS_SOURCE, exception.getMessage());
     }
+
+    @Test
+    @DisplayName("해당 색상 기물의 차례가 아닌 경우 예외가 발생한다.")
+    void moveNotMyTurn() {
+        // given
+        board.initialize();
+        String sourcePosition = "a2";
+        String targetPosition = "a3";
+        Color turn = Color.BLACK;
+
+        // when & then
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> chessGame.move(board, sourcePosition, targetPosition, turn));
+        assertEquals(ChessView.appendTurnMessage(turn, ChessGame.INVALID_TURN), exception.getMessage());
+    }
     
     @Test
     @DisplayName("해당 색상의 모든 기물의 점수 합계를 리턴해야한다.")

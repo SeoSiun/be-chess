@@ -41,6 +41,23 @@ class KnightTest {
     }
 
     @Test
+    @DisplayName("Knight가 NNE, NNW, .. WWS이 아닌 방향으로 움직이면 예외가 발생한다.")
+    void moveKnightRandomDirection() {
+        // given
+        Piece whiteKnight = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.KNIGHT);
+        board.initializeEmpty();
+        board.move(Position.from("d4"), whiteKnight);
+
+        // when & then
+        verifyException("d4", "h1", RecursivePiece.INVALID_TARGET_POSITION);
+        verifyException("d4", "a2", RecursivePiece.INVALID_TARGET_POSITION);
+        verifyException("d4", "b7", RecursivePiece.INVALID_TARGET_POSITION);
+        verifyException("d4", "d5", RecursivePiece.INVALID_TARGET_POSITION);
+        verifyException("d4", "e4", RecursivePiece.INVALID_TARGET_POSITION);
+    }
+
+
+    @Test
     @DisplayName("Knight가 NNE, NNW, .. WWS 으로 여러 칸 움직이면 InvalidTargetPositionException이 발생한다.")
     void moveKnightMultipleStep() {
         // given

@@ -53,6 +53,20 @@ class RookTest {
         verifyException("d4", "g6", RecursivePiece.INVALID_TARGET_POSITION);
     }
 
+    @Test
+    @DisplayName("Rook이 이동하는 경로에 다른 기물이 있으면 UnreachableWithObstacleException이 발생해야 한다.")
+    void moveRookWithObstacle() {
+        // given
+        Piece whiteRook = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.ROOK);
+        board.initializeEmpty();
+        board.move(Position.from("d1"), whiteRook);
+        board.move(Position.from("d3"), PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.PAWN));
+
+        // when & then
+        verifyException( "d1", "d5", RecursivePiece.UNREACHABLE_BY_OBSTACLE);
+    }
+
+
     private void verifyException(String source, String target, String expectedMessage) {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> move(source, target));
         assertEquals(expectedMessage, exception.getMessage());

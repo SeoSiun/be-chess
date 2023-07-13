@@ -22,7 +22,7 @@ class PositionTest {
 
     @Test
     @DisplayName("좌표 범위를 벗어나면 PositionOutOfRangeException을 throw한다")
-    void createPositionOutOfRange() {
+    void createPositionFromOutOfRange() {
         // given
         String coordinateWithRankOutOfRange = "a0";
         String coordinateWithFileOutOfRange = "k8";
@@ -38,8 +38,28 @@ class PositionTest {
         verifyException(coordinateWithIntFile, Position.POSITION_OUT_OF_RANGE);
     }
 
+    @Test
+    @DisplayName("좌표 범위를 벗어나면 PositionOutOfRangeException을 throw한다")
+    void createPositionOfOutOfRange() {
+        // given
+        int nine = 9;
+        int negative = -1;
+        int normal = 3;
+
+        // when & then
+        verifyException(normal, negative, Position.POSITION_OUT_OF_RANGE);
+        verifyException(normal, nine, Position.POSITION_OUT_OF_RANGE);
+        verifyException(negative, normal, Position.POSITION_OUT_OF_RANGE);
+        verifyException(nine, negative, Position.POSITION_OUT_OF_RANGE);
+    }
+
     private void verifyException(String coordinate, String expectedMessage) {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> Position.from(coordinate));
+        assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    private void verifyException(int xPos, int yPos, String expectedMessage) {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> Position.of(xPos, yPos));
         assertEquals(expectedMessage, exception.getMessage());
     }
 }

@@ -53,6 +53,22 @@ class BishopTest {
         verifyException("d4", "g6", RecursivePiece.INVALID_TARGET_POSITION);
     }
 
+    @Test
+    @DisplayName("target까지 가는 길에 장애물(다른 기물)이 있다면 예외가 발생한다.")
+    void moveUnreachableTarget() {
+        // given
+        board.initializeEmpty();
+        String sourcePosition = "c1";
+        String targetPosition = "e3";
+
+        board.move(Position.from(sourcePosition), PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.BISHOP));
+        board.move(Position.from("d2"), PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.PAWN));
+
+        // when & then
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> move(sourcePosition, targetPosition));
+        assertEquals(RecursivePiece.UNREACHABLE_BY_OBSTACLE, exception.getMessage());
+    }
+
     private void verifyException(String source, String target, String expectedMessage) {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> move(source, target));
         assertEquals(expectedMessage, exception.getMessage());

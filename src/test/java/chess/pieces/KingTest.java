@@ -27,19 +27,6 @@ class KingTest {
      * check King's movement
      */
     @Test
-    @DisplayName("target까지 가는 길에 장애물(다른 기물)이 있다면 UnreachableWithObstacleException을 throw한다.")
-    void moveUnreachableTarget() {
-        // given
-        board.initialize();
-        String sourcePosition = "a1";
-        String targetPosition = "a3";
-
-        // when & then
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> move(sourcePosition, targetPosition));
-        assertEquals(RecursivePiece.UNREACHABLE_BY_OBSTACLE, exception.getMessage());
-    }
-
-    @Test
     @DisplayName("King은 어느방향이든 1칸 움직일 수 있다.")
     void moveKing() {
         // given
