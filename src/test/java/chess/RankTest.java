@@ -99,7 +99,7 @@ class RankTest {
         // given
         Rank rank = RankFactory.createBlankRank();
         int index = 1;
-        Piece whitePawn = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.PAWN);
+        Piece whitePawn = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.PAWN);
 
         // when
         rank.setPiece(index, whitePawn);
@@ -114,8 +114,8 @@ class RankTest {
     void pieceCountWithColorAndType() {
         // given
         Rank rank = RankFactory.createFirstRank(Piece.Color.BLACK);
-        rank.setPiece(1, PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.KNIGHT));
-        rank.setPiece(4, PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.KNIGHT));
+        rank.setPiece(1, PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.KNIGHT));
+        rank.setPiece(4, PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.KNIGHT));
 
         // when
         int pieceCountWithWhiteKnight = rank.pieceCount(Piece.Color.WHITE, Piece.Type.KNIGHT);
@@ -147,8 +147,8 @@ class RankTest {
     void getPiecesByColor() {
         // given
         Rank rank = RankFactory.createFirstRank(Piece.Color.BLACK);
-        rank.setPiece(1, PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.QUEEN));
-        rank.setPiece(5, PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.KNIGHT));
+        rank.setPiece(1, PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.QUEEN));
+        rank.setPiece(5, PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.KNIGHT));
 
         // when
         List<Piece> whitePieces = rank.getPiecesByColor(Piece.Color.WHITE);

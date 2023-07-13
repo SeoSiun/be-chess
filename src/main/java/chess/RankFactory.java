@@ -9,14 +9,14 @@ public class RankFactory {
     public static Rank createFirstRank(Color color) {
         Rank rank = new Rank();
 
-        rank.addPiece(PieceFactory.createPiece(color, Type.ROOK));
-        rank.addPiece(PieceFactory.createPiece(color, Type.KNIGHT));
-        rank.addPiece(PieceFactory.createPiece(color, Type.BISHOP));
-        rank.addPiece(PieceFactory.createPiece(color, Type.QUEEN));
-        rank.addPiece(PieceFactory.createPiece(color, Type.KING));
-        rank.addPiece(PieceFactory.createPiece(color, Type.BISHOP));
-        rank.addPiece(PieceFactory.createPiece(color, Type.KNIGHT));
-        rank.addPiece(PieceFactory.createPiece(color, Type.ROOK));
+        rank.addPiece(PieceFactory.createPieceByColorAndType(color, Type.ROOK));
+        rank.addPiece(PieceFactory.createPieceByColorAndType(color, Type.KNIGHT));
+        rank.addPiece(PieceFactory.createPieceByColorAndType(color, Type.BISHOP));
+        rank.addPiece(PieceFactory.createPieceByColorAndType(color, Type.QUEEN));
+        rank.addPiece(PieceFactory.createPieceByColorAndType(color, Type.KING));
+        rank.addPiece(PieceFactory.createPieceByColorAndType(color, Type.BISHOP));
+        rank.addPiece(PieceFactory.createPieceByColorAndType(color, Type.KNIGHT));
+        rank.addPiece(PieceFactory.createPieceByColorAndType(color, Type.ROOK));
 
         return rank;
     }
@@ -29,7 +29,7 @@ public class RankFactory {
         Rank rank = new Rank();
 
         for (int file = 0; file < Board.MAX_FILE; file++) {
-            rank.addPiece(PieceFactory.createPiece(color, type));
+            rank.addPiece(PieceFactory.createPieceByColorAndType(color, type));
         }
         return rank;
 

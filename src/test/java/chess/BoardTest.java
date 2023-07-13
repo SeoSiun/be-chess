@@ -160,10 +160,10 @@ class BoardTest {
         Piece pieceInh1 = board.findPiece("h1");
 
         // then
-        assertEquals(PieceFactory.createPiece(Color.BLACK, Type.ROOK), pieceIna8);
-        assertEquals(PieceFactory.createPiece(Color.BLACK, Type.ROOK), pieceInh8);
-        assertEquals(PieceFactory.createPiece(Color.WHITE, Type.ROOK), pieceIna1);
-        assertEquals(PieceFactory.createPiece(Color.WHITE, Type.ROOK), pieceInh1);
+        assertEquals(PieceFactory.createPieceByColorAndType(Color.BLACK, Type.ROOK), pieceIna8);
+        assertEquals(PieceFactory.createPieceByColorAndType(Color.BLACK, Type.ROOK), pieceInh8);
+        assertEquals(PieceFactory.createPieceByColorAndType(Color.WHITE, Type.ROOK), pieceIna1);
+        assertEquals(PieceFactory.createPieceByColorAndType(Color.WHITE, Type.ROOK), pieceInh1);
     }
 
     private void addPiece(String position, Piece piece) {
@@ -176,17 +176,17 @@ class BoardTest {
         // given
         board.initializeEmpty();
 
-        addPiece("b6", PieceFactory.createPiece(Color.BLACK, Type.PAWN));
-        addPiece("e6", PieceFactory.createPiece(Color.BLACK, Type.QUEEN));
-        addPiece("e5", PieceFactory.createPiece(Color.BLACK, Type.BISHOP));
-        addPiece("e3", PieceFactory.createPiece(Color.BLACK, Type.KNIGHT));
-        addPiece("b8", PieceFactory.createPiece(Color.BLACK, Type.KING));
-        addPiece("c8", PieceFactory.createPiece(Color.BLACK, Type.ROOK));
+        addPiece("b6", PieceFactory.createPieceByColorAndType(Color.BLACK, Type.PAWN));
+        addPiece("e6", PieceFactory.createPieceByColorAndType(Color.BLACK, Type.QUEEN));
+        addPiece("e5", PieceFactory.createPieceByColorAndType(Color.BLACK, Type.BISHOP));
+        addPiece("e3", PieceFactory.createPieceByColorAndType(Color.BLACK, Type.KNIGHT));
+        addPiece("b8", PieceFactory.createPieceByColorAndType(Color.BLACK, Type.KING));
+        addPiece("c8", PieceFactory.createPieceByColorAndType(Color.BLACK, Type.ROOK));
 
-        addPiece("f2", PieceFactory.createPiece(Color.WHITE, Type.PAWN));
-        addPiece("g2", PieceFactory.createPiece(Color.WHITE, Type.PAWN));
-        addPiece("e1", PieceFactory.createPiece(Color.WHITE, Type.ROOK));
-        addPiece("f1", PieceFactory.createPiece(Color.WHITE, Type.KING));
+        addPiece("f2", PieceFactory.createPieceByColorAndType(Color.WHITE, Type.PAWN));
+        addPiece("g2", PieceFactory.createPieceByColorAndType(Color.WHITE, Type.PAWN));
+        addPiece("e1", PieceFactory.createPieceByColorAndType(Color.WHITE, Type.ROOK));
+        addPiece("f1", PieceFactory.createPieceByColorAndType(Color.WHITE, Type.KING));
 
         // when
         List<Piece> sortedWhitePieces = board.getSortedPiecesByPoint(Color.WHITE);

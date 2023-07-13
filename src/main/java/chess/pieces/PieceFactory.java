@@ -3,7 +3,7 @@ package chess.pieces;
 public class PieceFactory {
     private PieceFactory() {}
 
-    public static Piece createPiece(Piece.Color color, Piece.Type type) {
+    public static Piece createPieceByColorAndType(Piece.Color color, Piece.Type type) {
         switch (type) {
             case PAWN:
                 return new Pawn(color);
@@ -25,6 +25,6 @@ public class PieceFactory {
     }
 
     public static Piece createBlank() {
-        return createPiece(Piece.Color.NO_COLOR, Piece.Type.NO_PIECE);
+        return createPieceByColorAndType(Piece.Color.NO_COLOR, Piece.Type.NO_PIECE);
     }
 }

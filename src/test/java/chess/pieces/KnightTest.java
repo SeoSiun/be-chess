@@ -30,7 +30,7 @@ class KnightTest {
     @DisplayName("Knight는 NNE, NNW, .. WWS 으로 움직일 수 있다.")
     void moveKnight() {
         // given
-        Piece whiteKnight = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.KNIGHT);
+        Piece whiteKnight = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.KNIGHT);
         board.initializeEmpty();
         board.move(Position.from("d4"), whiteKnight);
         String[] positions = {"d4", "e6", "d8", "e6", "d4", "f5", "h4", "f5", "d4"};
@@ -44,7 +44,7 @@ class KnightTest {
     @DisplayName("Knight가 NNE, NNW, .. WWS이 아닌 방향으로 움직이면 예외가 발생한다.")
     void moveKnightRandomDirection() {
         // given
-        Piece whiteKnight = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.KNIGHT);
+        Piece whiteKnight = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.KNIGHT);
         board.initializeEmpty();
         board.move(Position.from("d4"), whiteKnight);
 
@@ -61,7 +61,7 @@ class KnightTest {
     @DisplayName("Knight가 NNE, NNW, .. WWS 으로 여러 칸 움직이면 InvalidTargetPositionException이 발생한다.")
     void moveKnightMultipleStep() {
         // given
-        Piece whiteKnight = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.KNIGHT);
+        Piece whiteKnight = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.KNIGHT);
         board.initializeEmpty();
         board.move(Position.from("d4"), whiteKnight);
 

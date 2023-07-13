@@ -11,10 +11,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PieceTest {
-    Piece whitePawn = PieceFactory.createPiece(Color.WHITE, Type.PAWN);
-    Piece blackPawn = PieceFactory.createPiece(Color.BLACK, Type.PAWN);
-    Piece whiteKing = PieceFactory.createPiece(Color.WHITE, Type.KING);
-    Piece blackBishop = PieceFactory.createPiece(Color.BLACK, Type.BISHOP);
+    Piece whitePawn = PieceFactory.createPieceByColorAndType(Color.WHITE, Type.PAWN);
+    Piece blackPawn = PieceFactory.createPieceByColorAndType(Color.BLACK, Type.PAWN);
+    Piece whiteKing = PieceFactory.createPieceByColorAndType(Color.WHITE, Type.KING);
+    Piece blackBishop = PieceFactory.createPieceByColorAndType(Color.BLACK, Type.BISHOP);
     Piece blank = PieceFactory.createBlank();
 
     @Test

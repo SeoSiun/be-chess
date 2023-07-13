@@ -30,7 +30,7 @@ class RookTest {
     @DisplayName("Rook은 수평/수직 방향이라면 몇 칸이든 움직일 수 있다")
     void moveRook() {
         // given
-        Piece whiteRook = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.ROOK);
+        Piece whiteRook = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.ROOK);
         board.initializeEmpty();
         board.move(Position.from("a1"), whiteRook);
         String[] positions = {"a1", "a4", "e4", "e3", "c3"};
@@ -44,7 +44,7 @@ class RookTest {
     @DisplayName("Rook이 수직/수평이 아닌 방향으로 움직이면 예외가 발생한다.")
     void moveRookInvalidDirection() {
         // given
-        Piece whiteRook = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.ROOK);
+        Piece whiteRook = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.ROOK);
         board.initializeEmpty();
         board.move(Position.from("d4"), whiteRook);
 
@@ -57,10 +57,10 @@ class RookTest {
     @DisplayName("Rook이 이동하는 경로에 다른 기물이 있으면 UnreachableWithObstacleException이 발생해야 한다.")
     void moveRookWithObstacle() {
         // given
-        Piece whiteRook = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.ROOK);
+        Piece whiteRook = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.ROOK);
         board.initializeEmpty();
         board.move(Position.from("d1"), whiteRook);
-        board.move(Position.from("d3"), PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.PAWN));
+        board.move(Position.from("d3"), PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.PAWN));
 
         // when & then
         verifyException( "d1", "d5", RecursivePiece.UNREACHABLE_BY_OBSTACLE);

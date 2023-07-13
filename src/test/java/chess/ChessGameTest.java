@@ -35,7 +35,7 @@ class ChessGameTest {
 
         // then
         assertEquals(PieceFactory.createBlank(), board.findPiece(sourcePosition));
-        assertEquals(PieceFactory.createPiece(Color.WHITE, Type.PAWN), board.findPiece(targetPosition));
+        assertEquals(PieceFactory.createPieceByColorAndType(Color.WHITE, Type.PAWN), board.findPiece(targetPosition));
     }
 
     @Test
@@ -97,15 +97,15 @@ class ChessGameTest {
         // given
         board.initializeEmpty();
 
-        addPiece("b6", PieceFactory.createPiece(Color.BLACK, Type.PAWN));
-        addPiece("e6", PieceFactory.createPiece(Color.BLACK, Type.QUEEN));
-        addPiece("b8", PieceFactory.createPiece(Color.BLACK, Type.KING));
-        addPiece("c8", PieceFactory.createPiece(Color.BLACK, Type.ROOK));
+        addPiece("b6", PieceFactory.createPieceByColorAndType(Color.BLACK, Type.PAWN));
+        addPiece("e6", PieceFactory.createPieceByColorAndType(Color.BLACK, Type.QUEEN));
+        addPiece("b8", PieceFactory.createPieceByColorAndType(Color.BLACK, Type.KING));
+        addPiece("c8", PieceFactory.createPieceByColorAndType(Color.BLACK, Type.ROOK));
 
-        addPiece("f2", PieceFactory.createPiece(Color.WHITE, Type.PAWN));
-        addPiece("g2", PieceFactory.createPiece(Color.WHITE, Type.PAWN));
-        addPiece("e1", PieceFactory.createPiece(Color.WHITE, Type.ROOK));
-        addPiece("f1", PieceFactory.createPiece(Color.WHITE, Type.KING));
+        addPiece("f2", PieceFactory.createPieceByColorAndType(Color.WHITE, Type.PAWN));
+        addPiece("g2", PieceFactory.createPieceByColorAndType(Color.WHITE, Type.PAWN));
+        addPiece("e1", PieceFactory.createPieceByColorAndType(Color.WHITE, Type.ROOK));
+        addPiece("f1", PieceFactory.createPieceByColorAndType(Color.WHITE, Type.KING));
 
         // when
         // then
@@ -118,24 +118,24 @@ class ChessGameTest {
         // given
         board.initializeEmpty();
 
-        addPiece("b6", PieceFactory.createPiece(Color.BLACK, Type.PAWN));
-        addPiece("c6", PieceFactory.createPiece(Color.BLACK, Type.PAWN));
-        addPiece("c5", PieceFactory.createPiece(Color.BLACK, Type.PAWN));
-        addPiece("e6", PieceFactory.createPiece(Color.BLACK, Type.QUEEN));
-        addPiece("b8", PieceFactory.createPiece(Color.BLACK, Type.KING));
-        addPiece("c8", PieceFactory.createPiece(Color.BLACK, Type.ROOK));
-        addPiece("a7", PieceFactory.createPiece(Color.BLACK, Type.PAWN));
-        addPiece("c7", PieceFactory.createPiece(Color.BLACK, Type.PAWN));
-        addPiece("d7", PieceFactory.createPiece(Color.BLACK, Type.BISHOP));
+        addPiece("b6", PieceFactory.createPieceByColorAndType(Color.BLACK, Type.PAWN));
+        addPiece("c6", PieceFactory.createPieceByColorAndType(Color.BLACK, Type.PAWN));
+        addPiece("c5", PieceFactory.createPieceByColorAndType(Color.BLACK, Type.PAWN));
+        addPiece("e6", PieceFactory.createPieceByColorAndType(Color.BLACK, Type.QUEEN));
+        addPiece("b8", PieceFactory.createPieceByColorAndType(Color.BLACK, Type.KING));
+        addPiece("c8", PieceFactory.createPieceByColorAndType(Color.BLACK, Type.ROOK));
+        addPiece("a7", PieceFactory.createPieceByColorAndType(Color.BLACK, Type.PAWN));
+        addPiece("c7", PieceFactory.createPieceByColorAndType(Color.BLACK, Type.PAWN));
+        addPiece("d7", PieceFactory.createPieceByColorAndType(Color.BLACK, Type.BISHOP));
 
-        addPiece("f2", PieceFactory.createPiece(Color.WHITE, Type.PAWN));
-        addPiece("g2", PieceFactory.createPiece(Color.WHITE, Type.PAWN));
-        addPiece("e1", PieceFactory.createPiece(Color.WHITE, Type.ROOK));
-        addPiece("f1", PieceFactory.createPiece(Color.WHITE, Type.KING));
-        addPiece("f4", PieceFactory.createPiece(Color.WHITE, Type.KNIGHT));
-        addPiece("g4", PieceFactory.createPiece(Color.WHITE, Type.QUEEN));
-        addPiece("f3", PieceFactory.createPiece(Color.WHITE, Type.PAWN));
-        addPiece("h3", PieceFactory.createPiece(Color.WHITE, Type.PAWN));
+        addPiece("f2", PieceFactory.createPieceByColorAndType(Color.WHITE, Type.PAWN));
+        addPiece("g2", PieceFactory.createPieceByColorAndType(Color.WHITE, Type.PAWN));
+        addPiece("e1", PieceFactory.createPieceByColorAndType(Color.WHITE, Type.ROOK));
+        addPiece("f1", PieceFactory.createPieceByColorAndType(Color.WHITE, Type.KING));
+        addPiece("f4", PieceFactory.createPieceByColorAndType(Color.WHITE, Type.KNIGHT));
+        addPiece("g4", PieceFactory.createPieceByColorAndType(Color.WHITE, Type.QUEEN));
+        addPiece("f3", PieceFactory.createPieceByColorAndType(Color.WHITE, Type.PAWN));
+        addPiece("h3", PieceFactory.createPieceByColorAndType(Color.WHITE, Type.PAWN));
 
         // when
         // then

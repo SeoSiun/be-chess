@@ -28,8 +28,8 @@ class PawnTest {
     @DisplayName("Pawn은 첫 번째 이동에는 앞으로 두 칸 또는 한 칸 움직일 수 있다.")
     void movePawnFirst() {
         // given
-        Piece whitePawnForOneStep = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.PAWN);
-        Piece whitePawnForTwoStep = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.PAWN);
+        Piece whitePawnForOneStep = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.PAWN);
+        Piece whitePawnForTwoStep = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.PAWN);
         board.initializeEmpty();
         board.move(Position.from("b2"), whitePawnForOneStep);
         board.move(Position.from("c2"), whitePawnForTwoStep);
@@ -43,7 +43,7 @@ class PawnTest {
     @DisplayName("Pawn은 두 번째 이동부터는 앞으로 한 칸만 움직일 수 있다.")
     void movePawnNonFirst() {
         // given
-        Piece whitePawn = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.PAWN);
+        Piece whitePawn = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.PAWN);
         board.initializeEmpty();
         board.move(Position.from("b2"), whitePawn);
         move("b2", "b4");
@@ -57,8 +57,8 @@ class PawnTest {
     @DisplayName("Pawn은 상대 편 기물이 있을 때만 대각선으로 이동할 수 있다.")
     void movePawnDiagonal() {
         // given
-        Piece whitePawn = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.PAWN);
-        Piece blackPawn = PieceFactory.createPiece(Piece.Color.BLACK, Piece.Type.PAWN);
+        Piece whitePawn = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.PAWN);
+        Piece blackPawn = PieceFactory.createPieceByColorAndType(Piece.Color.BLACK, Piece.Type.PAWN);
 
         board.initializeEmpty();
         board.move(Position.from("b2"), whitePawn);
@@ -73,7 +73,7 @@ class PawnTest {
     @DisplayName("Pawn이 뒤로 움직이면 예외가 발생한다.")
     void movePawnBackward() {
         // given
-        Piece whitePawn = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.PAWN);
+        Piece whitePawn = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.PAWN);
 
         board.initializeEmpty();
         board.move(Position.from("e4"), whitePawn);

@@ -30,7 +30,7 @@ class BishopTest {
     @DisplayName("Bishop은 대각선 방향이라면 몇 칸이든 움직일 수 있다")
     void moveBishop() {
         // given
-        Piece whiteBishop = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.BISHOP);
+        Piece whiteBishop = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.BISHOP);
         board.initializeEmpty();
         board.move(Position.from("f1"), whiteBishop);
         String[] positions = {"f1", "g2", "d5", "b3", "d1"};
@@ -44,7 +44,7 @@ class BishopTest {
     @DisplayName("Bishop이 대각선이 아닌 방향으로 움직이면 InvalidTargetPositionException이 발생한다.")
     void moveBishopNonDiagonal() {
         // given
-        Piece whiteBishop = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.BISHOP);
+        Piece whiteBishop = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.BISHOP);
         board.initializeEmpty();
         board.move(Position.from("d4"), whiteBishop);
 
@@ -61,8 +61,8 @@ class BishopTest {
         String sourcePosition = "c1";
         String targetPosition = "e3";
 
-        board.move(Position.from(sourcePosition), PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.BISHOP));
-        board.move(Position.from("d2"), PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.PAWN));
+        board.move(Position.from(sourcePosition), PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.BISHOP));
+        board.move(Position.from("d2"), PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.PAWN));
 
         // when & then
         Exception exception = assertThrows(IllegalArgumentException.class, () -> move(sourcePosition, targetPosition));

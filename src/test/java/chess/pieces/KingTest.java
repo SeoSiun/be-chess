@@ -30,7 +30,7 @@ class KingTest {
     @DisplayName("King은 어느방향이든 1칸 움직일 수 있다.")
     void moveKing() {
         // given
-        Piece whiteKing = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.KING);
+        Piece whiteKing = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.KING);
         board.initializeEmpty();
         board.move(Position.from("e5"), whiteKing);
         String[] positions = {"e5", "e6", "f7", "g7", "h6", "h5", "g4", "f4", "e5"};
@@ -44,7 +44,7 @@ class KingTest {
     @DisplayName("King이 체스판을 벗어나는 위치로 이동하면 PositionOutOfRangeException이 발생해야 한다.")
     void moveKingOutOfRange() {
         // given
-        Piece whiteKing = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.KING);
+        Piece whiteKing = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.KING);
         board.initializeEmpty();
         board.move(Position.from("e8"), whiteKing);
 
@@ -56,7 +56,7 @@ class KingTest {
     @DisplayName("King이 1칸 이상 움직이면 InvalidTargetPositionException이 발생해야 한다.")
     void moveKingMultipleStep() {
         // given
-        Piece whiteKing = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.KING);
+        Piece whiteKing = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.KING);
         board.initializeEmpty();
         board.move(Position.from("e5"), whiteKing);
 
@@ -68,10 +68,10 @@ class KingTest {
     @DisplayName("King이 이동하려는 위치에 같은 색의 기물이 있으면 TargetSameColorException이 발생해야 한다.")
     void moveKingWithObstacle() {
         // given
-        Piece whiteKing = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.KING);
+        Piece whiteKing = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.KING);
         board.initializeEmpty();
         board.move(Position.from("e5"), whiteKing);
-        board.move(Position.from("e4"), PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.PAWN));
+        board.move(Position.from("e4"), PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.PAWN));
 
         // when & then
         verifyException("e5", "e4", ChessGame.TARGET_IS_SAME_COLOR);

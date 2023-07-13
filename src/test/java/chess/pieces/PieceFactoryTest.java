@@ -12,18 +12,18 @@ class PieceFactoryTest {
         // given
 
         // when
-        Piece whitePawn = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.PAWN);
-        Piece blackPawn = PieceFactory.createPiece(Piece.Color.BLACK, Piece.Type.PAWN);
-        Piece whiteKnight = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.KNIGHT);
-        Piece blackKnight = PieceFactory.createPiece(Piece.Color.BLACK, Piece.Type.KNIGHT);
-        Piece whiteRook = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.ROOK);
-        Piece blackRook = PieceFactory.createPiece(Piece.Color.BLACK, Piece.Type.ROOK);
-        Piece whiteBishop = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.BISHOP);
-        Piece blackBishop = PieceFactory.createPiece(Piece.Color.BLACK, Piece.Type.BISHOP);
-        Piece whiteQueen = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.QUEEN);
-        Piece blackQueen = PieceFactory.createPiece(Piece.Color.BLACK, Piece.Type.QUEEN);
-        Piece whiteKing = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.KING);
-        Piece blackKing = PieceFactory.createPiece(Piece.Color.BLACK, Piece.Type.KING);
+        Piece whitePawn = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.PAWN);
+        Piece blackPawn = PieceFactory.createPieceByColorAndType(Piece.Color.BLACK, Piece.Type.PAWN);
+        Piece whiteKnight = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.KNIGHT);
+        Piece blackKnight = PieceFactory.createPieceByColorAndType(Piece.Color.BLACK, Piece.Type.KNIGHT);
+        Piece whiteRook = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.ROOK);
+        Piece blackRook = PieceFactory.createPieceByColorAndType(Piece.Color.BLACK, Piece.Type.ROOK);
+        Piece whiteBishop = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.BISHOP);
+        Piece blackBishop = PieceFactory.createPieceByColorAndType(Piece.Color.BLACK, Piece.Type.BISHOP);
+        Piece whiteQueen = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.QUEEN);
+        Piece blackQueen = PieceFactory.createPieceByColorAndType(Piece.Color.BLACK, Piece.Type.QUEEN);
+        Piece whiteKing = PieceFactory.createPieceByColorAndType(Piece.Color.WHITE, Piece.Type.KING);
+        Piece blackKing = PieceFactory.createPieceByColorAndType(Piece.Color.BLACK, Piece.Type.KING);
 
         // Then
         verifyPiece(whitePawn, blackPawn, Piece.Type.PAWN);
