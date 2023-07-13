@@ -17,7 +17,6 @@ import java.util.stream.IntStream;
  */
 public class Board {
     private final List<Rank> ranks;
-
     public static final int MAX_RANK = 8;
     public static final int MAX_FILE = 8;
 
@@ -160,19 +159,15 @@ public class Board {
         return findPiece(sourcePosition).getDirections();
     }
 
-    public int getMaxMoveCount(Position position) {
-        return findPiece(position).getMaxMoveCount();
-    }
-
-    public boolean isPawn(Position position) {
-        return findPiece(position).isPawn();
-    }
-
     public boolean isWhite(Position position) {
         return findPiece(position).isWhite();
     }
 
     public boolean isBlack(Position position) {
         return findPiece(position).isBlack();
+    }
+
+    public void checkMovable(Position sourcePosition, Position targetPosition) {
+        findPiece(sourcePosition).checkMovable(this, sourcePosition, targetPosition);
     }
 }

@@ -5,7 +5,7 @@ import java.util.List;
 
 import static chess.pieces.Piece.Direction.*;
 
-public class Queen extends Piece {
+public class Queen extends RecursivePiece {
     private static final List<Direction> directions = Arrays.asList(NORTH, EAST, SOUTH, WEST, NORTHEAST, SOUTHEAST, SOUTHWEST, NORTHWEST);
     protected Queen(Color color) {
         super(color, Type.QUEEN);

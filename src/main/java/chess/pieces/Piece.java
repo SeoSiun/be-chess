@@ -1,11 +1,10 @@
 package chess.pieces;
 
+import chess.Board;
 import chess.Position;
 
 import java.util.List;
 import java.util.Objects;
-
-import static chess.Board.MAX_RANK;
 
 public abstract class Piece {
     public enum Color {
@@ -54,6 +53,9 @@ public abstract class Piece {
         WEST(-1, 0),
         NORTHWEST(-1, 1),
 
+        NN(0, 2),
+        SS(0, -2),
+
         NNE(1, 2),
         NNW(-1, 2),
         SSE(1, -2),
@@ -92,9 +94,7 @@ public abstract class Piece {
 
     public abstract List<Direction> getDirections();
 
-    public int getMaxMoveCount() {
-        return MAX_RANK;
-    }
+    public abstract Direction checkMovable(Board board, Position sourcePosition, Position targetPosition);
 
     public char getRepresentation() {
         if (color == Color.BLACK) {

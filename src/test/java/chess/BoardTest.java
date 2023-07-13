@@ -24,8 +24,8 @@ class BoardTest {
     @BeforeEach
     void setup() {
         board = new Board();
-        chessView = new ChessView(board);
-        chessGame = new ChessGame(board);
+        chessView = new ChessView();
+        chessGame = new ChessGame();
     }
 
     @Test
@@ -49,7 +49,7 @@ class BoardTest {
                         appendNewLine("rnbqkbnr  1") +
                         appendNewLine("") +
                         appendNewLine("abcdefgh"),
-                chessView.showBoard());
+                chessView.showBoard(board));
     }
 
     @Test
@@ -74,7 +74,7 @@ class BoardTest {
                         appendNewLine("rnbqkbnr  1") +
                         appendNewLine("") +
                         appendNewLine("abcdefgh"),
-                chessView.showBoard());
+                chessView.showBoard(board));
     }
 
     @Test
@@ -98,7 +98,7 @@ class BoardTest {
                         appendNewLine(BLANK_RANK + "  1") +
                         appendNewLine("") +
                         appendNewLine("abcdefgh"),
-                chessView.showBoard());
+                chessView.showBoard(board));
     }
 
     @Test

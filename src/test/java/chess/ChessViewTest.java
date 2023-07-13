@@ -15,7 +15,7 @@ class ChessViewTest {
     @BeforeEach
     void setup() {
         board = new Board();
-        chessView = new ChessView(board);
+        chessView = new ChessView();
     }
 
     @Test
@@ -25,7 +25,7 @@ class ChessViewTest {
         board.initialize();
 
         // when
-        String showBoard = chessView.showBoard();
+        String showBoard = chessView.showBoard(board);
 
         // then
         assertEquals(32, board.pieceCount());
