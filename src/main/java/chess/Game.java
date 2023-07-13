@@ -42,7 +42,7 @@ public class Game {
                 } else if (command.equals(END)) {
                     isStarted();
                     break;
-                } else if (command.startsWith(MOVE)) {
+                } else if (isMove(command)) {
                     isStarted();
                     move(command);
                 } else {
@@ -54,6 +54,10 @@ public class Game {
             }
         }
         end();
+    }
+
+    private boolean isMove(String command) {
+        return command.startsWith(MOVE) && command.split(" ")[0].equals(MOVE);
     }
 
     private void printDefaultMessage() {
