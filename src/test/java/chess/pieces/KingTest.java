@@ -3,10 +3,6 @@ package chess.pieces;
 import chess.Board;
 import chess.ChessGame;
 import chess.Position;
-import exceptions.InvalidTargetPositionException;
-import exceptions.PositionOutOfRangeException;
-import exceptions.TargetSameColorException;
-import exceptions.UnreachableWithObstacleException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,7 +35,8 @@ class KingTest {
         String targetPosition = "a3";
 
         // when & then
-        assertThrows(UnreachableWithObstacleException.class, () -> move(sourcePosition, targetPosition));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> move(sourcePosition, targetPosition));
+        assertEquals(RecursivePiece.UNREACHABLE_BY_OBSTACLE, exception.getMessage());
     }
 
     @Test
@@ -65,7 +62,7 @@ class KingTest {
         board.move(Position.from("e8"), whiteKing);
 
         // when & then
-        assertThrows(PositionOutOfRangeException.class, () -> move("e8", "e9"));
+        verifyException("e8", "e9",Position.POSITION_OUT_OF_RANGE);
     }
 
     @Test
@@ -77,7 +74,7 @@ class KingTest {
         board.move(Position.from("e5"), whiteKing);
 
         // when & then
-        assertThrows(InvalidTargetPositionException.class, () -> move("e5", "e2"));
+        verifyException("e5", "e2", RecursivePiece.INVALID_TARGET_POSITION);
     }
 
     @Test
@@ -90,7 +87,12 @@ class KingTest {
         board.move(Position.from("e4"), PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.PAWN));
 
         // when & then
-        assertThrows(TargetSameColorException.class, () -> move("e5", "e4"));
+        verifyException("e5", "e4", ChessGame.TARGET_IS_SAME_COLOR);
+    }
+
+    private void verifyException(String source, String target, String expectedMessage) {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> move(source, target));
+        assertEquals(expectedMessage, exception.getMessage());
     }
     
     private void move(String sourcePosition, String targetPosition) {

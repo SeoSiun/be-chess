@@ -39,7 +39,7 @@ public class ChessView {
         System.out.println(appendTurnMessage(turn, DEFAULT_MESSAGE));
     }
 
-    public String appendTurnMessage(Piece.Color turn, String string) {
+    public static String appendTurnMessage(Piece.Color turn, String string) {
         if (turn == Piece.Color.WHITE) {
             return string + " (흰색 차례)";
         }

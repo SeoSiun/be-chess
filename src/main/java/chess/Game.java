@@ -1,8 +1,6 @@
 package chess;
 
 import chess.pieces.Piece;
-import exceptions.InvalidTurnException;
-import exceptions.NoPieceInSourceException;
 
 import java.util.Scanner;
 
@@ -44,8 +42,6 @@ public class Game {
                 } else {
                     throw new IllegalArgumentException("존재하지 않는 명령어입니다.");
                 }
-            } catch (InvalidTurnException exception) {
-                System.out.println(chessView.appendTurnMessage(turn, exception.getMessage()));
             } catch (IllegalArgumentException exception) {
                 System.out.println(appendNewLine(exception.getMessage()));
             }

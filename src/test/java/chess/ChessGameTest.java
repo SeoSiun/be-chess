@@ -4,13 +4,12 @@ import chess.pieces.Piece;
 import chess.pieces.Piece.Color;
 import chess.pieces.Piece.Type;
 import chess.pieces.PieceFactory;
-import exceptions.*;
+import chess.pieces.RecursivePiece;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ChessGameTest {
     private Board board;
@@ -48,7 +47,8 @@ class ChessGameTest {
         String targetPosition = "a2";
 
         // when & then
-        assertThrows(TargetSameColorException.class, () -> chessGame.move(board, sourcePosition, targetPosition, Color.WHITE));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> chessGame.move(board, sourcePosition, targetPosition, Color.WHITE));
+        assertEquals(ChessGame.TARGET_IS_SAME_COLOR, exception.getMessage());
     }
 
     @Test
@@ -60,7 +60,8 @@ class ChessGameTest {
         String targetPosition = "b4";
 
         // when & then
-        assertThrows(InvalidTargetPositionException.class, () -> chessGame.move(board, sourcePosition, targetPosition, Color.WHITE));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> chessGame.move(board, sourcePosition, targetPosition, Color.WHITE));
+        assertEquals(RecursivePiece.INVALID_TARGET_POSITION, exception.getMessage());
     }
 
     @Test
@@ -72,10 +73,10 @@ class ChessGameTest {
         String targetPosition = "a2";
 
         // when & then
-        assertThrows(TargetSameAsSourceException.class, () -> chessGame.move(board, sourcePosition, targetPosition, Color.WHITE));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> chessGame.move(board, sourcePosition, targetPosition, Color.WHITE));
+        assertEquals(ChessGame.TARGET_EQUALS_SOURCE, exception.getMessage());
     }
-
-
+    
     @Test
     @DisplayName("해당 색상의 모든 기물의 점수 합계를 리턴해야한다.")
     void calculatePoint() {

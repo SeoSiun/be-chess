@@ -1,7 +1,5 @@
 package chess;
 
-import chess.pieces.Piece;
-import exceptions.PositionOutOfRangeException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -33,10 +31,15 @@ class PositionTest {
         String coordinateWithIntFile = "11";
 
         // when & then
-        assertThrows(PositionOutOfRangeException.class, () -> Position.from(coordinateWithRankOutOfRange));
-        assertThrows(PositionOutOfRangeException.class, () -> Position.from(coordinateWithFileOutOfRange));
-        assertThrows(PositionOutOfRangeException.class, () -> Position.from(coordinateWithLongLength));
-        assertThrows(PositionOutOfRangeException.class, () -> Position.from(coordinateWithCharRank));
-        assertThrows(PositionOutOfRangeException.class, () -> Position.from(coordinateWithIntFile));
+        verifyException(coordinateWithRankOutOfRange, Position.POSITION_OUT_OF_RANGE);
+        verifyException(coordinateWithFileOutOfRange, Position.POSITION_OUT_OF_RANGE);
+        verifyException(coordinateWithLongLength, Position.POSITION_OUT_OF_RANGE);
+        verifyException(coordinateWithCharRank, Position.POSITION_OUT_OF_RANGE);
+        verifyException(coordinateWithIntFile, Position.POSITION_OUT_OF_RANGE);
+    }
+
+    private void verifyException(String coordinate, String expectedMessage) {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> Position.from(coordinate));
+        assertEquals(expectedMessage, exception.getMessage());
     }
 }

@@ -3,7 +3,6 @@ package chess.pieces;
 import chess.Board;
 import chess.ChessGame;
 import chess.Position;
-import exceptions.InvalidTargetPositionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,9 +48,14 @@ class BishopTest {
         board.initializeEmpty();
         board.move(Position.from("d4"), whiteBishop);
 
-        assertThrows(InvalidTargetPositionException.class, () -> move("d4", "d8"));
-        assertThrows(InvalidTargetPositionException.class, () -> move( "d4", "a4"));
-        assertThrows(InvalidTargetPositionException.class, () -> move("d4", "g6"));
+        verifyException("d4", "d8", RecursivePiece.INVALID_TARGET_POSITION);
+        verifyException("d4", "a4", RecursivePiece.INVALID_TARGET_POSITION);
+        verifyException("d4", "g6", RecursivePiece.INVALID_TARGET_POSITION);
+    }
+
+    private void verifyException(String source, String target, String expectedMessage) {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> move(source, target));
+        assertEquals(expectedMessage, exception.getMessage());
     }
 
     private void move(String sourcePosition, String targetPosition) {

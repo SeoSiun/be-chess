@@ -3,8 +3,6 @@ package chess.pieces;
 import chess.Board;
 import chess.ChessGame;
 import chess.Position;
-import exceptions.PositionOutOfRangeException;
-import exceptions.UnreachableWithObstacleException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,7 +50,7 @@ class QueenTest {
         board.move(Position.from("e5"), whiteKing);
 
         // when & then
-        assertThrows(PositionOutOfRangeException.class, () -> move( "e5", "e9"));
+        verifyException( "e5", "e9", Position.POSITION_OUT_OF_RANGE);
     }
 
     @Test
@@ -65,7 +63,12 @@ class QueenTest {
         board.move(Position.from("d3"), PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.PAWN));
 
         // when & then
-        assertThrows(UnreachableWithObstacleException.class, () -> move( "d1", "d5"));
+        verifyException( "d1", "d5", RecursivePiece.UNREACHABLE_BY_OBSTACLE);
+    }
+
+    private void verifyException(String source, String target, String expectedMessage) {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> move(source, target));
+        assertEquals(expectedMessage, exception.getMessage());
     }
 
     private void move(String sourcePosition, String targetPosition) {

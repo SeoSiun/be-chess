@@ -3,8 +3,6 @@ package chess.pieces;
 import chess.Board;
 import chess.ChessGame;
 import chess.Position;
-import exceptions.InvalidTargetPositionException;
-import exceptions.PawnMoveDiagonalWithNoEnemyException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,7 +50,7 @@ class PawnTest {
 
         // when & then
         verifyMovement(whitePawn, "b4", "b5", Piece.Color.WHITE);
-        assertThrows(InvalidTargetPositionException.class, () -> move("b5", "b7"));
+        verifyException("b5", "b7", RecursivePiece.INVALID_TARGET_POSITION);
     }
 
     @Test
@@ -68,7 +66,12 @@ class PawnTest {
 
         // when & then
         verifyMovement(whitePawn, "b2", "c3", Piece.Color.WHITE);
-        assertThrows(PawnMoveDiagonalWithNoEnemyException.class, () -> move("c3", "d4"));
+        verifyException("c3", "d4", Pawn.PAWN_MOVE_DIAGONAL_WITHOUT_ENEMY);
+    }
+
+    private void verifyException(String source, String target, String expectedMessage) {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> move(source, target));
+        assertEquals(expectedMessage, exception.getMessage());
     }
 
     private void move(String sourcePosition, String targetPosition) {

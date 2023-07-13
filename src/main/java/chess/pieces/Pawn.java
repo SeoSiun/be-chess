@@ -2,8 +2,6 @@ package chess.pieces;
 
 import chess.Board;
 import chess.Position;
-import exceptions.PawnMoveDiagonalWithNoEnemyException;
-import exceptions.UnreachableWithObstacleException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +14,7 @@ public class Pawn extends NonRecursivePiece {
     private static final List<Direction> WHITE_FIRST_DIRECTIONS = Arrays.asList(NORTH, NN, NORTHEAST, NORTHWEST);
     private static final List<Direction> BLACK_DIRECTIONS = Arrays.asList(SOUTH, SOUTHEAST, SOUTHWEST);
     private static final List<Direction> BLACK_FIRST_DIRECTIONS = Arrays.asList(SOUTH, SS, SOUTHEAST, SOUTHWEST);
+    public static final String PAWN_MOVE_DIAGONAL_WITHOUT_ENEMY = "Pawn은 상대 편 기물이 있을 때만 대각선으로 움직일 수 있습니다.";
 
     protected Pawn(Color color) {
         super(color, Type.PAWN);
@@ -50,13 +49,13 @@ public class Pawn extends NonRecursivePiece {
 
         // pawn이 대각선 방향으로 이동할 때 상대편 기물이 존재하지 않는 경우 예외처리
         if (isDiagonal(direction) && board.isBlank(targetPosition)) {
-            throw new PawnMoveDiagonalWithNoEnemyException();
+            throw new IllegalArgumentException(PAWN_MOVE_DIAGONAL_WITHOUT_ENEMY);
         }
 
         // 첫 번째 이동 - 두 칸까지 이동시 장애물이 있으면 예외처리
         if (isFirst && isTwoStep(direction)) {
             if (!board.isBlank(sourcePosition.add(direction.getDegree().getUnitVector()))) {
-                throw new UnreachableWithObstacleException();
+                throw new IllegalArgumentException(RecursivePiece.UNREACHABLE_BY_OBSTACLE);
             }
         }
         return direction;

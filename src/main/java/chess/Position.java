@@ -1,10 +1,9 @@
 package chess;
 
-import exceptions.PositionOutOfRangeException;
-
 import java.util.Objects;
 
 public class Position {
+    public static final String POSITION_OUT_OF_RANGE = "좌표 범위가 올바르지 않습니다.";
     private final int xPos;
     private final int yPos;
 
@@ -31,19 +30,19 @@ public class Position {
 
     private static void validate(String coordinate) {
         if (coordinate.length() != 2) {
-            throw new PositionOutOfRangeException();
+            throw new IllegalArgumentException(POSITION_OUT_OF_RANGE);
         }
         if (isInvalidRange(fileToIndex(coordinate.charAt(0)))) {
-            throw new PositionOutOfRangeException();
+            throw new IllegalArgumentException(POSITION_OUT_OF_RANGE);
         }
         if (isInvalidRange(rankToIndex(coordinate.charAt(1)))) {
-            throw new PositionOutOfRangeException();
+            throw new IllegalArgumentException(POSITION_OUT_OF_RANGE);
         }
     }
 
     private static void validate(int xPos, int yPos) {
         if (isInvalidRange(xPos) || isInvalidRange(yPos)) {
-            throw new PositionOutOfRangeException();
+            throw new IllegalArgumentException(POSITION_OUT_OF_RANGE);
         }
     }
 

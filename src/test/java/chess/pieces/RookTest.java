@@ -3,7 +3,6 @@ package chess.pieces;
 import chess.Board;
 import chess.ChessGame;
 import chess.Position;
-import exceptions.InvalidTargetPositionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,16 +41,21 @@ class RookTest {
     }
 
     @Test
-    @DisplayName("Rook이 수직/수평이 아닌 방향으로 움직이면 InvalidTargetPositionException이 발생한다.")
+    @DisplayName("Rook이 수직/수평이 아닌 방향으로 움직이면 예외가 발생한다.")
     void moveRookInvalidDirection() {
         // given
         Piece whiteRook = PieceFactory.createPiece(Piece.Color.WHITE, Piece.Type.ROOK);
         board.initializeEmpty();
         board.move(Position.from("d4"), whiteRook);
 
-        assertThrows(InvalidTargetPositionException.class, () -> move("d4", "a7"));
-        assertThrows(InvalidTargetPositionException.class, () -> move("d4", "g1"));
-        assertThrows(InvalidTargetPositionException.class, () -> move("d4", "g6"));
+        verifyException("d4", "a7", RecursivePiece.INVALID_TARGET_POSITION);
+        verifyException("d4", "g1", RecursivePiece.INVALID_TARGET_POSITION);
+        verifyException("d4", "g6", RecursivePiece.INVALID_TARGET_POSITION);
+    }
+
+    private void verifyException(String source, String target, String expectedMessage) {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> move(source, target));
+        assertEquals(expectedMessage, exception.getMessage());
     }
 
     private void move(String sourcePosition, String targetPosition) {

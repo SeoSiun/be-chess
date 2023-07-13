@@ -1,7 +1,6 @@
 package chess;
 
 import chess.pieces.Piece;
-import exceptions.*;
 
 import java.util.stream.IntStream;
 
@@ -14,6 +13,10 @@ import static chess.Board.MAX_RANK;
 public class ChessGame {
     // 같은 file에 여러 개의 pawn이 존재하면 0.5점 적용
     private static final double DUPLICATED_PAWN_POINT = 0.5;
+    public static final String NO_PIECE_IN_SOURCE = "옮길 기물이 존재하지 않습니다.";
+    public static final String INVALID_TURN = "해당 색상의 차례가 아닙니다.";
+    public static final String TARGET_EQUALS_SOURCE = "같은 위치로 이동할 수 없습니다.";
+    public static final String TARGET_IS_SAME_COLOR = "target에 같은 색의 기물이 위치합니다.";
 
     public void move(Board board, String sourceCoordinate, String targetCoordinate, Piece.Color turn) {
         Position sourcePosition = Position.from(sourceCoordinate);
@@ -36,7 +39,7 @@ public class ChessGame {
 
     private void checkNoPieceInSource(Board board, Position sourcePosition) {
         if (board.isBlank(sourcePosition)) {
-            throw new NoPieceInSourceException();
+            throw new IllegalArgumentException(NO_PIECE_IN_SOURCE);
         }
     }
 
@@ -47,18 +50,18 @@ public class ChessGame {
         if (turn == Piece.Color.BLACK && board.isBlack(sourcePosition)) {
             return;
         }
-        throw new InvalidTurnException();
+        throw new IllegalArgumentException(ChessView.appendTurnMessage(turn, INVALID_TURN));
     }
 
     private void checkTargetSameAsSource(Position sourcePosition, Position targetPosition) {
         if (sourcePosition.equals(targetPosition)) {
-            throw new TargetSameAsSourceException();
+            throw new IllegalArgumentException(TARGET_EQUALS_SOURCE);
         }
     }
 
     private void checkIsTargetSameColor(Board board, Position sourcePosition, Position targetPosition) {
         if (board.isSameColor(sourcePosition, targetPosition)) {
-            throw new TargetSameColorException();
+            throw new IllegalArgumentException(TARGET_IS_SAME_COLOR);
         }
     }
 

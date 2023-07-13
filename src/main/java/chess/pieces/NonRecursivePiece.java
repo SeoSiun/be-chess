@@ -2,7 +2,6 @@ package chess.pieces;
 
 import chess.Board;
 import chess.Position;
-import exceptions.InvalidTargetPositionException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +23,7 @@ public abstract class NonRecursivePiece extends Piece {
                 .collect(Collectors.toList());
 
         if (filteredDirection.isEmpty()) {
-            throw new InvalidTargetPositionException();
+            throw new IllegalArgumentException(RecursivePiece.INVALID_TARGET_POSITION);
         }
 
         return filteredDirection.get(0);
