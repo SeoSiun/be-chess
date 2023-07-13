@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * 8 * 8 체스판 구성 및 관리
@@ -95,44 +94,11 @@ public class Board {
     }
 
     /**
-     * @param rank : rank index
-     * @param file : file index
-     * @return : 해당 rank, file에 위치한 기물 반환
-     */
-    private Piece findPiece(int rank, int file) {
-        Position position = Position.of(file, rank);
-
-        return findPiece(position);
-    }
-
-    /**
      * @param position : 찾을 위치
      * @return : 해당 위치에 있는 기물 반환
      */
-    private Piece findPiece(Position position) {
+    public Piece findPiece(Position position) {
         return ranks.get(position.getYPos()).getPiece(position.getXPos());
-    }
-
-    public double calculatePoint(Color color) {
-        double pointExceptPawn = ranks.stream()
-                .mapToDouble(rank -> rank.calculatePointExceptPawn(color))
-                .sum();
-
-        return pointExceptPawn + calculatePawnPoint(color);
-    }
-
-    private double calculatePawnPoint(Color color) {
-        return IntStream.range(0, MAX_FILE)
-                .map(file -> (int) IntStream.range(0, MAX_RANK)
-                        .filter(rank -> findPiece(rank, file).checkColorAndType(color, Type.PAWN)).count())
-                .mapToDouble(Board::getPawnPointByCount).sum();
-    }
-
-    private static double getPawnPointByCount(int count) {
-        if (count > 1) {
-            return Type.PAWN.getDefaultPoint() / 2 * count;
-        }
-        return Type.PAWN.getDefaultPoint() * count;
     }
 
     public List<Piece> getSortedPiecesByPoint(Color color) {
@@ -142,21 +108,12 @@ public class Board {
                 .collect(Collectors.toList());
     }
 
-    // TODO: 체스뷰?
-    public String getRankRepresentation(int rank) {
-        return ranks.get(rank).getRepresentation();
-    }
-
     public boolean isBlank(Position position) {
         return findPiece(position).isBlank();
     }
 
     public boolean isSameColor(Position sourcePosition, Position targetPosition) {
         return findPiece(sourcePosition).isSameColor(findPiece(targetPosition));
-    }
-
-    public List<Piece.Direction> getDirections(Position sourcePosition) {
-        return findPiece(sourcePosition).getDirections();
     }
 
     public boolean isWhite(Position position) {
@@ -169,5 +126,16 @@ public class Board {
 
     public void checkMovable(Position sourcePosition, Position targetPosition) {
         findPiece(sourcePosition).checkMovable(this, sourcePosition, targetPosition);
+    }
+    public String getRankRepresentation(int rank) {
+        return ranks.get(rank).getRepresentation();
+    }
+
+    public boolean isPawn(int file, int rank, Color color) {
+        return findPiece(Position.of(file, rank)).checkColorAndType(color, Type.PAWN);
+    }
+
+    public List<Rank> getRanks() {
+        return ranks;
     }
 }

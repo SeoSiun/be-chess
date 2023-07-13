@@ -1,8 +1,13 @@
 package chess;
 
+import chess.pieces.Piece;
 import exceptions.InvalidTurnException;
+import exceptions.NoPieceInSourceException;
 
 import java.util.Scanner;
+
+import static chess.ChessView.*;
+import static utils.StringUtils.appendNewLine;
 
 public class Game {
     private static final String START = "start";
@@ -12,54 +17,101 @@ public class Game {
     private final ChessGame chessGame;
     private final ChessView chessView;
 
-    private boolean isWhiteTurn;
+    private Piece.Color turn;
 
     public Game() {
         board = new Board();
-        chessGame = new ChessGame(board);
-        chessView = new ChessView(board);
-        isWhiteTurn = true;
+        chessGame = new ChessGame();
+        chessView = new ChessView();
+        turn = Piece.Color.WHITE;
     }
 
     public void run() {
         Scanner sc = new Scanner(System.in);
         String command;
 
-        System.out.println("명령어를 입력해주세요 ('start' / 'end' / 'move [source] [target])");
-
+        System.out.println(INITIAL_MESSAGE);
         while (sc.hasNext()) {
             command = sc.nextLine();
-            System.out.println();
             try {
                 if (command.equals(START)) {
-                    System.out.println("체스 게임을 시작합니다");
-                    board.initialize();
-                    System.out.println(chessView.showBoard());
+                    start();
                 } else if (command.equals(END)) {
-                    System.out.println("체스 게임을 종료합니다.");
+                    System.out.println(END_MESSAGE);
                     break;
                 } else if (command.startsWith(MOVE)) {
-                    String[] splitCommand = command.split(" ");
-
-                    chessGame.move(splitCommand[1], splitCommand[2], isWhiteTurn);
-                    isWhiteTurn = !isWhiteTurn;
-                    System.out.println(chessView.showBoard());
+                   move(command);
+                } else {
+                    throw new IllegalArgumentException("존재하지 않는 명령어입니다.");
                 }
             } catch (InvalidTurnException exception) {
-                System.out.println(exception.getMessage() + getTurn());
+                System.out.println(chessView.appendTurnMessage(turn, exception.getMessage()));
             } catch (IllegalArgumentException exception) {
-                System.out.println(exception.getMessage());
+                System.out.println(appendNewLine(exception.getMessage()));
             }
-
-            System.out.println("------------------------------------------------------------");
-            System.out.println("명령어를 입력해주세요. ('start' / 'end' / 'move [source] [target])" + getTurn());
+            printDefaultMessage();
         }
     }
 
-    private String getTurn() {
-        if (isWhiteTurn) {
-            return " (흰색 차례)";
+    private void printDefaultMessage() {
+        chessView.printDefaultMessage(turn);
+
+        double whitePoint = chessGame.calculatePoint(board, Piece.Color.WHITE);
+        double blackPoint = chessGame.calculatePoint(board, Piece.Color.BLACK);
+        chessView.printPoint(whitePoint, blackPoint);
+    }
+
+    private void start() {
+        board.initialize();
+        System.out.println(START_MESSAGE);
+        System.out.println(chessView.showBoard(board));
+    }
+
+    private void move(String command) {
+        String[] splitCommand = command.split(" ");
+
+        validateMove(splitCommand);
+        chessGame.move(board, splitCommand[1], splitCommand[2]);
+        changeTurn();
+        System.out.println(chessView.showBoard(board));
+    }
+
+    private void validateMove(String[] splitCommand) {
+        if (splitCommand.length != 3) {
+            throw new IllegalArgumentException("잘못된 인자 개수 입니다.");
         }
-        return " (검은색 차례)";
+        Position sourcePosition = Position.from(splitCommand[1]);
+
+        checkNoPieceInSource(sourcePosition);
+        checkValidTurn(sourcePosition);
+    }
+
+    /**
+     * source에 기물이 없는 경우 예외처리
+     */
+    private void checkNoPieceInSource(Position sourcePosition) {
+        if (board.isBlank(sourcePosition)) {
+            throw new NoPieceInSourceException();
+        }
+    }
+
+
+    private void checkValidTurn(Position sourcePosition) {
+        if (turn == Piece.Color.WHITE && board.isWhite(sourcePosition)) {
+            return;
+        }
+        if (turn == Piece.Color.BLACK && board.isBlack(sourcePosition)) {
+            return;
+        }
+        throw new InvalidTurnException();
+    }
+
+    private void changeTurn() {
+        if (turn == Piece.Color.WHITE) {
+            turn = Piece.Color.BLACK;
+        }
+        else {
+            turn = Piece.Color.WHITE;
+        }
     }
 }

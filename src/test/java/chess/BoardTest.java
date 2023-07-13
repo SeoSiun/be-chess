@@ -17,15 +17,13 @@ import static utils.StringUtils.appendNewLine;
 class BoardTest {
     private Board board;
     private ChessView chessView;
-    private ChessGame chessGame;
-    public static final String BLANK_RANK = "........";
+    static final String BLANK_RANK = "........";
 
 
     @BeforeEach
     void setup() {
         board = new Board();
         chessView = new ChessView();
-        chessGame = new ChessGame();
     }
 
     @Test
@@ -151,7 +149,7 @@ class BoardTest {
 
     @Test
     @DisplayName("주어진 좌표에 놓인 기물을 반환해야한다.")
-    void findPiece() throws Exception {
+    void findPiece() {
         // given
         board.initialize();
 
@@ -166,67 +164,6 @@ class BoardTest {
         assertEquals(PieceFactory.createPiece(Color.BLACK, Type.ROOK), pieceInh8);
         assertEquals(PieceFactory.createPiece(Color.WHITE, Type.ROOK), pieceIna1);
         assertEquals(PieceFactory.createPiece(Color.WHITE, Type.ROOK), pieceInh1);
-    }
-
-    @Test
-    @DisplayName("해당 색상의 모든 기물의 점수 합계를 리턴해야한다.")
-    void calculatePoint() throws Exception {
-        // given
-        board.initializeEmpty();
-
-        addPiece("b6", PieceFactory.createPiece(Color.BLACK, Type.PAWN));
-        addPiece("e6", PieceFactory.createPiece(Color.BLACK, Type.QUEEN));
-        addPiece("b8", PieceFactory.createPiece(Color.BLACK, Type.KING));
-        addPiece("c8", PieceFactory.createPiece(Color.BLACK, Type.ROOK));
-
-        addPiece("f2", PieceFactory.createPiece(Color.WHITE, Type.PAWN));
-        addPiece("g2", PieceFactory.createPiece(Color.WHITE, Type.PAWN));
-        addPiece("e1", PieceFactory.createPiece(Color.WHITE, Type.ROOK));
-        addPiece("f1", PieceFactory.createPiece(Color.WHITE, Type.KING));
-
-        // when
-        // then
-        verifyCalculatedPoint(15.0, 7.0);
-    }
-
-    @Test
-    @DisplayName("같은 file에 여러 개의 pawn이 있으면 pawn의 점수를 0.5점으로 계산해야 한다")
-    void calculatePointWithMultiplePawnInSameLine() throws Exception {
-        // given
-        board.initializeEmpty();
-
-        addPiece("b6", PieceFactory.createPiece(Color.BLACK, Type.PAWN));
-        addPiece("c6", PieceFactory.createPiece(Color.BLACK, Type.PAWN));
-        addPiece("c5", PieceFactory.createPiece(Color.BLACK, Type.PAWN));
-        addPiece("e6", PieceFactory.createPiece(Color.BLACK, Type.QUEEN));
-        addPiece("b8", PieceFactory.createPiece(Color.BLACK, Type.KING));
-        addPiece("c8", PieceFactory.createPiece(Color.BLACK, Type.ROOK));
-        addPiece("a7", PieceFactory.createPiece(Color.BLACK, Type.PAWN));
-        addPiece("c7", PieceFactory.createPiece(Color.BLACK, Type.PAWN));
-        addPiece("d7", PieceFactory.createPiece(Color.BLACK, Type.BISHOP));
-
-        addPiece("f2", PieceFactory.createPiece(Color.WHITE, Type.PAWN));
-        addPiece("g2", PieceFactory.createPiece(Color.WHITE, Type.PAWN));
-        addPiece("e1", PieceFactory.createPiece(Color.WHITE, Type.ROOK));
-        addPiece("f1", PieceFactory.createPiece(Color.WHITE, Type.KING));
-        addPiece("f4", PieceFactory.createPiece(Color.WHITE, Type.KNIGHT));
-        addPiece("g4", PieceFactory.createPiece(Color.WHITE, Type.QUEEN));
-        addPiece("f3", PieceFactory.createPiece(Color.WHITE, Type.PAWN));
-        addPiece("h3", PieceFactory.createPiece(Color.WHITE, Type.PAWN));
-
-        // when
-        // then
-        verifyCalculatedPoint(20.5, 19.5);
-    }
-
-    private void verifyCalculatedPoint(double blackExpected, double whiteExpected) {
-        // when
-        double blackPoint = board.calculatePoint(Color.BLACK);
-        double whitePoint = board.calculatePoint(Color.WHITE);
-
-        // then
-        assertEquals(blackExpected, blackPoint, 0.01);
-        assertEquals(whiteExpected, whitePoint, 0.01);
     }
 
     private void addPiece(String position, Piece piece) {

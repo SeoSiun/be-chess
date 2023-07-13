@@ -3,8 +3,10 @@ package chess;
 import chess.pieces.Piece;
 import exceptions.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static chess.Board.MAX_FILE;
+import static chess.Board.MAX_RANK;
 
 /**
  * 체스 규칙에 따른 로직
@@ -19,19 +21,9 @@ public class ChessGame {
     }
 
     private void validate(Board board, Position sourcePosition, Position targetPosition) {
-        checkNoPieceInSource(board, sourcePosition);
         checkTargetSameAsSource(sourcePosition, targetPosition);
         checkIsTargetSameColor(board, sourcePosition, targetPosition);
         board.checkMovable(sourcePosition, targetPosition);
-    }
-
-    /**
-     * source에 기물이 없는 경우 예외처리
-     */
-    private void checkNoPieceInSource(Board board, Position sourcePosition) {
-        if (board.isBlank(sourcePosition)) {
-            throw new NoPieceInSourceException();
-        }
     }
 
     /**
@@ -50,5 +42,31 @@ public class ChessGame {
         if (board.isSameColor(sourcePosition, targetPosition)) {
             throw new TargetSameColorException();
         }
+    }
+
+    public double calculatePoint(Board board, Piece.Color color) {
+        double pointExceptPawn = board.getRanks().stream()
+                .mapToDouble(rank -> rank.calculatePointExceptPawn(color))
+                .sum();
+
+        return pointExceptPawn + calculatePawnPoint(board, color);
+    }
+
+    private double calculatePawnPoint(Board board, Piece.Color color) {
+        return IntStream.range(0, MAX_FILE)
+                .map(file -> countPawnInFile(board, file, color))
+                .mapToDouble(ChessGame::getPawnPointByCount).sum();
+    }
+
+    private int countPawnInFile(Board board, int file, Piece.Color color) {
+        return (int) IntStream.range(0, MAX_RANK)
+                .filter(rank -> board.isPawn(file, rank, color)).count();
+    }
+
+    private static double getPawnPointByCount(int count) {
+        if (count > 1) {
+            return Piece.Type.PAWN.getDefaultPoint() / 2 * count;
+        }
+        return Piece.Type.PAWN.getDefaultPoint() * count;
     }
 }
