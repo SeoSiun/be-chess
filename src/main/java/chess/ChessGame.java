@@ -12,6 +12,9 @@ import static chess.Board.MAX_RANK;
  * 체스 규칙에 따른 로직
  */
 public class ChessGame {
+    // 같은 file에 여러 개의 pawn이 존재하면 0.5점 적용
+    private static final double DUPLICATED_PAWN_POINT = 0.5;
+
     public void move(Board board, String sourceCoordinate, String targetCoordinate) {
         Position sourcePosition = Position.from(sourceCoordinate);
         Position targetPosition = Position.from(targetCoordinate);
@@ -65,7 +68,7 @@ public class ChessGame {
 
     private static double getPawnPointByCount(int count) {
         if (count > 1) {
-            return Piece.Type.PAWN.getDefaultPoint() / 2 * count;
+            return DUPLICATED_PAWN_POINT * count;
         }
         return Piece.Type.PAWN.getDefaultPoint() * count;
     }
